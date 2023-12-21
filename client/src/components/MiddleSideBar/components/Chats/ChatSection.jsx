@@ -1,18 +1,17 @@
-
-
-
-
 import React from 'react'
 import Slides from './components/Slides'
+import SingleChatOption from './components/SingleChatOption'
 
-function ChatSection() {
+function ChatSection () {
   return (
     <div className='mt-8'>
-        {/* slides! */}
-           <Slides />
+      {/* slides! */}
+      <Slides />
 
-        {/* chats */}
-
+      {/* chats */}
+      <div className='mt-8'>
+        <SingleChatOption />
+      </div>
     </div>
   )
 }
