@@ -6,8 +6,7 @@ import {
   IoLogoMastodon
 } from 'react-icons/io5'
 import { CgLogOff } from 'react-icons/cg'
-
-
+import { RiEditFill } from "react-icons/ri";
 
 export {
   CgLogOff,
@@ -15,5 +14,6 @@ export {
   IoLogoMastodon,
   IoNotifications,
   FaUserGroup,
-  IoSettingsSharp
+  IoSettingsSharp,
+  RiEditFill,
 }

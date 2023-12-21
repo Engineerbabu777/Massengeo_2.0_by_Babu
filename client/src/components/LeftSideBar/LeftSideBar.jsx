@@ -11,9 +11,9 @@ import IconComponent from './components/IconComponent'
 export default function LeftSideBar ({}) {
   return (
     <>
-      <aside className='bg-[#161A30] w-20 h-screen border-r-2 border-gray-600 flex flex-col items-center  py-4'>
+      <aside className='backdrop-blur-lg bg-[#1A132F] w-20 h-screen border-r-2 border-gray-700 flex flex-col items-center  py-5 pt-6'>
         {/* LOGO! */}
-        <div className='mb-20'>
+        <div className='mb-[15vh]'>
           <IoLogoMastodon size={40} className='text-white' />
         </div>
         {/* ICONS! */}
@@ -26,7 +26,7 @@ export default function LeftSideBar ({}) {
         {/* LOGOUT! */}
         <CgLogOff
           size={32}
-          className='text-white hover:text-red-600 cursor-pointer '
+          className='text-white hover:text-red-600 cursor-pointer transition duration-150 '
         />
       </aside>
     </>
