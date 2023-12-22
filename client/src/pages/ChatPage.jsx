@@ -12,6 +12,7 @@ function ChatPage() {
 
       {/* MESSAGES */}
 
+
       {/* FOOTER */}
 
     </div>
