@@ -7,7 +7,8 @@ export default function SearchChatMessage ({}) {
         <CiSearch className='w-7 h-7 text-gray-200' />
         <input
           type='text'
-          className='w-[180px] bg-inherit text-white border-none outline-none text-lg'
+          placeholder='Search in chat'
+          className='w-[180px] bg-inherit text-white border-none outline-none text-lg pl-2'
         />
       </div>
     </>
