@@ -1,5 +1,6 @@
 import Avatar from "./components/Avatar";
 import ChatInfo from "./components/ChatInfo";
+import GroupChat from "./components/GroupChat";
 import SearchChatMessage from "./components/SearchChatMessage";
 import SingleChat from "./components/SingleChat";
 
@@ -14,6 +15,8 @@ export default function Header ({openSideModal,open}) {
       <SingleChat />
        
       {/* NAME & members length for group chats */}
+      {/* <GroupChat /> */}
+
 
       {/* SEARCH FOR CHAT */}
       <SearchChatMessage />

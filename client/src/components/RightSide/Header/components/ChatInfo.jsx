@@ -1,5 +1,5 @@
 import Avatar from './Avatar'
-import Name from './Name'
+
 import { FaAngleDown } from '../../../../icons'
 
 export default function ChatInfo ({ openSideModal }) {
@@ -10,7 +10,8 @@ export default function ChatInfo ({ openSideModal }) {
         <Avatar sm src={'/images/pic4.jpg'} />
 
         {/* NAME */}
-        <Name sm />
+        <span className={`text-white font-bold text-md`}>Elon Musk</span>
+
 
         {/* DOWN */}
         <FaAngleDown

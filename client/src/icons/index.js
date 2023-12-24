@@ -13,10 +13,12 @@ import { MdAttachFile } from 'react-icons/md'
 import { MdOutlineEmojiEmotions } from 'react-icons/md'
 import { FaMicrophone } from 'react-icons/fa6'
 import { IoIosSend } from 'react-icons/io'
+import { IoCheckmarkDoneSharp } from "react-icons/io5";
 
 export {
   CgLogOff,
   MdOutlineMessage,
+  IoCheckmarkDoneSharp,
   IoLogoMastodon,
   IoNotifications,
   FaUserGroup,

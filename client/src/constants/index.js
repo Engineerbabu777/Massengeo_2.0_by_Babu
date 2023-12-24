@@ -19,7 +19,7 @@ export const ChatsData = [
     profile: '/images/pic3.webp',
     message: "Let's connect! on zoom buddy...",
     time: 'yesterday 13:45',
-    active: true,
+    active: false,
     unread: 13,
     name: 'Mark Zuckerberg'
   },
@@ -27,7 +27,7 @@ export const ChatsData = [
     profile: '/images/pic4.jpg',
     message: 'Starring at mars⭐🌕🌕',
     time: '44m',
-    active: false,
+    active: true,
     unread: 0,
     name: 'Elon Musk'
   },
@@ -204,7 +204,7 @@ export const marsConversation = [
     senderId: 1,
     receiverId: 2,
     time: "11:00:00",
-    message: "And the scientific discoveries! Mars has so much to teach us about the solar system and beyond."
+    message: "And the scientific discoveries! Mars has so much to teach us about the solar system and beyond., And the scientific discoveries! Mars has so much to teach us about the solar system and beyond"
   },
   {
     senderId: 2,
