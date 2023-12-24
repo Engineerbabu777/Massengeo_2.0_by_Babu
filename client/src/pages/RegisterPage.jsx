@@ -13,12 +13,13 @@ export default function RegisterPage ({}) {
 
   const handleSubmit = event => {
     event.preventDefault() // prevent page reload
+    // CREATING API!!
   }
   return (
     <>
       <section className='flex bg-[#0c0415] justify-center items-center h-screen w-screen flex-col gap-3'>
         <h1 className='text-3xl text-white font-sans font-bold'>Sign Up</h1>
-        <form className='flex gap-2 flex-col gap-1'>
+        <form className='flex gap-2 flex-col gap-1' onSubmit={handleSubmit}>
           <div className='flex flex-col'>
             <label className='text-slate-500 font-semibold text-lg'>
               Username
@@ -51,7 +52,10 @@ export default function RegisterPage ({}) {
             />
           </div>
 
-          <button className='bg-[#F05454] text-white w-full rounded-md h-[40px] font-semibold  text-lg tracking-wider mt-8 '>
+          <button
+            type='submit'
+            className='bg-[#F05454] text-white w-full rounded-md h-[40px] font-semibold  text-lg tracking-wider mt-8 '
+          >
             Create an account
           </button>
         </form>

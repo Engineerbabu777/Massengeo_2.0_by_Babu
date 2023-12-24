@@ -1,17 +1,24 @@
-import { useState } from "react"
+import { useState } from 'react'
 
 export default function LoginPage ({}) {
+  const [login, setlogin] = useState({
+    password: '',
+    email: ''
+  })
 
+  const onChange = event => {
+    setlogin({ ...login, [event.target.name]: event.target.value })
+  }
 
-    const [login, setlogin] = useState({
-        password: '',
-        email: ''
-      })
+  const handleSubmit = event => {
+    event.preventDefault() // prevent page reload
+    // CREATING API!!
+  }
   return (
     <>
       <section className='flex bg-[#0c0415] justify-center items-center h-screen w-screen flex-col gap-3'>
         <h1 className='text-3xl text-white font-sans font-bold'>Log in</h1>
-        <form className='flex gap-2 flex-col gap-1'>
+        <form className='flex gap-2 flex-col gap-1' onSubmit={handleSubmit}>
           <div className='flex flex-col'>
             <label className='text-slate-500 font-semibold text-lg'>
               Email
@@ -19,6 +26,8 @@ export default function LoginPage ({}) {
             <input
               className='px-2 py-2 rounded-sm bg-slate-300  outline-none border-none w-[350px]'
               placeholder='John123@gmail.com'
+              value={login.email}
+              onChange={onChange}
             />
           </div>
           <div className='flex flex-col'>
@@ -28,10 +37,15 @@ export default function LoginPage ({}) {
             <input
               className='px-2 py-2 rounded-sm bg-slate-300  outline-none border-none w-[350px]'
               placeholder='*******'
+              value={login.password}
+              onChange={onChange}
             />
           </div>
 
-          <button className='bg-[#F05454] text-white w-full rounded-md h-[40px] font-semibold  text-lg tracking-wider mt-8 '>
+          <button
+            type='submit'
+            className='bg-[#F05454] text-white w-full rounded-md h-[40px] font-semibold  text-lg tracking-wider mt-8 '
+          >
             Log in
           </button>
         </form>
