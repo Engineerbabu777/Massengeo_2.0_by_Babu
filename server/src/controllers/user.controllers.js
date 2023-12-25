@@ -61,7 +61,6 @@ export const loginUser = async (req, res) => {
   }
 }
 
-
 //Find User!
 export const findUser = async (req, res) => {
   try {
@@ -76,8 +75,6 @@ export const findUser = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message })
   }
 }
-
-
 
 // USER FORGOT PASSWORD!!
 // USER VERIFY EMAIL!
