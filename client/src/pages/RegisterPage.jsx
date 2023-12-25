@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import useUser from '../hooks/useUser'
 
 export default function RegisterPage ({}) {
   const [register, setRegister] = useState({
@@ -6,6 +7,7 @@ export default function RegisterPage ({}) {
     password: '',
     email: ''
   })
+  const { userRegistration } = useUser()
 
   const onChange = event => {
     setRegister({ ...register, [event.target.name]: event.target.value })
@@ -14,6 +16,7 @@ export default function RegisterPage ({}) {
   const handleSubmit = event => {
     event.preventDefault() // prevent page reload
     // CREATING API!!
+    userRegistration(register)
   }
   return (
     <>
