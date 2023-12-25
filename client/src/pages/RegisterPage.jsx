@@ -32,6 +32,7 @@ export default function RegisterPage ({}) {
               placeholder='John123'
               value={register.username}
               onChange={onChange}
+              name="username"
             />
           </div>
           <div className='flex flex-col'>
@@ -42,6 +43,7 @@ export default function RegisterPage ({}) {
               className='px-2 py-2 rounded-sm bg-slate-300  outline-none border-none w-[350px]'
               placeholder='John123@gmail.com'
               value={register.email}
+              name="email"
             />
           </div>
           <div className='flex flex-col'>
@@ -52,6 +54,7 @@ export default function RegisterPage ({}) {
               className='px-2 py-2 rounded-sm bg-slate-300  outline-none border-none w-[350px]'
               placeholder='*******'
               value={register.password}
+              name="password"
             />
           </div>
 
