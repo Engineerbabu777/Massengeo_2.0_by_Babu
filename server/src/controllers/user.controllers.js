@@ -1,28 +1,24 @@
 import { User } from '../models/user.model.js'
-import bcryptjs from 'bcryptjs'
+import * as bcrypt from 'bcrypt'
 
 // USER REGISTRATION!
 export const registerUser = async (req, res) => {
   try {
-    // GET DATA FROM REQ BODY!!!
-    const { username, password, email } = req.body
+    // ENCRYPTED PASSWORD AFTER THAT STORE IN DATABASE!
+    const { password } = req.body
 
-    // ENCRYPTED PASSWORD!
-    const hashedPassword = await bcryptjs.hash(password, 32)
+    // GENERATING HASHED PASSWORD!
+    const hashedPassword = bcrypt.hashSync(password, 8)
 
-    // CREATE NEW USER!!
-    await User.create({
-      username,
-      password: hashedPassword,
-      email
-    })
+    // CREATING NEW USER!
+    await User.create({ ...req.body, password: hashedPassword })
 
     // RETURN SUCCESS RESPONSE!!
-    return res
+    res
       .status(200)
       .json({ success: true, message: 'user created successfully!' })
   } catch (error) {
-    return res.status(500).json({ success: false, message: error.message })
+    res.status(500).json({ success: false, message: error.message })
   }
 }
 
@@ -40,7 +36,7 @@ export const loginUser = async (req, res) => {
         .json({ success: false, message: 'invalid credentials' })
     }
     // VALIDATE PASSWORD!!
-    const isValidPassword = await bcryptjs.compare(password, user.password)
+    const isValidPassword = await bcrypt.compare(password, user.password)
     // VALIDATE PASSWORD!!
     if (!isValidPassword) {
       return res

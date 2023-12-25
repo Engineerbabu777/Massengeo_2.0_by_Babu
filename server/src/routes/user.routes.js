@@ -6,7 +6,7 @@ import { authProtection } from '../middlewares/user.middleware.js'
 const routes = express.Router()
 
 // USER REGISTRATION!
-routes.post('/register', authProtection, registerUser)
+routes.post('/register', registerUser)
 
 // USER LOGIN!!
 

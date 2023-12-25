@@ -6,11 +6,12 @@ import ChatPage from './pages/ChatPage'
 import NewChat from './pages/NewChat'
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage'
-
+import {Toaster} from 'react-hot-toast'
 
 function App () {
   return (
     <div className='flex '>
+      <Toaster />
         <BrowserRouter>
           <Suspense>
             {/* <LeftSideBar /> */}
