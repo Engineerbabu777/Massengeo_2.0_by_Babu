@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import { User } from '../models/user.model'
+import { User } from '../models/user.model.js'
 
 // AUTHORIZATION MIDDLEWARE!!
 export const authProtection = async (req, res, next) => {

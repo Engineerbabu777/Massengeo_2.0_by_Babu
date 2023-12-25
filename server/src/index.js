@@ -2,12 +2,16 @@
 import express from 'express'
 import userRoutes from './routes/user.routes.js'
 import * as dotenv from 'dotenv'
+import { databaseConnect } from './db/databaseConnect.js';
 
 // USING ENV FILE!
 dotenv.config();
 
 // CREATING EXPRESS APP!
 const app = express()
+
+// DATABASE CONNECT!
+databaseConnect();
 
 // REQUIRED MIDDLEWARES!
 app.use(express.urlencoded({ extended: true }))
