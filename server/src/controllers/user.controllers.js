@@ -50,21 +50,34 @@ export const loginUser = async (req, res) => {
     // GENERATE TOKEN!!
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
     // RETURN THE SUCCESS RESPONSE!
-    return res
-      .status(200)
-      .json({
-        success: true,
-        token,
-        user: { id: user._id, username: user.username, email: user.email }
-      })
+    return res.status(200).json({
+      success: true,
+      token,
+      user: { id: user._id, username: user.username, email: user.email }
+    })
   } catch (error) {
     // RETURN ERROR RESPONSE!
     return res.status(500).json({ success: false, message: error.message })
   }
 }
 
-// USER REFRESH/ACCESS!
+
+//Find User!
+export const findUser = async (req, res) => {
+  try {
+    //GET ID FROM REQ BODY
+    const { id } = req.params
+    //FIND USER BY ID
+    const user = await User.findById(id)
+    //RETURN USER
+    return res.status(200).json({ success: true, user: user })
+  } catch (error) {
+    // RETURN ERROR RESPONSE!
+    return res.status(500).json({ success: false, message: error.message })
+  }
+}
+
+
 
 // USER FORGOT PASSWORD!!
-
 // USER VERIFY EMAIL!
