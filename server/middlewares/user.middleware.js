@@ -22,6 +22,9 @@ export const authProtection = async (req, res, next) => {
   if (!user?.email) {
     return res.status(401).json({ msg: 'invalid token, authorization denied' })
   }
+
+  // ADDING USER TO REQUEST!!
+  req.user = user
   // PROCEEDED TO NEXT!
   next()
 }

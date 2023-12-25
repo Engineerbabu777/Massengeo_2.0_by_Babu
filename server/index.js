@@ -1,6 +1,10 @@
 // ALL IMPORTS!
 import express from 'express'
 import userRoutes from './routes/user.routes.js'
+import * as dotenv from 'dotenv'
+
+// USING ENV FILE!
+dotenv.config();
 
 // CREATING EXPRESS APP!
 const app = express()
