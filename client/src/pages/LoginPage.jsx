@@ -1,6 +1,8 @@
 import { useState } from 'react'
+import useUser from '../hooks/useUser'
 
 export default function LoginPage ({}) {
+  const { loadingUser, userLogin } = useUser()
   const [login, setlogin] = useState({
     password: '',
     email: ''
@@ -13,6 +15,7 @@ export default function LoginPage ({}) {
   const handleSubmit = event => {
     event.preventDefault() // prevent page reload
     // CREATING API!!
+    userLogin(login)
   }
   return (
     <>
@@ -28,6 +31,7 @@ export default function LoginPage ({}) {
               placeholder='John123@gmail.com'
               value={login.email}
               onChange={onChange}
+              name='email'
             />
           </div>
           <div className='flex flex-col'>
@@ -39,14 +43,16 @@ export default function LoginPage ({}) {
               placeholder='*******'
               value={login.password}
               onChange={onChange}
+              name='password'
             />
           </div>
 
           <button
             type='submit'
-            className='bg-[#F05454] text-white w-full rounded-md h-[40px] font-semibold  text-lg tracking-wider mt-8 '
+            disabled={loadingUser}
+            className='bg-[#F05454] disabled:bg-gray-700 disabled:text-white text-white w-full rounded-md h-[40px] font-semibold  text-lg tracking-wider mt-8 '
           >
-            Log in
+            {loadingUser ? 'loading...' : 'Log in'}
           </button>
         </form>
         <p className='flex items-center gap-1'>
