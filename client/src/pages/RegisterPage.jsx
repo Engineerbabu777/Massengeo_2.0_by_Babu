@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import useUser from '../hooks/useUser'
+import { Link } from 'react-router-dom'
 
 export default function RegisterPage ({}) {
   const { userRegistration, savingNewUser } = useUser()
@@ -71,13 +72,13 @@ export default function RegisterPage ({}) {
         </form>
         <p className='flex items-center gap-1'>
           <p className='text-gray-400'>Already have an account?</p>
-          <a
+          <Link
             className='text-[#F05454] font-semibold cursor-pointer'
             href={'/login'}
           >
             {' '}
             Log in
-          </a>
+          </Link>
         </p>
       </section>
     </>
