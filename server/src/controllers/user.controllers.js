@@ -83,5 +83,19 @@ export const findUser = async (req, res) => {
   }
 }
 
+// GET ALL USERS!
+export const getAllUsers = async (req, res) => {
+  try {
+    //FIND ALL USERS
+    const users = await User.find({ _id: { $ne: req.user._id } })
+    console.log({ users })
+    //RETURN ALL USERS
+    return res.status(200).json({ success: true, users: users })
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message })
+  }
+}
+
+
 // USER FORGOT PASSWORD!!
 // USER VERIFY EMAIL!

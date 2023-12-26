@@ -4,7 +4,7 @@ import Slides from './components/Slides'
 import SingleChatOption from './components/SingleChatOption'
 import { ChatsData, Options } from '../../../../constants'
 
-function ChatSection () {
+function ChatSection ({}) {
   const [selectedSlide, setSelectedSlide] = useState(Options[0])
   const chatState =
     selectedSlide === 'all'

@@ -74,7 +74,8 @@ export default function RegisterPage ({}) {
           <p className='text-gray-400'>Already have an account?</p>
           <Link
             className='text-[#F05454] font-semibold cursor-pointer'
-            href={'/login'}
+            to='/login'
+
           >
             {' '}
             Log in

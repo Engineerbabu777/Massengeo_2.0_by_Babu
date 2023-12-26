@@ -60,7 +60,7 @@ export default function LoginPage ({}) {
           <p className='text-gray-400'>Not have an account?</p>
           <Link
             className='text-[#F05454] font-semibold cursor-pointer'
-            href={'/register'}
+            to='/register'
           >
             {' '}
             Sign in

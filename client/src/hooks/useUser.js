@@ -1,11 +1,20 @@
 import { useState } from 'react'
 import { loginData, registerData } from '../utils/authDataValidate'
 import toast from 'react-hot-toast'
-
+import {
+  fetchedUsers,
+  fetchingUsers,
+  fetchingUsersSuccess
+} from '../redux/userSlice'
+import { useSelector, useDispatch } from 'react-redux'
 export default function useUser () {
   // STATES!
   const [savingNewUser, setSavingNewUser] = useState(false)
   const [loadingUser, setLoadingUser] = useState(false)
+  const isALreadyGetUsers = useSelector(state => state.user.alreadyLoadedUsers)
+  const dispatch = useDispatch()
+
+  console.log({ isALreadyGetUsers })
 
   // FUNCTION FOR NEW USER REGISTRATION!
   const userRegistration = async data => {
@@ -94,12 +103,34 @@ export default function useUser () {
 
   const userLogout = () => {}
 
+  // GET ALL USERS FUNCTION!
+  const getAllUsers = async () => {
+    if (isALreadyGetUsers) return // USERS ALREADY FETCHED!
+
+    dispatch(fetchingUsers())
+    // FETCHING USERS API REQUEST!
+    const response = await fetch('http://localhost:4444/api/v1/user/users', {
+      method: 'GET',
+      headers: {
+        authorization: JSON.parse(localStorage.getItem('userData@**@user'))
+          ?.token
+      }
+    }).then(res => res.json())
+
+    // IF SUCCESS IS TRUE!
+    if (response?.success) {
+      dispatch(fetchingUsersSuccess())
+      dispatch(fetchedUsers(response?.users))
+    }
+  }
+
   return {
     userLogin,
     userLogout,
     userRegistration,
     savingNewUser,
     loadingUser,
-    setLoadingUser
+    setLoadingUser,
+    getAllUsers
   }
 }
