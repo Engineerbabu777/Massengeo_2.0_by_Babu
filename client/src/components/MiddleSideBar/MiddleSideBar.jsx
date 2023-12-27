@@ -4,26 +4,44 @@ import Header from './components/Header'
 import StoriesParent from './components/Stories/StoriesParent'
 import useUser from '../../hooks/useUser'
 import { useSelector } from 'react-redux'
+import SearchUsers from './components/SearchUsers/SearchUsers'
 
 export default function MiddleSideBar ({}) {
   const { getAllUsers } = useUser()
   const users = useSelector(state => state.user.users)
+  const sidebarState = useSelector(state => state.sidebar.active)
 
-  useEffect(() => {
-    getAllUsers()
-  }, [])
+  // useEffect(() => {
+  //   getAllUsers()
+  // }, [])
 
   return (
     <>
       <aside className='bg-[#0c0415] w-[25vw] h-screen pt-6 border-r-2 border-gray-700 '>
-        {/* HEADER! */}
-        <Header />
+        {/* IF ACTIVE STATE IS CHAT! */}
+        {sidebarState === 'chats' && (
+          <>
+            {/* HEADER! */}
+            <Header />
 
-        {/* STORIES! */}
-        <StoriesParent />
+            {/* STORIES! */}
+            <StoriesParent />
 
-        {/* CHAT SECTION! */}
-        <ChatSection  />
+            {/* CHAT SECTION! */}
+            <ChatSection />
+          </>
+        )}
+        
+        {/* IF ACTIVE STATE IS SEARCH FOR USERS! */}
+        {sidebarState === 'users' && (
+          <>
+            <SearchUsers />
+          </>
+        )}
+
+        {/* NOTIFICATIONS!! */}
+
+        {/* SETTINGS! */}
       </aside>
     </>
   )

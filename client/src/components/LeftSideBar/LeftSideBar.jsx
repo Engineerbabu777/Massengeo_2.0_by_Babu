@@ -16,7 +16,7 @@ export default function LeftSideBar ({}) {
   const active = useSelector((state) => state.sidebar.active)
 
   const updateActiveState = active => {
-    updateSidebar(active)
+    dispatch(updateSidebar(active))
   }
 
   return (
