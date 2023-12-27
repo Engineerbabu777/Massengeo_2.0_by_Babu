@@ -2,7 +2,9 @@ import { useState } from 'react'
 import { loginData, registerData } from '../utils/authDataValidate'
 import toast from 'react-hot-toast'
 import {
+  fetchedSearchUsers,
   fetchedUsers,
+  fetchingSearchUsers,
   fetchingUsers,
   fetchingUsersSuccess
 } from '../redux/userSlice'
@@ -127,6 +129,7 @@ export default function useUser () {
   // FIND USERS!
   const findUsers = async search => {
     try {
+      dispatch(fetchingSearchUsers())
       // FETCHING USERS API REQUEST!
       const response = await fetch(
         'http://localhost:4444/api/v1/user/users?search=' + search,
@@ -139,7 +142,9 @@ export default function useUser () {
         }
       ).then(res => res.json())
 
-      console.log({ response })
+      if (response?.error) throw new Error(response.message)
+
+      dispatch(fetchedSearchUsers(response.users))
     } catch (error) {
       // IF USERS SEARCHING FAILED!
       toast.error(error.message)

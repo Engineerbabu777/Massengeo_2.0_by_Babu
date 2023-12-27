@@ -3,12 +3,15 @@ import { CiSearch, GoSearch, FaUserGroup } from '../../../../icons'
 import IconComponent from '../../../LeftSideBar/components/IconComponent'
 import SingleUser from './components/SingleUser'
 import useUser from '../../../../hooks/useUser'
+import { useSelector } from 'react-redux'
 
 export default function SearchUsers ({}) {
   const [input, setInput] = useState('')
+  const searchUsers = useSelector(state => state.user.searchUsers)
 
   const { findUsers } = useUser()
 
+  // THIS FUNCTION WILL HANDLE SEARCH ON KEY ENTER WILL BE PRESSED!
   const handleSearch = e => {
     if (e.key === 'Enter' || e.keyCode === 13) {
       if (input.length > 3) findUsers(input)
@@ -44,10 +47,9 @@ export default function SearchUsers ({}) {
 
       {/* USERS! */}
       <section className='mt-12 flex flex-col gap-4'>
-        <SingleUser src={'/images/pic1.jpg'} name={'Kriti'} />
-        <SingleUser src={'/images/pic2.jpg'} name={'Sakshi'} />
-        <SingleUser src={'/images/pic3.jpg'} name={'Mark Zuckerbug'} />
-        <SingleUser src={'/images/pic4.webp'} name={'Elon Musk'} />
+        {searchUsers?.map((user, i) => (
+          <SingleUser name={user?.username} src={user?.avatar} key={i} />
+        ))}
       </section>
     </>
   )

@@ -5,12 +5,12 @@ export default function SingleUser ({ src, name }) {
         <div className='flex grow items-center gap-3'>
           {/* AVATAR! */}
           <img
-            src='/images/pic1.jpg'
+            src={src}
             alt='2'
             className='w-16 h-16 rounded-full object-cover object-fit'
           />
           {/* NAME! */}
-          <span className='text-white text-2xl font-semibold'>Ayush Kumar</span>
+          <span className='text-white text-2xl font-semibold'>{name}</span>
         </div>
 
         {/* ADD! */}

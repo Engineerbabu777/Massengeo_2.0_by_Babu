@@ -88,28 +88,30 @@ export const getAllUsers = async (req, res) => {
   try {
     // MAY BE WE HAVE TO FIND FOR SPECIFIC USERS!
     if (req?.query?.search) {
+      // CREATING NEW CASE INSENSITIVE REGULAR EXPRESSION!
       const search = new RegExp(req.query.search, 'i')
 
       const users = await User.find({
         $and: [
           {
+            // FIND USERS WHERE THOSE USERNAME ARE EQUAL TO REQUIRED!
             $or: [{ username: search }, { email: search }]
           },
           {
+            // BUT REMOVE THOSE USERS WHERE USERNAME ARE EQUAL TO THAT USER REQUESTING!
             username: { $ne: req.user.username }
           }
         ]
       })
-
+      // RETURNING RESPONSE BACK TO USER!
       return res.status(200).json({ success: true, users: users })
     }
-    //FIND ALL USERS
+    //FIND ALL USERS BUT EXCLUDED THE REQUESTED USER!
     const users = await User.find({ _id: { $ne: req.user._id } })
-    console.log({ users })
     //RETURN ALL USERS
     return res.status(200).json({ success: true, users: users })
   } catch (error) {
-    return res.status(500).json({ success: false, message: error.message })
+    return res.status(500).json({ error: true, message: error.message })
   }
 }
 

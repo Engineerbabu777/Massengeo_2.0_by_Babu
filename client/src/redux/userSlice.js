@@ -6,7 +6,8 @@ const userSlice = createSlice({
     users: [],
     loadingUsers: false,
     alreadyLoadedUsers: false,
-    
+    searchUsers: [],
+    loadingSearchUsers: false
   },
   reducers: {
     fetchedUsers: (state, action) => {
@@ -18,10 +19,22 @@ const userSlice = createSlice({
     },
     fetchingUsersSuccess: state => {
       state.loadingUsers = false
+    },
+    fetchingSearchUsers: state => {
+      state.loadingSearchUsers = true
+    },
+    fetchedSearchUsers: (state, action) => {
+      state.searchUsers = action.payload
+      state.loadingSearchUsers = false
     }
   }
 })
 
-export const { fetchedUsers, fetchingUsersSuccess, fetchingUsers } =
-  userSlice.actions
+export const {
+  fetchedUsers,
+  fetchingUsersSuccess,
+  fetchingUsers,
+  fetchedSearchUsers,
+  fetchingSearchUsers
+} = userSlice.actions
 export const userReducer = userSlice.reducer
