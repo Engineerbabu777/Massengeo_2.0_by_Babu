@@ -1,5 +1,6 @@
 import { CiSearch, GoSearch, FaUserGroup } from '../../../../icons'
 import IconComponent from '../../../LeftSideBar/components/IconComponent'
+import SingleUser from './components/SingleUser'
 
 export default function SearchUsers ({}) {
   return (
@@ -26,8 +27,11 @@ export default function SearchUsers ({}) {
       </section>
 
       {/* USERS! */}
-      <section className='mt-12'>
-
+      <section className='mt-12 flex flex-col gap-4'>
+        <SingleUser src={'/images/pic1.jpg'} name={'Kriti'} />
+        <SingleUser src={'/images/pic2.jpg'} name={'Sakshi'} />
+        <SingleUser src={'/images/pic3.jpg'} name={'Mark Zuckerbug'} />
+        <SingleUser src={'/images/pic4.webp'} name={'Elon Musk'} />
       </section>
     </>
   )
