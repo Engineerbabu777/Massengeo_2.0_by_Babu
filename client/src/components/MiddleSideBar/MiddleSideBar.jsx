@@ -7,13 +7,7 @@ import { useSelector } from 'react-redux'
 import SearchUsers from './components/SearchUsers/SearchUsers'
 
 export default function MiddleSideBar ({}) {
-  const { getAllUsers } = useUser()
-  const users = useSelector(state => state.user.users)
   const sidebarState = useSelector(state => state.sidebar.active)
-
-  // useEffect(() => {
-  //   getAllUsers()
-  // }, [])
 
   return (
     <>
@@ -31,7 +25,7 @@ export default function MiddleSideBar ({}) {
             <ChatSection />
           </>
         )}
-        
+
         {/* IF ACTIVE STATE IS SEARCH FOR USERS! */}
         {sidebarState === 'users' && (
           <>

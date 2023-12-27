@@ -86,6 +86,23 @@ export const findUser = async (req, res) => {
 // GET ALL USERS!
 export const getAllUsers = async (req, res) => {
   try {
+    // MAY BE WE HAVE TO FIND FOR SPECIFIC USERS!
+    if (req?.query?.search) {
+      const search = new RegExp(req.query.search, 'i')
+
+      const users = await User.find({
+        $and: [
+          {
+            $or: [{ username: search }, { email: search }]
+          },
+          {
+            username: { $ne: req.user.username }
+          }
+        ]
+      })
+
+      return res.status(200).json({ success: true, users: users })
+    }
     //FIND ALL USERS
     const users = await User.find({ _id: { $ne: req.user._id } })
     console.log({ users })
@@ -95,7 +112,6 @@ export const getAllUsers = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message })
   }
 }
-
 
 // USER FORGOT PASSWORD!!
 // USER VERIFY EMAIL!

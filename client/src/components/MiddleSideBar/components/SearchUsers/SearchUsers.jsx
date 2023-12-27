@@ -1,8 +1,20 @@
+import { useState } from 'react'
 import { CiSearch, GoSearch, FaUserGroup } from '../../../../icons'
 import IconComponent from '../../../LeftSideBar/components/IconComponent'
 import SingleUser from './components/SingleUser'
+import useUser from '../../../../hooks/useUser'
 
 export default function SearchUsers ({}) {
+  const [input, setInput] = useState('')
+
+  const { findUsers } = useUser()
+
+  const handleSearch = e => {
+    if (e.key === 'Enter' || e.keyCode === 13) {
+      if (input.length > 3) findUsers(input)
+    }
+  }
+
   return (
     <>
       {/* HEADER */}
@@ -19,6 +31,10 @@ export default function SearchUsers ({}) {
         <label className='bg-[#272829] border-slate-400 rounded-full px-3 py-2 flex justify-center items-center'>
           <CiSearch className='text-gray-500 w-8 h-8' />
           <input
+            name='search'
+            value={input}
+            onChange={e => setInput(e.target.value)}
+            onKeyDown={e => handleSearch(e)}
             type='text'
             placeholder='Search For Users...'
             className='flex-1 px-2 py-1 bg-inherit border-none outline-none text-white font-semibold text-lg'

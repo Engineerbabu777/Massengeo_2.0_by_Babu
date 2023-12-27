@@ -5,7 +5,8 @@ const userSlice = createSlice({
   initialState: {
     users: [],
     loadingUsers: false,
-    alreadyLoadedUsers: false
+    alreadyLoadedUsers: false,
+    
   },
   reducers: {
     fetchedUsers: (state, action) => {

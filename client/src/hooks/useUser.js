@@ -124,6 +124,29 @@ export default function useUser () {
     }
   }
 
+  // FIND USERS!
+  const findUsers = async search => {
+    try {
+      // FETCHING USERS API REQUEST!
+      const response = await fetch(
+        'http://localhost:4444/api/v1/user/users?search=' + search,
+        {
+          method: 'GET',
+          headers: {
+            authorization: JSON.parse(localStorage.getItem('userData@**@user'))
+              ?.token
+          }
+        }
+      ).then(res => res.json())
+
+      console.log({ response })
+    } catch (error) {
+      // IF USERS SEARCHING FAILED!
+      toast.error(error.message)
+      console.log({ error: error.message })
+    }
+  }
+
   return {
     userLogin,
     userLogout,
@@ -131,6 +154,7 @@ export default function useUser () {
     savingNewUser,
     loadingUser,
     setLoadingUser,
-    getAllUsers
+    getAllUsers,
+    findUsers
   }
 }
