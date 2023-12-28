@@ -1,7 +1,16 @@
-export default function SingleUser ({ src, name }) {
+import useConversation from "../../../../../hooks/useConversation"
+
+
+
+export default function SingleUser ({ src, name,_id }) {
+
+  const {} = useConversation();
+
+  const handleConversation = () => {}
+
   return (
     <>
-      <section className='flex justify-between w-[95%] mx-auto items-center transition-all group hover:bg-gray-700/50 py-2 px-1 rounded-md cursor-pointer'>
+      <section className='flex justify-between w-[95%] mx-auto items-center transition-all group hover:bg-gray-700/50 py-2 px-1 rounded-md cursor-pointer bg-slate-800/50 border-gray-700 border'>
         <div className='flex grow items-center gap-3'>
           {/* AVATAR! */}
           <img
