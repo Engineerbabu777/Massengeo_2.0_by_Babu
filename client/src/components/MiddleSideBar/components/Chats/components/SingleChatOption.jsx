@@ -1,6 +1,6 @@
-import { formatTimeAgoMoment } from "../../../../../utils/getLastMessageTime"
+import { formatTimeAgo } from "../../../../../utils/getLastMessageTime"
 
-export default function SingleChatOption ({ conversation }) {
+export default function SingleChatOption ({ conversation,createdAt,users }) {
   // const isUnread = chat?.unread > 0 ? true : false;
   // const isActive = chat?.active ? true : false;
   // const isGrouped = chat?.isGroup ? true : false;
@@ -10,7 +10,7 @@ export default function SingleChatOption ({ conversation }) {
   return (
     <>
       <div
-        className={`max-w-[25vw] px-3 flex items-center font-sans py-3 ${
+        className={`max-w-[25vw] px-3 flex items-center hover:bg-[#F05454] transition-all duration-150 cursor-pointer group font-sans py-3 ${
           false ? 'bg-[#F05454]' : ''
         }`}
       >
@@ -18,20 +18,20 @@ export default function SingleChatOption ({ conversation }) {
         <img
           className='w-16 h-16 rounded-full object-cover '
           alt='test0image'
-          src={conversation?.avatar}
+          src={users?.avatar}
         />
 
         {/* NAME & MESSAGE! */}
         <section className={`flex-1 ml-6 flex flex-col gap-0.5 `}>
           <p
-            className={`text-gray-100 font-bold text-xl ${
+            className={`text-gray-100 font-bold text-xl group-hover:text-white ${
               isActive ? 'text-white' : ''
             }`}
           >
-            {conversation?.username}
+            {users?.username}
           </p>
           <p
-            className={`text-gray-400 font-semibold tracking-wider line-clamp-1 ${
+            className={`text-gray-400 font-semibold group-hover:text-white tracking-wider line-clamp-1 ${
               isActive ? 'text-white' : ''
             }`}
           >
@@ -55,13 +55,14 @@ export default function SingleChatOption ({ conversation }) {
         {/* TIME UNREADS! */}
         <section className=' ml-6 flex flex-col gap-0.5 '>
           <p
-            className={` font-bold text-md text-gray-400 ${
+            className={` font-bold text-md text-gray-400 group-hover:text-white ${
               isActive ? 'text-white' : ''
             }`}
           >
             {' '}
             {/* ELSE LAST MESSAGE TIME!*/}
-            {formatTimeAgoMoment(conversation?.createdAt)}
+            {formatTimeAgo(conversation?.createdAt) }
+            {console.log(conversation?.createdAt)}
           </p>
           {/* {isUnread && (
             <p
