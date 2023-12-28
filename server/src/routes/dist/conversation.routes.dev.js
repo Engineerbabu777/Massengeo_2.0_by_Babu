@@ -13,9 +13,11 @@ var _userMiddleware = require("../middlewares/user.middleware.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var routes = _express["default"].Router(); // USER REGISTRATION!
+var routes = _express["default"].Router(); // CREATE CONVERSATION!
 
 
-routes.post('/create-conversation', _userMiddleware.authProtection, _conversationController.createConversation);
+routes.post('/create-conversation', _userMiddleware.authProtection, _conversationController.createConversation); // FETCHING ROUTES
+
+routes.get('/fetch-all', _userMiddleware.authProtection, _conversationController.fetchAllConversations);
 var _default = routes;
 exports["default"] = _default;
