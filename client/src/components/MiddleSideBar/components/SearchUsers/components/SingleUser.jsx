@@ -1,16 +1,14 @@
-import useConversation from "../../../../../hooks/useConversation"
+import useConversation from '../../../../../hooks/useConversation'
 
-
-
-export default function SingleUser ({ src, name,_id }) {
-
-  const {} = useConversation();
-
-  const handleConversation = () => {}
+export default function SingleUser ({ src, name, _id }) {
+  const { createConversation } = useConversation()
 
   return (
     <>
-      <section className='flex justify-between w-[95%] mx-auto items-center transition-all group hover:bg-gray-700/50 py-2 px-1 rounded-md cursor-pointer bg-slate-800/50 border-gray-700 border'>
+      <section
+        onClick={() => createConversation(_id)}
+        className='flex justify-between w-[95%] mx-auto items-center transition-all group hover:bg-gray-700/50 py-2 px-1 rounded-md cursor-pointer bg-slate-800/50 border-gray-700 border'
+      >
         <div className='flex grow items-center gap-3'>
           {/* AVATAR! */}
           <img

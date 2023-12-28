@@ -48,7 +48,12 @@ export default function SearchUsers ({}) {
       {/* USERS! */}
       <section className='mt-12 flex flex-col gap-4'>
         {searchUsers?.map((user, i) => (
-          <SingleUser name={user?.username} src={user?.avatar} key={i} />
+          <SingleUser
+            name={user?.username}
+            src={user?.avatar}
+            key={i}
+            _id={user?._id}
+          />
         ))}
       </section>
     </>

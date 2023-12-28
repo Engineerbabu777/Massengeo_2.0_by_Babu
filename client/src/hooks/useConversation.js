@@ -9,10 +9,11 @@ export default function useConversation () {
     if (!userId) return
 
     try {
+      setCreatingConversation(true)
       // MAKE A REQUEST!
       const response = await fetch(
         // API ENDPOINT FOR CREATING A CONVERSATION
-        'http://locahost:4444/api/v1/conversation/create-conversation',
+        'http://localhost:4444/api/v1/conversation/create-conversation',
         {
           // HTTP METHOD: POST
           method: 'POST',
@@ -33,11 +34,13 @@ export default function useConversation () {
 
       // LOG THE RESPONSE AND DISPLAY A SUCCESS TOAST
       console.log({ response })
+      setCreatingConversation(false)
       toast.success(response?.message)
     } catch (error) {
       // LOG THE ERROR AND DISPLAY AN ERROR TOAST
       console.log({ error: error.message })
       toast.error(error?.message)
+      setCreatingConversation(false)
     }
   }
   return { createConversation, creatingConversation }
