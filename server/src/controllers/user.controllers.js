@@ -56,7 +56,7 @@ export const loginUser = async (req, res) => {
     res.status(200).json({
       success: true,
       token,
-      user: { id: user._id, username: user.username, email: user.email }
+      user: { id: user._id, username: user.username, email: user.email,image:user?.avatar }
     })
   } catch (error) {
     // RETURN ERROR RESPONSE!

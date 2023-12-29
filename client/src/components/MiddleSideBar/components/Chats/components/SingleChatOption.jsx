@@ -1,19 +1,42 @@
+import useMessages from '../../../../../hooks/useMessages'
 import { updateOpenChat } from '../../../../../redux/chatSlice'
 import { formatTimeAgo } from '../../../../../utils/getLastMessageTime'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+
 export default function SingleChatOption ({ conversation, createdAt, users }) {
   // const isUnread = chat?.unread > 0 ? true : false;
   // const isActive = chat?.active ? true : false;
   // const isGrouped = chat?.isGroup ? true : false;
+  const { fetchChatByConversation } = useMessages()
+  const openedChatUsers = useSelector(state => state.chat.openedChatUsers)
+
+  // CHECKING IS MESSAGE SENT BY ME OTHERS!
+  const isSentByMe =
+    conversation?.lastMessage?.senderId ===
+    JSON.parse(localStorage.getItem('userData@**@user'))?.id
+
+  const { conversationId } = useParams()
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const isActive = false
+  const isActive = conversationId === conversation._id ? true : false
+
+  // console.log({
+  //   isSentByMe,
+  //   mineId: JSON.parse(localStorage.getItem('userData@**@user'))?.id,
+  //   otherId: conversation?.lastMessage?.senderId?,
+  //   other: conversation
+  // })
+
   const isGrouped = false
   const isUnread = false
 
   const handleClick = () => {
+    // FETCH CHAT!
+    fetchChatByConversation(conversation._id)
     // UPDATE THE STATE!
     dispatch(updateOpenChat(users)) // FOR NOW ONLY ONE USER! WILL UPDATE IT LATER!
     // MOVE TO CONVERSATION PAGE
@@ -24,7 +47,7 @@ export default function SingleChatOption ({ conversation, createdAt, users }) {
       <div
         onClick={handleClick}
         className={`max-w-[25vw] px-3 flex items-center hover:bg-[#F05454] transition-all duration-150 cursor-pointer group font-sans py-3 ${
-          false ? 'bg-[#F05454]' : ''
+          isActive ? 'bg-[#F05454]' : ''
         }`}
       >
         {/* IMAGE */}
@@ -59,6 +82,8 @@ export default function SingleChatOption ({ conversation, createdAt, users }) {
               </>
             ) : (
               <>
+                {' '}
+                {isSentByMe && 'me: '}
                 {conversation?.lastMessage?.message || 'start a conversation'}
               </>
             )}
@@ -75,7 +100,6 @@ export default function SingleChatOption ({ conversation, createdAt, users }) {
             {' '}
             {/* ELSE LAST MESSAGE TIME!*/}
             {formatTimeAgo(createdAt)}
-            {console.log(createdAt)}
           </p>
           {/* {isUnread && (
             <p

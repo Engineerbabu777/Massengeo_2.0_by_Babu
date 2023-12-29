@@ -1,6 +1,14 @@
 import toast from 'react-hot-toast'
+import { useDispatch } from 'react-redux'
+import {
+  fetchingConversationMessages,
+  fetchingMessagesFailed,
+  fetchingMessagesSuccess
+} from '../redux/chatSlice'
 
 export default function useMessages () {
+  const dispatch = useDispatch()
+
   const sendMessages = async (messageType, message, conversationId) => {
     // FOR NOW!
     // TYPE = TEXT!
@@ -20,6 +28,8 @@ export default function useMessages () {
         }
       ).then(resp => resp.json())
 
+      if (response?.error) throw new Error(response?.message)
+
       console.log({ response })
       toast.success('message sent!')
     } catch (error) {
@@ -28,5 +38,30 @@ export default function useMessages () {
     }
   }
 
-  return { sendMessages }
+  const fetchChatByConversation = async conversationId => {
+    try {
+      dispatch(fetchingConversationMessages())
+      const response = await fetch(
+        `http://localhost:4444/api/v1/messages/get-messages/${conversationId}`,
+        {
+          method: 'GET',
+          headers: {
+            authorization: JSON.parse(localStorage.getItem('userData@**@user'))
+              ?.token
+          }
+        }
+      ).then(resp => resp.json())
+
+      if (response?.error) throw new Error(response?.message)
+
+      console.log({ response })
+      dispatch(fetchingMessagesSuccess(response?.messages))
+    } catch (error) {
+      console.log('Sending Messages Error: ', error?.message)
+      toast.error('message failed!')
+      dispatch(fetchingMessagesFailed())
+    }
+  }
+
+  return { sendMessages, fetchChatByConversation }
 }

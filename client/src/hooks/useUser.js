@@ -81,14 +81,18 @@ export default function useUser () {
       // GET USER DATA (ID, username, EMAIL) AND SAVE IN LOCAL STORAGE!
       const {
         token,
-        user: { id, username, email }
+        user: { id, username, email, image }
       } = response
+
+      console.log({ token, id, username, email })
 
       // SAVING USER LOCAL STORAGE!
       localStorage.setItem(
         'userData@**@user',
-        JSON.stringify({ id, username, email, token })
+        JSON.stringify({ id, username, email, token, image })
       )
+
+      localStorage.setItem('token', token)
 
       // SETTING STATE BACK TO DEFAULT!
       setLoadingUser(false)

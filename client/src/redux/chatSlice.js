@@ -17,17 +17,20 @@ const chatSlice = createSlice({
       state.fetchingConversations = false
       state.conversations = actions.payload
     },
-    fetchingConversations: (state, actions) => {
+    fetchingConversations: state => {
       state.fetchingConversations = true
     },
-    fetchingConversationsFailed: (state, actions) => {
+    fetchingConversationsFailed: state => {
       state.fetchingConversations = false
+    },
+    fetchingConversationMessages: state => {
+      state.fetchingMessages = true
     },
     fetchingMessagesSuccess: (state, actions) => {
       state.activeUserMessages = actions.payload
       state.fetchingMessages = false
     },
-    fetchingMessagesFailed: (state, actions) => {
+    fetchingMessagesFailed: state => {
       state.fetchingMessages = false
     }
   }
@@ -40,6 +43,7 @@ export const {
   fetchingConversations,
   fetchingConversationsFailed,
   fetchingMessagesFailed,
-  fetchingMessagesSuccess
+  fetchingMessagesSuccess,
+  fetchingConversationMessages
 } = chatSlice.actions
 export const chatReducer = chatSlice.reducer

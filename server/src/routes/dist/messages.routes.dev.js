@@ -16,6 +16,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 var routes = _express["default"].Router(); // SEND MESSAGES ROUTE!
 
 
-routes.post('/send-message', _userMiddleware.authProtection, _messagesControllers.sendMessage);
+routes.post('/send-message', _userMiddleware.authProtection, _messagesControllers.sendMessage); // FETCH ALL MESSAGE BY CONVERSATION!
+
+routes.get('/get-messages/:conversationId', _userMiddleware.authProtection, _messagesControllers.fetchAllMessages);
 var _default = routes;
 exports["default"] = _default;

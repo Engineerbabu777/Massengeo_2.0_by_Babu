@@ -68,7 +68,9 @@ var fetchAllConversations = function fetchAllConversations(req, res) {
             users: {
               $in: [req.user._id]
             }
-          }).populate('users'));
+          }).populate('users lastMessage').sort({
+            updatedAt: -1
+          }));
 
         case 3:
           conversations = _context2.sent;
