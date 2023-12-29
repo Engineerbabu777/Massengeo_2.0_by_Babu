@@ -6,8 +6,6 @@ export const formatTimeAgo = dateString => {
 
   const diffDays = now.diff(dateMoment, 'days')
 
-  console.log(diffDays)
-
   // GET BOTH DATES!
   const inputDate = new Date(dateString)
   const todayDate = new Date()
@@ -28,7 +26,6 @@ export const formatTimeAgo = dateString => {
     return dateMoment.format('hh:mm A')
   }
 
-  console.log(formattedDate, formattedDate2)
   if (diffDays === 1 || (diffDays === 0 && dateMoment.date() !== now.date())) {
     // Yesterday: Show 'Yesterday'
     return 'Yesterday'

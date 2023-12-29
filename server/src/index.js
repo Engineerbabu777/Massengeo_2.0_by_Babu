@@ -5,6 +5,7 @@ import * as dotenv from 'dotenv'
 import { databaseConnect } from './db/databaseConnect.js'
 import cors from 'cors'
 import conversationRoutes from './routes/conversation.routes.js'
+import messagesRoutes from './routes/messages.routes.js';
 
 // USING ENV FILE!
 dotenv.config()
@@ -23,6 +24,7 @@ app.use(cors())
 // USER ROUTES!!
 app.use('/api/v1/user', userRoutes)
 app.use('/api/v1/conversation', conversationRoutes)
+app.use('/api/v1/messages', messagesRoutes)
 
 // RUNNING EXPRESS APP ON PORT: 4444
 app.listen(4444, () => {

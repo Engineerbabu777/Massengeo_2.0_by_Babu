@@ -10,7 +10,9 @@ const messageSchema = new mongoose.Schema(
     // MESSAGE TYPE WHATEVER (TEXT, IMAGE, FILE)!
     messageType: { type: String, enum: ['text', 'image', 'file'] },
     // SEEN USER IDS!
-    seenBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }]
+    seenBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }],
+    // CONVERSATION ID!
+    conversationId: { type: mongoose.Schema.Types.ObjectId, ref: 'conversation' }
   },
   {
     timestamps: true

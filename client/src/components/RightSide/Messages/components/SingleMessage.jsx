@@ -3,7 +3,10 @@ import MineMessage from './components/MineMessage'
 import OtherUserMessage from './components/OtherUserMessage'
 
 const SingleMessage = ({ message }) => {
-  const mine = message?.senderId === 1
+  // GETTING CURRENT ACTIVE USER ID!
+  const mine =
+    message?.senderId ===
+    JSON.parse(localStorage.getItem('userData@**@user'))._id
 
   return (
     <>

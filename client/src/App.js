@@ -37,7 +37,7 @@ function App () {
             {/* PROTECTED PAGES! */}
             <Route path='/' element={<PrivateRoute element={<NewChat />} />} />
             <Route
-              path='/chat'
+              path='/:conversationId'
               element={<PrivateRoute element={<ChatPage />} />}
             />
             {/* AUTH PAGES! */}

@@ -3,13 +3,15 @@ import { createSlice } from '@reduxjs/toolkit'
 const chatSlice = createSlice({
   name: 'chats',
   initialState: {
-    openedChat: null,
+    openedChatUsers: null,
     conversations: [],
-    fetchingConversations: false
+    fetchingConversations: false,
+    activeUserMessages: [],
+    fetchingMessages: false
   },
   reducers: {
     updateOpenChat: (state, actions) => {
-      state.openedChat = actions.payload
+      state.openedChatUsers = actions.payload
     },
     fetchingConversationsSuccess: (state, actions) => {
       state.fetchingConversations = false
@@ -20,6 +22,13 @@ const chatSlice = createSlice({
     },
     fetchingConversationsFailed: (state, actions) => {
       state.fetchingConversations = false
+    },
+    fetchingMessagesSuccess: (state, actions) => {
+      state.activeUserMessages = actions.payload
+      state.fetchingMessages = false
+    },
+    fetchingMessagesFailed: (state, actions) => {
+      state.fetchingMessages = false
     }
   }
 })
@@ -29,6 +38,8 @@ export const {
   fetchConversations,
   fetchingConversationsSuccess,
   fetchingConversations,
-  fetchingConversationsFailed
+  fetchingConversationsFailed,
+  fetchingMessagesFailed,
+  fetchingMessagesSuccess
 } = chatSlice.actions
 export const chatReducer = chatSlice.reducer

@@ -6,6 +6,7 @@ import Footer from '../components/RightSide/Footer/Footer'
 
 function ChatPage () {
   const [open, setOpen] = useState(false)
+
   return (
     <div className='bg-[#0c0415] h-screen flex-1 flex flex-col'>
       {/* SIDEBAR!!(FIXED) */}

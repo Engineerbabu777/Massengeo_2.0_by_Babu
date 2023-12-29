@@ -1,15 +1,28 @@
-import { formatTimeAgo } from "../../../../../utils/getLastMessageTime"
-
-export default function SingleChatOption ({ conversation,createdAt,users }) {
+import { updateOpenChat } from '../../../../../redux/chatSlice'
+import { formatTimeAgo } from '../../../../../utils/getLastMessageTime'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+export default function SingleChatOption ({ conversation, createdAt, users }) {
   // const isUnread = chat?.unread > 0 ? true : false;
   // const isActive = chat?.active ? true : false;
   // const isGrouped = chat?.isGroup ? true : false;
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
   const isActive = false
   const isGrouped = false
   const isUnread = false
+
+  const handleClick = () => {
+    // UPDATE THE STATE!
+    dispatch(updateOpenChat(users)) // FOR NOW ONLY ONE USER! WILL UPDATE IT LATER!
+    // MOVE TO CONVERSATION PAGE
+    navigate(`/${conversation._id}`)
+  }
   return (
     <>
       <div
+        onClick={handleClick}
         className={`max-w-[25vw] px-3 flex items-center hover:bg-[#F05454] transition-all duration-150 cursor-pointer group font-sans py-3 ${
           false ? 'bg-[#F05454]' : ''
         }`}
@@ -61,8 +74,8 @@ export default function SingleChatOption ({ conversation,createdAt,users }) {
           >
             {' '}
             {/* ELSE LAST MESSAGE TIME!*/}
-            {formatTimeAgo(conversation?.createdAt) }
-            {console.log(conversation?.createdAt)}
+            {formatTimeAgo(createdAt)}
+            {console.log(createdAt)}
           </p>
           {/* {isUnread && (
             <p

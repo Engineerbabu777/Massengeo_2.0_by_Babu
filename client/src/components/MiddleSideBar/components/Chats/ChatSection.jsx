@@ -37,8 +37,9 @@ function ChatSection ({}) {
         {conversations?.map((conversation, ind) => {
           const users = findOtherUsers(conversation.users)
           const lastMessage = conversation.lastMessage;
+          const time = conversation?.lastMessage?.createdAt || conversation?.createdAt
           return <>
-          <SingleChatOption users={users[0]} key={ind} conversation={conversation} />
+          <SingleChatOption users={users[0]} key={ind} conversation={conversation} createdAt={time}/>
           </>
         })}
       </div>
