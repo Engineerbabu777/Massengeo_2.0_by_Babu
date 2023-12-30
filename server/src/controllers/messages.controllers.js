@@ -26,12 +26,12 @@ export const sendMessage = async (req, res) => {
     // SEND A SUCCESS RESPONSE
     res
       .status(201)
-      .json({ SUCCESS: true, MESSAGE: 'MESSAGE SENT SUCCESSFULLY!' })
+      .json({ success: true, message: 'MESSAGE SENT SUCCESSFULLY!' })
     // SEND RESPONSE BACK!
   } catch (error) {
     // LOG AND SEND AN ERROR RESPONSE WITH A MORE DETAILED MESSAGE
     console.log('API SEND MESSAGE ERROR: ', error?.message)
-    res.status(500).json({ SUCCESS: false, MESSAGE: 'INTERNAL SERVER ERROR' })
+    res.status(500).json({ error: true, message: 'INTERNAL SERVER ERROR' })
   }
 }
 
@@ -46,10 +46,10 @@ export const fetchAllMessages = async (req, res) => {
     const messages = await Message.find({ conversationId }).populate('senderId')
 
     // SEND A SUCCESS RESPONSE WITH THE FETCHED MESSAGES
-    res.status(200).json({ SUCCESS: true, MESSAGES: messages })
+    res.status(200).json({ success: true, messages: messages })
   } catch (error) {
     // LOG AND SEND AN ERROR RESPONSE WITH A MORE DETAILED MESSAGE
     console.log('API FETCH ALL MESSAGES ERROR: ', error?.message)
-    res.status(500).json({ SUCCESS: false, MESSAGE: 'INTERNAL SERVER ERROR' })
+    res.status(500).json({ error: true, message: 'INTERNAL SERVER ERROR' })
   }
 }

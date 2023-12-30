@@ -28,6 +28,7 @@ const chatSlice = createSlice({
     },
     fetchingMessagesSuccess: (state, actions) => {
       state.activeUserMessages = actions.payload
+      console.log({messages:actions.payload})
       state.fetchingMessages = false
     },
     fetchingMessagesFailed: state => {
