@@ -5,6 +5,7 @@ import {
   fetchingMessagesFailed,
   fetchingMessagesSuccess
 } from '../redux/chatSlice'
+import { socket } from '../components/RightSide/Messages/Messages'
 
 export default function useMessages () {
   const dispatch = useDispatch()
@@ -29,6 +30,9 @@ export default function useMessages () {
       ).then(resp => resp.json())
 
       if (response?.error) throw new Error(response?.message)
+
+      socket.emit('message-sent', message)
+
 
       console.log({ response })
       toast.success('message sent!')

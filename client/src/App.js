@@ -7,6 +7,7 @@ import NewChat from './pages/NewChat'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import { Toaster } from 'react-hot-toast'
+import { socket } from './socket/socket'
 
 //NOTE - THIS COMPONENT WILL CHECK WHETHER USER IS LOGGED OR NOT!
 const PrivateRoute = ({ element }) => {
@@ -28,6 +29,7 @@ const PrivateRoute = ({ element }) => {
 }
 
 function App () {
+
   return (
     <BrowserRouter>
       <div className='flex'>
