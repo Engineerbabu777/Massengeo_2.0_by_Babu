@@ -3,7 +3,9 @@ import { useDispatch } from 'react-redux'
 import {
   fetchingConversationMessages,
   fetchingMessagesFailed,
-  fetchingMessagesSuccess
+  fetchingMessagesSuccess,
+  updateConversationsOnRealtime,
+  updateMessagesOnRealtime
 } from '../redux/chatSlice'
 import { socket } from '../components/RightSide/Messages/Messages'
 
@@ -31,8 +33,17 @@ export default function useMessages () {
 
       if (response?.error) throw new Error(response?.message)
 
-      socket.emit('message-sent', message)
+      // I NEED TO UPDATE THE MESSAGES ARRAY AS WELL AS THE CONVERSATIONS ARRAY!
+      dispatch(updateConversationsOnRealtime(response.updatedConversation))
+      dispatch(updateMessagesOnRealtime(response.newMessage));
 
+
+      // NOTE: CHECKS WHETHER THE CHAT IS OPEN OR NOT!
+
+      socket.emit('message-sent', {
+        newMessage: response?.newMessage,
+        updatedConversation: response?.updatedConversation
+      })
 
       console.log({ response })
       toast.success('message sent!')

@@ -28,16 +28,28 @@ const chatSlice = createSlice({
     },
     fetchingMessagesSuccess: (state, actions) => {
       state.activeUserMessages = actions.payload
-      console.log({messages:actions.payload})
+      console.log({ messages: actions.payload })
       state.fetchingMessages = false
     },
     fetchingMessagesFailed: state => {
       state.fetchingMessages = false
+    },
+    updateConversationsOnRealtime: (state, actions) => {
+      // FIND AND UPDATE!
+      state.conversations = [
+        actions.payload,
+        ...state.conversations.filter(c => c._id !== actions.payload._id)
+      ]
+      // FIND THE CONVERSATION ID AND REMOVE REPLACE WITH NEW DATA!
+    },
+    updateMessagesOnRealtime: (state, actions) => {
+      state.activeUserMessages = [...state.activeUserMessages, actions.payload]
     }
   }
 })
 
 export const {
+  updateMessagesOnRealtime,
   updateOpenChat,
   fetchConversations,
   fetchingConversationsSuccess,
@@ -45,6 +57,7 @@ export const {
   fetchingConversationsFailed,
   fetchingMessagesFailed,
   fetchingMessagesSuccess,
-  fetchingConversationMessages
+  fetchingConversationMessages,
+  updateConversationsOnRealtime
 } = chatSlice.actions
 export const chatReducer = chatSlice.reducer

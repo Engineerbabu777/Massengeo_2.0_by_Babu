@@ -52,11 +52,12 @@ app.use('/api/v1/conversation', _conversationRoutes["default"]);
 app.use('/api/v1/messages', _messagesRoutes["default"]); // ON SOCKET CONNECTION!!
 
 socket.on('connection', function (client) {
-  console.log('Client Connected!');
-  client.on('message-sent', function (message) {
-    console.log(message);
+  console.log('Client Connected!'); // UPDATE THE REALTIME CONVERSATIONS!!
+
+  client.on('message-sent', function (data) {
+    console.log(data);
     socket.emit('message-received', {
-      message: message,
+      data: data,
       clientId: client.id
     });
   }); // ON USER DISCONNECTED!

@@ -39,10 +39,12 @@ app.use('/api/v1/messages', messagesRoutes)
 socket.on('connection', client => {
   console.log('Client Connected!')
 
-  client.on('message-sent', message => {
-    console.log(message)
-    socket.emit('message-received', {message,clientId:client.id})
+  // UPDATE THE REALTIME CONVERSATIONS!!
+  client.on('message-sent', data => {
+    console.log(data)
+    socket.emit('message-received', { data, clientId: client.id })
   })
+
   // ON USER DISCONNECTED!
   client.on('disconnect', () => {
     console.log('user disconnected')

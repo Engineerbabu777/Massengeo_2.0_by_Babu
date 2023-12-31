@@ -1,12 +1,14 @@
 import React, { useEffect, useRef } from 'react'
 import SingleMessage from './components/SingleMessage'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import io from 'socket.io-client'
 import toast from 'react-hot-toast'
+import { updateConversationsOnRealtime } from '../../../redux/chatSlice'
 
-export const socket = io('http://localhost:4444') // Replace with your WebSocket server URL
+export const socket = io('http://localhost:4444') // EXPORTING TO USE IT EVERY WHERE
 const Messages = () => {
   const refVal = useRef(null)
+  const dispatch = useDispatch()
 
   const messages = useSelector(state => state?.chat?.activeUserMessages)
 
@@ -18,13 +20,15 @@ const Messages = () => {
 
   useEffect(() => {
     scrollToBottom()
-  }, [])
+  }, [messages])
 
   // CREATING CLIENT SIDE SOCKET CONNECTION!
   useEffect(() => {
-    socket.on('message-received', ({ message, clientId }) => {
+    socket.on('message-received', ({ data, clientId }) => {
       if (clientId !== socket.id) {
-        toast.success('message received from ' + clientId)
+        // toast.success('message received from ' + clientId)
+        // DISPATCH!
+        dispatch(updateConversationsOnRealtime(data.updatedConversation))
       }
     })
     // Clean up the WebSocket connection on component unmount

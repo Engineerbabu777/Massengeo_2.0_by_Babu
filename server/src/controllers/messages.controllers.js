@@ -21,12 +21,22 @@ export const sendMessage = async (req, res) => {
       conversationId,
       {
         lastMessage: newMessage
+      },
+      {
+        new: true // RETURNS NEW DOC!
       }
     )
+      .populate('users lastMessage')
+      .exec()
     // SEND A SUCCESS RESPONSE
-    res
-      .status(201)
-      .json({ success: true, message: 'MESSAGE SENT SUCCESSFULLY!' })
+    res.status(201).json({
+      success: true,
+      message: 'MESSAGE SENT SUCCESSFULLY!',
+      updatedConversation,
+      newMessage: await Message.findById(newMessage._id)
+        .populate('senderId')
+        .exec()
+    })
     // SEND RESPONSE BACK!
   } catch (error) {
     // LOG AND SEND AN ERROR RESPONSE WITH A MORE DETAILED MESSAGE
