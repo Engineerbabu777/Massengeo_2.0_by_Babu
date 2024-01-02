@@ -7,7 +7,8 @@ const chatSlice = createSlice({
     conversations: [],
     fetchingConversations: false,
     activeUserMessages: [],
-    fetchingMessages: false
+    fetchingMessages: false,
+    activeConversationId: null
   },
   reducers: {
     updateOpenChat: (state, actions) => {
@@ -35,15 +36,25 @@ const chatSlice = createSlice({
       state.fetchingMessages = false
     },
     updateConversationsOnRealtime: (state, actions) => {
-      // FIND AND UPDATE!
-      state.conversations = [
-        actions.payload,
-        ...state.conversations.filter(c => c._id !== actions.payload._id)
-      ]
       // FIND THE CONVERSATION ID AND REMOVE REPLACE WITH NEW DATA!
+
+      if (state.conversations.find(c => c._id === actions.payload._id)) {
+        // FIND AND UPDATE!
+        state.conversations = [
+          actions.payload,
+          ...state.conversations.filter(c => c._id !== actions.payload._id)
+        ]
+      }
     },
     updateMessagesOnRealtime: (state, actions) => {
-      state.activeUserMessages = [...state.activeUserMessages, actions.payload]
+      if (
+        state?.activeUserMessages[0]?.conversationId ===
+        actions.payload.conversationId
+      )
+        state.activeUserMessages = [
+          ...state.activeUserMessages,
+          actions.payload
+        ]
     }
   }
 })

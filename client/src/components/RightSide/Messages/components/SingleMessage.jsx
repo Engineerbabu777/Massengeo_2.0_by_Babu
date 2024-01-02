@@ -2,6 +2,7 @@ import React from 'react'
 import MineMessage from './components/MineMessage'
 import OtherUserMessage from './components/OtherUserMessage'
 import { findOtherUsers } from '../../../../utils/otherUsers'
+import { isMessageReadByOrNot } from '../../../../utils/getIsMessageReadOrNot'
 
 const SingleMessage = ({ message }) => {
 
@@ -15,11 +16,16 @@ const SingleMessage = ({ message }) => {
     messageId: message?.senderId?._id
   })
 
+  // IS MESSAGE READ BY OTHER!
+  const isRead = isMessageReadByOrNot(message?.seenBy, )
+
+  
+
   return (
     <>
       {mine ? (
         <>
-          <MineMessage message={message} />
+          <MineMessage message={message} isRead={isRead}/>
         </>
       ) : (
         <>

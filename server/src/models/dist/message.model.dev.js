@@ -27,10 +27,7 @@ var messageSchema = new _mongoose["default"].Schema({
     "enum": ['text', 'image', 'file']
   },
   // SEEN USER IDS!
-  seenBy: [{
-    type: _mongoose["default"].Schema.Types.ObjectId,
-    ref: 'user'
-  }],
+  seenBy: [String],
   // CONVERSATION ID!
   conversationId: {
     type: _mongoose["default"].Schema.Types.ObjectId,

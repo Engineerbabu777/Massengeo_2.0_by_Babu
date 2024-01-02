@@ -13,7 +13,8 @@ export const sendMessage = async (req, res) => {
       message,
       senderId: user._id,
       conversationId,
-      messageType
+      messageType,
+      seenBy: [req.user._id] // MEANS THE SENDER HAS SEEN THE MESSAGE(BUT OTHERS NOT!)!
     })
 
     // UPDATE THE LAST_MESSAGE FIELD IN THE CORRESPONDING CONVERSATION DOCUMENT
@@ -51,6 +52,18 @@ export const fetchAllMessages = async (req, res) => {
     // EXTRACT USER AND CONVERSATION_ID FROM REQUEST PARAMETERS
     const user = req.user
     const { conversationId } = req.params
+
+    // WHEN USER FETCH FOR MESSAGES THAT MEANS HAS SEEN ALL OF THE MESSAGE THAT ARE UNSEEN!
+    // FIND ALL MESSAGE AND MARKED THEM AS SEEN BY THE CURRENT USER!
+    await Message.updateMany(
+      {
+        conversationId,
+        seenBy: { $nin: [user?._id] }
+      },
+      {
+        $push: { seenBy: req.user?._id }
+      }
+    )
 
     // FETCH ALL MESSAGES ASSOCIATED WITH THE SPECIFIED CONVERSATION_ID
     const messages = await Message.find({ conversationId }).populate('senderId')

@@ -3,7 +3,10 @@ import SingleMessage from './components/SingleMessage'
 import { useSelector, useDispatch } from 'react-redux'
 import io from 'socket.io-client'
 import toast from 'react-hot-toast'
-import { updateConversationsOnRealtime } from '../../../redux/chatSlice'
+import {
+  updateConversationsOnRealtime,
+  updateMessagesOnRealtime
+} from '../../../redux/chatSlice'
 
 export const socket = io('http://localhost:4444') // EXPORTING TO USE IT EVERY WHERE
 const Messages = () => {
@@ -26,9 +29,11 @@ const Messages = () => {
   useEffect(() => {
     socket.on('message-received', ({ data, clientId }) => {
       if (clientId !== socket.id) {
-        // toast.success('message received from ' + clientId)
+        console.log({ data })
+        toast.success('message received from ' + clientId)
         // DISPATCH!
         dispatch(updateConversationsOnRealtime(data.updatedConversation))
+        dispatch(updateMessagesOnRealtime(data.newMessage))
       }
     })
     // Clean up the WebSocket connection on component unmount

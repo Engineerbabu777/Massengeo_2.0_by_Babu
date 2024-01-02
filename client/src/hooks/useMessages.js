@@ -42,7 +42,8 @@ export default function useMessages () {
 
       socket.emit('message-sent', {
         newMessage: response?.newMessage,
-        updatedConversation: response?.updatedConversation
+        updatedConversation: response?.updatedConversation,
+        conversationId: response?.updatedConversation?._id
       })
 
       console.log({ response })

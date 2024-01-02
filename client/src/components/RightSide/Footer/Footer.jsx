@@ -19,6 +19,7 @@ const Footer = () => {
   const handleMessages = () => {
     if (input && conversationId && receiverId)
       sendMessages(messageType, input, conversationId)
+    setInput('');
   }
 
   return (
