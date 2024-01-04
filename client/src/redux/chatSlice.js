@@ -12,7 +12,9 @@ const chatSlice = createSlice({
   },
   reducers: {
     updateOpenChat: (state, actions) => {
-      state.openedChatUsers = actions.payload
+      state.openedChatUsers = actions.payload.users
+      state.activeConversationId = actions.payload.conversationId
+      console.log(actions.payload.conversationId)
     },
     fetchingConversationsSuccess: (state, actions) => {
       state.fetchingConversations = false
@@ -55,6 +57,33 @@ const chatSlice = createSlice({
           ...state.activeUserMessages,
           actions.payload
         ]
+    },
+    updateMessageIsRead: (state, actions) => {
+      if (
+        state?.activeUserMessages[0]?.conversationId ===
+        actions.payload.conversationId
+      ) {
+        state.activeUserMessages = state.activeUserMessages.map(m => {
+          if (m._id === actions.payload._id) {
+            return { ...m, seenBy: [...m.seenBy, actions.payload.userIdToAdd] }
+          }
+          return m
+        })
+      }
+    },
+    updateAllUnreadAsRead: (state, actions) => {
+      if (
+        state?.activeUserMessages[0]?.conversationId ===
+        actions.payload.conversationId
+      ) {
+        state.activeUserMessages = state.activeUserMessages.map(m => {
+          if (m?.seenBy?.includes(actions.payload.userIdToAdd)) {
+            return m
+          } else {
+            return { ...m, seenBy: [...m.seenBy, actions.payload.userIdToAdd] }
+          }
+        })
+      }
     }
   }
 })
@@ -69,6 +98,8 @@ export const {
   fetchingMessagesFailed,
   fetchingMessagesSuccess,
   fetchingConversationMessages,
-  updateConversationsOnRealtime
+  updateConversationsOnRealtime,
+  updateMessageIsRead,
+  updateAllUnreadAsRead
 } = chatSlice.actions
 export const chatReducer = chatSlice.reducer

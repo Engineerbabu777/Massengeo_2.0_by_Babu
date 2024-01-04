@@ -76,3 +76,24 @@ export const fetchAllMessages = async (req, res) => {
     res.status(500).json({ error: true, message: 'INTERNAL SERVER ERROR' })
   }
 }
+
+export const readTheMessageThatWasSent = async (req, res) => {
+  try {
+    // EXTRACT USER AND CONVERSATION_ID FROM REQUEST PARAMETERS
+    const user = req.user
+    const { conversationId, messageId } = req.params
+
+    // WHEN USER FETCH FOR MESSAGES THAT MEANS HAS SEEN ALL OF THE MESSAGE THAT ARE UNSEEN!
+    // FIND ALL MESSAGE AND MARKED THEM AS SEEN BY THE CURRENT USER!
+    await Message.findByIdAndUpdate(messageId, {
+      $push: { seenBy: user?._id }
+    })
+
+    // SEND A SUCCESS RESPONSE WITH THE FETCHED MESSAGES
+    res.status(200).json({ success: true, message: 'Message Marked as Read!' })
+  } catch (error) {
+    // LOG AND SEND AN ERROR RESPONSE WITH A MORE DETAILED MESSAGE
+    console.log('UPDATING MESSAGE READ ERROR: ', error?.message)
+    res.status(500).json({ error: true, message: 'INTERNAL SERVER ERROR' })
+  }
+}

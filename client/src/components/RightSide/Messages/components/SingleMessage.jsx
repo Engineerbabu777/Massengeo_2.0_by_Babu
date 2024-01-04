@@ -11,11 +11,6 @@ const SingleMessage = ({ message }) => {
     message?.senderId?._id ===
     JSON.parse(localStorage.getItem('userData@**@user')).id
 
-  console.log({
-    mineId: JSON.parse(localStorage.getItem('userData@**@user'))._id,
-    messageId: message?.senderId?._id
-  })
-
   // IS MESSAGE READ BY OTHER!
   const isRead = isMessageReadByOrNot(message?.seenBy, )
 

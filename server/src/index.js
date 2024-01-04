@@ -45,6 +45,16 @@ socket.on('connection', client => {
     socket.emit('message-received', { data, clientId: client.id })
   })
 
+  // UPDATE SEEN ON REALTIME!
+  client.on('message-read-by-user', ({newMessage,conversationId,userIdToAdd}) => {
+    socket.emit('mark-message-as-read', {newMessage,conversationId,clientId:client.id,userIdToAdd})
+  })
+
+  // MARK ALL UNREAD AS READ!
+  client.on('marked-all-unread-as-read',(data) => {
+    socket.emit('update-as-read',{...data,clientId:client.id});
+  })
+
   // ON USER DISCONNECTED!
   client.on('disconnect', () => {
     console.log('user disconnected')

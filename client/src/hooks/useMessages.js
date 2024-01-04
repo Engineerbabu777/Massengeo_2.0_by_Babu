@@ -79,5 +79,31 @@ export default function useMessages () {
     }
   }
 
-  return { sendMessages, fetchChatByConversation }
+  const markMessageAsReadOnRealTime = async(conversationId,messageId) => {
+    /*THAT MEANS THE CURRENT USER HAS SEEN THE RECEIVED MESSAGE SO WE NEED TO UPDATE IT TO BE READ ON REALTIME!
+    */
+    try {
+      dispatch(fetchingConversationMessages())
+      const response = await fetch(
+        `http://localhost:4444/api/v1/messages/update-read-message/${conversationId}/${messageId}`,
+        {
+          method: 'PUT',
+          headers: {
+            authorization: JSON.parse(localStorage.getItem('userData@**@user'))
+              ?.token
+          }
+        }
+      ).then(resp => resp.json())
+
+      if (response?.error) throw new Error(response?.message)
+
+      console.log({response})
+
+      console.log({ response })
+    } catch (error) {
+      console.log('UPDATE READ MESSAGE ERROR: ', error?.message)
+      toast.error('message failed!')
+    }
+  } 
+  return { sendMessages, fetchChatByConversation,markMessageAsReadOnRealTime }
 }

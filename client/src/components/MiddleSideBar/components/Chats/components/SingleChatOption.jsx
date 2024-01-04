@@ -4,6 +4,7 @@ import { formatTimeAgo } from '../../../../../utils/getLastMessageTime'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router-dom'
+import { socket } from '../../../../RightSide/Messages/Messages'
 
 export default function SingleChatOption ({ conversation, createdAt, users }) {
   // const isUnread = chat?.unread > 0 ? true : false;
@@ -38,9 +39,16 @@ export default function SingleChatOption ({ conversation, createdAt, users }) {
     // FETCH CHAT!
     fetchChatByConversation(conversation._id)
     // UPDATE THE STATE!
-    dispatch(updateOpenChat(users)) // FOR NOW ONLY ONE USER! WILL UPDATE IT LATER!
+    dispatch(updateOpenChat({ users, conversationId: conversation._id })) // FOR NOW ONLY ONE USER! WILL UPDATE IT LATER!
     // MOVE TO CONVERSATION PAGE
     navigate(`/${conversation._id}`)
+
+    setTimeout(() => {
+      socket.emit('marked-all-unread-as-read', {
+        conversationId: conversation._id,
+        userId: JSON.parse(localStorage.getItem('userData@**@user'))?.id
+      })
+    }, 500)
   }
   return (
     <>
