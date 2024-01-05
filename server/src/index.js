@@ -38,7 +38,6 @@ app.use('/api/v1/messages', messagesRoutes)
 // ONLINE USERS IDS!
 let onlineUsers = {}
 
-
 // ON SOCKET CONNECTION!!
 socket.on('connection', client => {
   // WHEN USER COMES ACTIVE/ONLINE!
