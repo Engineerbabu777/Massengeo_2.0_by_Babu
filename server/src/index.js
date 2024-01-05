@@ -38,15 +38,14 @@ app.use('/api/v1/messages', messagesRoutes)
 // ONLINE USERS IDS!
 let onlineUsers = {}
 
-console.log(onlineUsers)
 
 // ON SOCKET CONNECTION!!
 socket.on('connection', client => {
   // WHEN USER COMES ACTIVE/ONLINE!
-  client.on('update-user-is-online-now', data => {
-    onlineUsers[client.id] = data.userId
+  client.on('update-user-is-online-now', ({ userId, clientId }) => {
+    onlineUsers[clientId] = userId
     // EMIT AN EVENT ABOUT NEW ACTIVE USERS!!
-    client.emit('update-active-users', { onlineUsers, clientId: client.id })
+    socket.emit('update-active-users', { onlineUsers, clientId: client.id })
   })
 
   // UPDATE THE REALTIME CONVERSATIONS!!
@@ -78,6 +77,8 @@ socket.on('connection', client => {
     console.log('user disconnected')
     // UPDATE THE ONLINE USERS (BY DELETING)!
     delete onlineUsers[client.id]
+
+    socket.emit('update-active-users', { onlineUsers, clientId: client.id })
   })
 })
 

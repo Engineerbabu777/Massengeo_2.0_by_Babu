@@ -14,7 +14,7 @@ export default function Header ({ openSideModal, open }) {
       <Avatar src={chatUserData?.avatar} online={true} />
 
       {/* NAME & LAST SEEN for single chats */}
-      <SingleChat name={chatUserData?.username}/>
+      <SingleChat name={chatUserData?.username} userId={chatUserData._id} />
 
       {/* NAME & members length for group chats */}
       {/* <GroupChat /> */}
@@ -23,7 +23,12 @@ export default function Header ({ openSideModal, open }) {
       <SearchChatMessage />
 
       {/* INFO about single chat */}
-      <ChatInfo openSideModal={openSideModal} open={open} src={chatUserData?.avatar} name={chatUserData?.username} />
+      <ChatInfo
+        openSideModal={openSideModal}
+        open={open}
+        src={chatUserData?.avatar}
+        name={chatUserData?.username}
+      />
     </div>
   )
 }

@@ -8,7 +8,8 @@ const chatSlice = createSlice({
     fetchingConversations: false,
     activeUserMessages: [],
     fetchingMessages: false,
-    activeConversationId: null
+    activeConversationId: null,
+    allOnlineUsers: []
   },
   reducers: {
     updateOpenChat: (state, actions) => {
@@ -84,6 +85,12 @@ const chatSlice = createSlice({
           }
         })
       }
+    },
+    
+    // UPDATING USERS ON REALTIME!
+    updateOnlineUsers: (state, actions) => {
+      // UPDATE THE ONLINE USERS ARRAY!
+      state.allOnlineUsers = Object.values(actions.payload.onlineUsers)
     }
   }
 })
@@ -100,6 +107,7 @@ export const {
   fetchingConversationMessages,
   updateConversationsOnRealtime,
   updateMessageIsRead,
-  updateAllUnreadAsRead
+  updateAllUnreadAsRead,
+  updateOnlineUsers
 } = chatSlice.actions
 export const chatReducer = chatSlice.reducer

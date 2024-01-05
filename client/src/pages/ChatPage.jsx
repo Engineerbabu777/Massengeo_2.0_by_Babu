@@ -8,7 +8,8 @@ import {
   updateAllUnreadAsRead,
   updateConversationsOnRealtime,
   updateMessageIsRead,
-  updateMessagesOnRealtime
+  updateMessagesOnRealtime,
+  updateOnlineUsers
 } from '../redux/chatSlice'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -21,13 +22,15 @@ function ChatPage () {
   useEffect(() => {
     // ONCE THE USER IS CONNECTED!
     socket.emit('update-user-is-online-now', {
-      userId: JSON.parse(localStorage.getItem('userData@**@user')).id
+      userId: JSON.parse(localStorage.getItem('userData@**@user')).id,
+      clientId: socket.id
     })
 
     // UPDATE USER ACTIVE STATUS!!
-    socket.on('update-active-users', () => {
-      toast.success('Another User is active now!')
-      console.log('Hi!!')
+    socket.on('update-active-users', ({ onlineUsers, clientId }) => {
+      if (clientId !== socket.id) {
+        dispatch(updateOnlineUsers({ onlineUsers }))
+      }
     })
 
     // ON RECEIVED OF NEW MESSAGE!

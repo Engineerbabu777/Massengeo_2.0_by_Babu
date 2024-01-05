@@ -7,7 +7,7 @@ const userSlice = createSlice({
     loadingUsers: false,
     alreadyLoadedUsers: false,
     searchUsers: [],
-    loadingSearchUsers: false
+    loadingSearchUsers: false,
   },
   reducers: {
     fetchedUsers: (state, action) => {

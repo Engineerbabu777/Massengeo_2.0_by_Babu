@@ -56,15 +56,16 @@ app.use('/api/v1/user', _userRoutes["default"]);
 app.use('/api/v1/conversation', _conversationRoutes["default"]);
 app.use('/api/v1/messages', _messagesRoutes["default"]); // ONLINE USERS IDS!
 
-var onlineUsers = {};
-console.log(onlineUsers); // ON SOCKET CONNECTION!!
+var onlineUsers = {}; // ON SOCKET CONNECTION!!
 
 socket.on('connection', function (client) {
   // WHEN USER COMES ACTIVE/ONLINE!
-  client.on('update-user-is-online-now', function (data) {
-    onlineUsers[client.id] = data.userId; // EMIT AN EVENT ABOUT NEW ACTIVE USERS!!
+  client.on('update-user-is-online-now', function (_ref) {
+    var userId = _ref.userId,
+        clientId = _ref.clientId;
+    onlineUsers[clientId] = userId; // EMIT AN EVENT ABOUT NEW ACTIVE USERS!!
 
-    client.emit('update-active-users', {
+    socket.emit('update-active-users', {
       onlineUsers: onlineUsers,
       clientId: client.id
     });
@@ -78,10 +79,10 @@ socket.on('connection', function (client) {
     });
   }); // UPDATE SEEN ON REALTIME!
 
-  client.on('message-read-by-user', function (_ref) {
-    var newMessage = _ref.newMessage,
-        conversationId = _ref.conversationId,
-        userIdToAdd = _ref.userIdToAdd;
+  client.on('message-read-by-user', function (_ref2) {
+    var newMessage = _ref2.newMessage,
+        conversationId = _ref2.conversationId,
+        userIdToAdd = _ref2.userIdToAdd;
     socket.emit('mark-message-as-read', {
       newMessage: newMessage,
       conversationId: conversationId,
@@ -100,6 +101,10 @@ socket.on('connection', function (client) {
     console.log('user disconnected'); // UPDATE THE ONLINE USERS (BY DELETING)!
 
     delete onlineUsers[client.id];
+    socket.emit('update-active-users', {
+      onlineUsers: onlineUsers,
+      clientId: client.id
+    });
   });
 }); // RUNNING EXPRESS APP ON PORT: 4444
 
