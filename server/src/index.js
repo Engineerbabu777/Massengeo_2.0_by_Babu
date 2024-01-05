@@ -35,6 +35,9 @@ app.use('/api/v1/user', userRoutes)
 app.use('/api/v1/conversation', conversationRoutes)
 app.use('/api/v1/messages', messagesRoutes)
 
+// ONLINE USERS IDS!
+let onlineUsers = []
+
 // ON SOCKET CONNECTION!!
 socket.on('connection', client => {
   console.log('Client Connected!')
@@ -46,18 +49,28 @@ socket.on('connection', client => {
   })
 
   // UPDATE SEEN ON REALTIME!
-  client.on('message-read-by-user', ({newMessage,conversationId,userIdToAdd}) => {
-    socket.emit('mark-message-as-read', {newMessage,conversationId,clientId:client.id,userIdToAdd})
-  })
+  client.on(
+    'message-read-by-user',
+    ({ newMessage, conversationId, userIdToAdd }) => {
+      socket.emit('mark-message-as-read', {
+        newMessage,
+        conversationId,
+        clientId: client.id,
+        userIdToAdd
+      })
+    }
+  )
 
   // MARK ALL UNREAD AS READ!
-  client.on('marked-all-unread-as-read',(data) => {
-    socket.emit('update-as-read',{...data,clientId:client.id});
+  client.on('marked-all-unread-as-read', data => {
+    socket.emit('update-as-read', { ...data, clientId: client.id })
   })
 
   // ON USER DISCONNECTED!
   client.on('disconnect', () => {
     console.log('user disconnected')
+    // UPDATE THE ONLINE USERS!
+    onlineUsers = onlineUsers.filter(user => user.socketId !== socket.id)
   })
 })
 

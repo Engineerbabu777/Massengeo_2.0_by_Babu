@@ -54,7 +54,9 @@ app.use((0, _cors["default"])()); // USER ROUTES!!
 
 app.use('/api/v1/user', _userRoutes["default"]);
 app.use('/api/v1/conversation', _conversationRoutes["default"]);
-app.use('/api/v1/messages', _messagesRoutes["default"]); // ON SOCKET CONNECTION!!
+app.use('/api/v1/messages', _messagesRoutes["default"]); // ONLINE USERS IDS!
+
+var onlineUsers = []; // ON SOCKET CONNECTION!!
 
 socket.on('connection', function (client) {
   console.log('Client Connected!'); // UPDATE THE REALTIME CONVERSATIONS!!
@@ -86,7 +88,11 @@ socket.on('connection', function (client) {
   }); // ON USER DISCONNECTED!
 
   client.on('disconnect', function () {
-    console.log('user disconnected');
+    console.log('user disconnected'); // UPDATE THE ONLINE USERS!
+
+    onlineUsers = onlineUsers.filter(function (user) {
+      return user.socketId !== socket.id;
+    });
   });
 }); // RUNNING EXPRESS APP ON PORT: 4444
 

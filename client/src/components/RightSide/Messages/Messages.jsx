@@ -69,7 +69,7 @@ const Messages = () => {
     socket.on('update-as-read', ({ clientId, userId, conversationId }) => {
       if (clientId !== socket.id) {
         if (window?.location?.pathname?.split('/')[1] === conversationId) {
-          dispatch(
+cmd          dispatch(
             updateAllUnreadAsRead({ conversationId, userIdToAdd: userId })
           )
         }
