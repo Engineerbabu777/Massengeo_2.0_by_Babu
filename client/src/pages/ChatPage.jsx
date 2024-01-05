@@ -25,8 +25,9 @@ function ChatPage () {
     })
 
     // UPDATE USER ACTIVE STATUS!!
-    socket.on('update-user-active-status', () => {
-      toast.success('User is active now!')
+    socket.on('update-active-users', () => {
+      toast.success('Another User is active now!')
+      console.log('Hi!!')
     })
 
     // ON RECEIVED OF NEW MESSAGE!

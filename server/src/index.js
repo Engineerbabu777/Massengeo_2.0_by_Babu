@@ -46,7 +46,7 @@ socket.on('connection', client => {
   client.on('update-user-is-online-now', data => {
     onlineUsers[client.id] = data.userId
     // EMIT AN EVENT ABOUT NEW ACTIVE USERS!!
-    client.broadcast.emit('update-active-users', onlineUsers)
+    client.emit('update-active-users', { onlineUsers, clientId: client.id })
   })
 
   // UPDATE THE REALTIME CONVERSATIONS!!
