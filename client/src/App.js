@@ -7,12 +7,15 @@ import NewChat from './pages/NewChat'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import { Toaster } from 'react-hot-toast'
-import { socket } from './socket/socket'
+import { socket } from './components/RightSide/Messages/Messages'
 
 //NOTE - THIS COMPONENT WILL CHECK WHETHER USER IS LOGGED OR NOT!
 const PrivateRoute = ({ element }) => {
   //REVIEW - CHECKING IF USER IS LOGGED!!
   const userLogged = JSON.parse(localStorage.getItem('userData@**@user'))?.id
+
+
+
   // IF USER IS LOGGED THEN PROCEED!!
   if (userLogged) {
     return (
@@ -29,7 +32,6 @@ const PrivateRoute = ({ element }) => {
 }
 
 function App () {
-
   return (
     <BrowserRouter>
       <div className='flex'>

@@ -56,10 +56,16 @@ app.use('/api/v1/user', _userRoutes["default"]);
 app.use('/api/v1/conversation', _conversationRoutes["default"]);
 app.use('/api/v1/messages', _messagesRoutes["default"]); // ONLINE USERS IDS!
 
-var onlineUsers = []; // ON SOCKET CONNECTION!!
+var onlineUsers = {};
+console.log(onlineUsers); // ON SOCKET CONNECTION!!
 
 socket.on('connection', function (client) {
-  console.log('Client Connected!'); // UPDATE THE REALTIME CONVERSATIONS!!
+  // WHEN USER COMES ACTIVE/ONLINE!
+  client.on('update-user-is-online-now', function (data) {
+    onlineUsers[client.id] = data.userId; // EMIT AN EVENT ABOUT NEW ACTIVE USERS!!
+
+    client.broadcast.emit('update-active-users', onlineUsers);
+  }); // UPDATE THE REALTIME CONVERSATIONS!!
 
   client.on('message-sent', function (data) {
     console.log(data);
@@ -87,12 +93,10 @@ socket.on('connection', function (client) {
     }));
   }); // ON USER DISCONNECTED!
 
-  client.on('disconnect', function () {
-    console.log('user disconnected'); // UPDATE THE ONLINE USERS!
+  client.on('disconnect', function (data) {
+    console.log('user disconnected'); // UPDATE THE ONLINE USERS (BY DELETING)!
 
-    onlineUsers = onlineUsers.filter(function (user) {
-      return user.socketId !== socket.id;
-    });
+    delete onlineUsers[client.id];
   });
 }); // RUNNING EXPRESS APP ON PORT: 4444
 
