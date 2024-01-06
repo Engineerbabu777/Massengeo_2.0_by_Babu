@@ -25,6 +25,8 @@ var _socket = require("socket.io");
 
 var _http = require("http");
 
+var _messageModel = require("./models/message.model.js");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -36,6 +38,14 @@ function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (O
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
 dotenv.config(); // CREATING EXPRESS APP!
 
@@ -85,15 +95,31 @@ socket.on('connection', function (client) {
     });
   }); // UPDATE SEEN ON REALTIME!
 
-  client.on('message-read-by-user', function (_ref2) {
-    var newMessage = _ref2.newMessage,
-        conversationId = _ref2.conversationId,
-        userIdToAdd = _ref2.userIdToAdd;
-    socket.emit('mark-message-as-read', {
-      newMessage: newMessage,
-      conversationId: conversationId,
-      clientId: client.id,
-      userIdToAdd: userIdToAdd
+  client.on('message-read-by-user', function _callee(_ref2) {
+    var newMessage, conversationId, userIdToAdd;
+    return regeneratorRuntime.async(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            newMessage = _ref2.newMessage, conversationId = _ref2.conversationId, userIdToAdd = _ref2.userIdToAdd;
+            _context.next = 3;
+            return regeneratorRuntime.awrap(_messageModel.Message.findByIdAndUpdate(newMessage._id, {
+              seenBy: [].concat(_toConsumableArray(newMessage.seenBy), [userId])
+            }));
+
+          case 3:
+            socket.emit('mark-message-as-read', {
+              newMessage: newMessage,
+              conversationId: conversationId,
+              clientId: client.id,
+              userIdToAdd: userIdToAdd
+            });
+
+          case 4:
+          case "end":
+            return _context.stop();
+        }
+      }
     });
   }); // MARK ALL UNREAD AS READ!
 

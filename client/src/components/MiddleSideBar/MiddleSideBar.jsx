@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import ChatSection from './components/Chats/ChatSection'
 import Header from './components/Header'
 import StoriesParent from './components/Stories/StoriesParent'
-import useUser from '../../hooks/useUser'
 import SearchUsers from './components/SearchUsers/SearchUsers'
 import toast from 'react-hot-toast'
 import {
@@ -11,13 +10,14 @@ import {
   updateMessageIsRead,
   updateMessagesOnRealtime,
   updateOnlineUsers,
-  allMessagesAreDelivered
 } from '../../redux/chatSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import { socket } from '../RightSide/Messages/Messages'
+import useMessages from '../../hooks/useMessages'
 
 export default function MiddleSideBar () {
   const sidebarState = useSelector(state => state.sidebar.active)
+  const { fetchChatByConversation } = useMessages()
 
   // CREATING CLIENT SIDE SOCKET CONNECTION!
   const dispatch = useDispatch()
@@ -35,6 +35,10 @@ export default function MiddleSideBar () {
       console.log({ onlineUsers })
       if (clientId !== socket.id) {
         dispatch(updateOnlineUsers({ onlineUsers }))
+        // ONLY IF ANY CHAT ID IS OPEN!
+        if (window?.location?.pathname?.split('/')[1]) {
+          fetchChatByConversation(window?.location?.pathname?.split('/')[1])
+        }
       }
     })
 

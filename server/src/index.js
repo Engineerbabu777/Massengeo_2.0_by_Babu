@@ -8,6 +8,7 @@ import conversationRoutes from './routes/conversation.routes.js'
 import messagesRoutes from './routes/messages.routes.js'
 import { Server } from 'socket.io'
 import { createServer } from 'http'
+import { Message } from './models/message.model.js'
 // USING ENV FILE!
 dotenv.config()
 
@@ -46,13 +47,9 @@ socket.on('connection', client => {
     // EMIT AN EVENT ABOUT NEW ACTIVE USERS!!
     socket.emit('update-active-users', {
       onlineUsers,
-      clientId: client.id,
+      clientId: client.id
     })
-
-
   })
-
-
 
   // UPDATE THE REALTIME MESSAGE SENT/RECEIVED!!
   client.on('message-sent', data => {
@@ -63,7 +60,12 @@ socket.on('connection', client => {
   // UPDATE SEEN ON REALTIME!
   client.on(
     'message-read-by-user',
-    ({ newMessage, conversationId, userIdToAdd }) => {
+    async ({ newMessage, conversationId, userIdToAdd }) => {
+      // UPDATE IN DATABASE AS WELL!
+      await Message.findByIdAndUpdate(newMessage._id, {
+        seenBy: [...newMessage.seenBy, userId]
+      })
+
       socket.emit('mark-message-as-read', {
         newMessage,
         conversationId,
@@ -86,7 +88,7 @@ socket.on('connection', client => {
 
     socket.emit('update-active-users', {
       onlineUsers,
-      clientId: client.id,
+      clientId: client.id
     })
   })
 })
