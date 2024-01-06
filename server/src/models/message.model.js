@@ -16,7 +16,8 @@ const messageSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'conversation'
     },
-    delivered: { type: Boolean, default: false }
+    delivered: { type: Boolean, default: false },
+    receiverId: { type: mongoose.Schema.Types.ObjectId, ref: 'user' }
   },
   {
     timestamps: true

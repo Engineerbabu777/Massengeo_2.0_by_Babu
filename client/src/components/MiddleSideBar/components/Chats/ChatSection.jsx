@@ -6,6 +6,7 @@ import { Options } from '../../../../constants'
 import useConversation from '../../../../hooks/useConversation'
 import { useSelector } from 'react-redux'
 import { findOtherUsers } from '../../../../utils/otherUsers'
+import { socket } from '../../../RightSide/Messages/Messages'
 
 function ChatSection ({}) {
   const [selectedSlide, setSelectedSlide] = useState(Options[0])
@@ -24,6 +25,11 @@ function ChatSection ({}) {
   const onChangeSlide = val => setSelectedSlide(val)
 
   useEffect(() => {
+    if (JSON.parse(localStorage.getItem('userData@**@user'))?.id) {
+      socket.emit('update-user-is-online-now', {
+        userId: JSON.parse(localStorage.getItem('userData@**@user'))?.id
+      })
+    }
     fetchConversations()
   }, [])
 
@@ -36,11 +42,19 @@ function ChatSection ({}) {
       <div className='mt-8 flex flex-col h-[calc(100vh-270px)] gap-4 overflow-auto no-scrollbar pb-6'>
         {conversations?.map((conversation, ind) => {
           const users = findOtherUsers(conversation.users)
-          const lastMessage = conversation.lastMessage;
-          const time = conversation?.lastMessage?.createdAt || conversation?.createdAt
-          return <>
-          <SingleChatOption users={users[0]} key={ind} conversation={conversation} createdAt={time}/>
-          </>
+          const lastMessage = conversation.lastMessage
+          const time =
+            conversation?.lastMessage?.createdAt || conversation?.createdAt
+          return (
+            <>
+              <SingleChatOption
+                users={users[0]}
+                key={ind}
+                conversation={conversation}
+                createdAt={time}
+              />
+            </>
+          )
         })}
       </div>
     </div>

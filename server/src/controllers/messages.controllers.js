@@ -1,3 +1,4 @@
+import { onlineUsers } from '../index.js';
 import { Conversation } from '../models/conversation.model.js'
 import { Message } from '../models/message.model.js'
 
@@ -6,7 +7,10 @@ export const sendMessage = async (req, res) => {
   try {
     // EXTRACT USER, MESSAGE, CONVERSATION_ID, AND MESSAGE_TYPE FROM THE REQUEST BODY
     const user = req.user
-    const { message, conversationId, messageType } = req.body
+    const { message, conversationId, messageType,receiverId } = req.body;
+
+    // Checks if user is online then marked delivered as true else false
+    const isDelivered = Object.values(onlineUsers).includes(receiverId) ? true : false;
 
     // CREATE A NEW MESSAGE DOCUMENT IN THE MESSAGE COLLECTION
     const newMessage = await Message.create({
@@ -14,7 +18,9 @@ export const sendMessage = async (req, res) => {
       senderId: user._id,
       conversationId,
       messageType,
-      seenBy: [req.user._id] // MEANS THE SENDER HAS SEEN THE MESSAGE(BUT OTHERS NOT!)!
+      seenBy: [req.user._id], // MEANS THE SENDER HAS SEEN THE MESSAGE(BUT OTHERS NOT!)!
+      delivered: isDelivered,
+      receiverId: receiverId
     })
 
     // UPDATE THE LAST_MESSAGE FIELD IN THE CORRESPONDING CONVERSATION DOCUMENT

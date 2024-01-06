@@ -44,10 +44,16 @@ export default function SingleChatOption ({ conversation, createdAt, users }) {
     navigate(`/${conversation._id}`)
 
     setTimeout(() => {
+      
       socket.emit('marked-all-unread-as-read', {
         conversationId: conversation._id,
         userId: JSON.parse(localStorage.getItem('userData@**@user'))?.id
       })
+
+      socket.emit('update-user-is-online-now', {
+        userId: JSON.parse(localStorage.getItem('userData@**@user'))?.id
+      })
+
     }, 500)
   }
   return (

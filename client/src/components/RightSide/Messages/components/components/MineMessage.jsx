@@ -25,7 +25,13 @@ const MineMessage = ({ message, isRead }) => {
           {me?.username} {formatTimeAgo(message?.createdAt)}
           {/* CHECKMARK ICON INDICATING WHETHER THE MESSAGE HAS BEEN READ */}
           <IoCheckmarkDoneSharp
-            className={`${isRead ? 'text-green-600' : 'text-blue-400'} w-6 h-6`}
+            className={`${
+              message?.delivered
+                ? isRead
+                  ? 'text-green-500'
+                  : 'text-blue-500'
+                : 'text-red-400'
+            } w-6 h-6`}
           />
         </span>
       </div>

@@ -36,13 +36,13 @@ app.use('/api/v1/conversation', conversationRoutes)
 app.use('/api/v1/messages', messagesRoutes)
 
 // ONLINE USERS IDS!
-let onlineUsers = {}
+export var onlineUsers = {}
 
 // ON SOCKET CONNECTION!!
 socket.on('connection', client => {
   // WHEN USER COMES ACTIVE/ONLINE!
   client.on('update-user-is-online-now', ({ userId, clientId }) => {
-    onlineUsers[clientId] = userId
+    onlineUsers[client.id] = userId
     // EMIT AN EVENT ABOUT NEW ACTIVE USERS!!
     socket.emit('update-active-users', { onlineUsers, clientId: client.id })
   })
@@ -70,6 +70,7 @@ socket.on('connection', client => {
   client.on('marked-all-unread-as-read', data => {
     socket.emit('update-as-read', { ...data, clientId: client.id })
   })
+
 
   // ON USER DISCONNECTED!
   client.on('disconnect', data => {

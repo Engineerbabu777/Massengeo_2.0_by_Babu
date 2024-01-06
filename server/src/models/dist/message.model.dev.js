@@ -36,6 +36,10 @@ var messageSchema = new _mongoose["default"].Schema({
   delivered: {
     type: Boolean,
     "default": false
+  },
+  receiverId: {
+    type: _mongoose["default"].Schema.Types.ObjectId,
+    ref: 'user'
   }
 }, {
   timestamps: true

@@ -12,7 +12,7 @@ import { socket } from '../components/RightSide/Messages/Messages'
 export default function useMessages () {
   const dispatch = useDispatch()
 
-  const sendMessages = async (messageType, message, conversationId) => {
+  const sendMessages = async (messageType, message, conversationId,receiverId) => {
     // FOR NOW!
     // TYPE = TEXT!
     // MESSAGE CAN ON BE TEXT!
@@ -27,7 +27,7 @@ export default function useMessages () {
             authorization: JSON.parse(localStorage.getItem('userData@**@user'))
               ?.token
           },
-          body: JSON.stringify({ message, messageType, conversationId })
+          body: JSON.stringify({ message, messageType, conversationId,receiverId })
         }
       ).then(resp => resp.json())
 

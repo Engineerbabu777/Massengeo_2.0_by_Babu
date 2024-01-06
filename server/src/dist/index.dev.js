@@ -2,6 +2,11 @@
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.onlineUsers = void 0;
+
 var _express = _interopRequireDefault(require("express"));
 
 var _userRoutes = _interopRequireDefault(require("./routes/user.routes.js"));
@@ -58,12 +63,13 @@ app.use('/api/v1/messages', _messagesRoutes["default"]); // ONLINE USERS IDS!
 
 var onlineUsers = {}; // ON SOCKET CONNECTION!!
 
+exports.onlineUsers = onlineUsers;
 socket.on('connection', function (client) {
   // WHEN USER COMES ACTIVE/ONLINE!
   client.on('update-user-is-online-now', function (_ref) {
     var userId = _ref.userId,
         clientId = _ref.clientId;
-    onlineUsers[clientId] = userId; // EMIT AN EVENT ABOUT NEW ACTIVE USERS!!
+    onlineUsers[client.id] = userId; // EMIT AN EVENT ABOUT NEW ACTIVE USERS!!
 
     socket.emit('update-active-users', {
       onlineUsers: onlineUsers,

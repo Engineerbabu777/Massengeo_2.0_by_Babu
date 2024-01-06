@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux'
 export default function SingleChat ({ name, userId }) {
   const onlineUsers = useSelector(state => state.chat.allOnlineUsers)
 
+  console.log({onlineUsers})
+
   return (
     <div className='flex flex-col flex-1'>
       <span className={`text-white font-bold text-xl`}>{name}</span>

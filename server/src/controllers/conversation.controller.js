@@ -1,4 +1,5 @@
 import { Conversation } from '../models/conversation.model.js'
+import { Message } from '../models/message.model.js'
 
 // CREATE CONVERSATION CONTROLLER
 export const createConversation = async (req, res) => {
@@ -32,24 +33,40 @@ export const createConversation = async (req, res) => {
 // FETCH ALL CONVERSATIONS CONTROLLER
 export const fetchAllConversations = async (req, res) => {
   try {
-    // RETRIEVE ALL CONVERSATIONS FROM THE DATABASE WHERE THE REQUESTING USER ID IS INCLUDED
+    // MARKED ALL UN_DELIVERED MESSAGES OF THIS USER TO BE DELIVERED!
+    const data = await Message.updateMany(
+      {
+        receiverId: req.user._id, // MEANS THOSE MESSAGE THAT WHERE SEND TO THIS USER WILL BE DELIVERED FOR OTHERS!
+        delivered: false // FINDING BOTH CONDITIONS TO BE TRUE!
+      },
+      {
+        delivered: true // LATE WE WILL UPDATE IT TO ARRAY LIKE SEEN BY HAVING!
+      },
+      {
+        new: true
+      }
+    )
+
+    console.log({ new: data })
+
+    // RETRIEVE ALL CONVERSATIONS FROM THE DATABASE WHERE THE REQUESTING USER ID IS INCLUDED!!
     const conversations = await Conversation.find({
       users: { $in: [req.user._id] }
     })
       .populate('users lastMessage')
       .sort({ updatedAt: -1 })
 
-    // RETURN A SUCCESSFUL RESPONSE WITH A STATUS OF 200 OK AND THE FETCHED CONVERSATIONS
+    // RETURN A SUCCESSFUL RESPONSE WITH A STATUS OF 200 OK AND THE FETCHED CONVERSATIONS!!
     res.status(200).json({
       success: true,
       message: 'Conversations fetched successfully',
       conversations
     })
   } catch (error) {
-    // LOG AND HANDLE ERROR IF FETCHING FAILS
+    // LOG AND HANDLE ERROR IF FETCHING FAILS!!
     console.log('Fetching Conversations Error: ', error.message)
 
-    // RETURN AN ERROR RESPONSE WITH A STATUS OF 504 GATEWAY TIMEOUT
+    // RETURN AN ERROR RESPONSE WITH A STATUS OF 504 GATEWAY TIMEOUT!!
     res
       .status(504)
       .json({ error: true, message: 'Conversations fetching failed' })
