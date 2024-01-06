@@ -11,7 +11,7 @@ export const createConversation = async (req, res) => {
     const requestedUserID = req.user._id
 
     // CREATE A NEW CONVERSATION IN THE DATABASE
-    const newConversation = await Conversation.create({
+    await Conversation.create({
       users: [requestedUserID, userId]
     })
 
@@ -46,8 +46,6 @@ export const fetchAllConversations = async (req, res) => {
         new: true
       }
     )
-
-    console.log({ new: data })
 
     // RETRIEVE ALL CONVERSATIONS FROM THE DATABASE WHERE THE REQUESTING USER ID IS INCLUDED!!
     const conversations = await Conversation.find({

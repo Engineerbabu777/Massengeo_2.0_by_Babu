@@ -44,10 +44,17 @@ socket.on('connection', client => {
   client.on('update-user-is-online-now', ({ userId, clientId }) => {
     onlineUsers[client.id] = userId
     // EMIT AN EVENT ABOUT NEW ACTIVE USERS!!
-    socket.emit('update-active-users', { onlineUsers, clientId: client.id })
+    socket.emit('update-active-users', {
+      onlineUsers,
+      clientId: client.id,
+    })
+
+
   })
 
-  // UPDATE THE REALTIME CONVERSATIONS!!
+
+
+  // UPDATE THE REALTIME MESSAGE SENT/RECEIVED!!
   client.on('message-sent', data => {
     console.log(data)
     socket.emit('message-received', { data, clientId: client.id })
@@ -71,14 +78,16 @@ socket.on('connection', client => {
     socket.emit('update-as-read', { ...data, clientId: client.id })
   })
 
-
   // ON USER DISCONNECTED!
   client.on('disconnect', data => {
     console.log('user disconnected')
     // UPDATE THE ONLINE USERS (BY DELETING)!
     delete onlineUsers[client.id]
 
-    socket.emit('update-active-users', { onlineUsers, clientId: client.id })
+    socket.emit('update-active-users', {
+      onlineUsers,
+      clientId: client.id,
+    })
   })
 })
 

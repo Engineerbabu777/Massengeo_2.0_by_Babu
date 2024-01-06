@@ -96,7 +96,15 @@ const chatSlice = createSlice({
         })
       }
     },
-
+    allMessagesAreDelivered: (state, actions) => {
+      state.activeUserMessages = state.activeUserMessages.map(m => {
+        if (m.delivered) {
+          return m
+        } else {
+          return { ...m, delivered: true }
+        }
+      })
+    },
     // Update the list of online users in real-time
     updateOnlineUsers: (state, actions) => {
       state.allOnlineUsers = Object.values(actions.payload.onlineUsers)
@@ -118,7 +126,8 @@ export const {
   updateConversationsOnRealtime,
   updateMessageIsRead,
   updateAllUnreadAsRead,
-  updateOnlineUsers
+  updateOnlineUsers,
+  allMessagesAreDelivered
 } = chatSlice.actions
 
 export const chatReducer = chatSlice.reducer

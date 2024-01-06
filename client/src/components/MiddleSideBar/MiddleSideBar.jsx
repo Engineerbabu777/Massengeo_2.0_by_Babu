@@ -10,12 +10,13 @@ import {
   updateConversationsOnRealtime,
   updateMessageIsRead,
   updateMessagesOnRealtime,
-  updateOnlineUsers
+  updateOnlineUsers,
+  allMessagesAreDelivered
 } from '../../redux/chatSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import { socket } from '../RightSide/Messages/Messages'
 
-export default function MiddleSideBar ({}) {
+export default function MiddleSideBar () {
   const sidebarState = useSelector(state => state.sidebar.active)
 
   // CREATING CLIENT SIDE SOCKET CONNECTION!
@@ -29,13 +30,40 @@ export default function MiddleSideBar ({}) {
     })
 
     // UPDATE USER ACTIVE STATUS!!
-    socket.on('update-active-users', ({ onlineUsers, clientId }) => {
-      toast.success('client online!')
-      console.log({ onlineUsers })
-      if (clientId !== socket.id) {
-        dispatch(updateOnlineUsers({ onlineUsers }))
+    socket.on(
+      'update-active-users',
+      ({ onlineUsers, clientId, usersActiveConversations }) => {
+        toast.success('client online!')
+        console.log({ onlineUsers })
+        if (clientId !== socket.id) {
+          dispatch(updateOnlineUsers({ onlineUsers }))
+          // ALSO CHECK IF THE CONVERSATION OPEN WITH THIS USER!
+          console.log(usersActiveConversations)
+          // if (
+          //   Object.values(usersActiveConversations)?.includes(
+          //     window?.location?.pathname?.split('/')[1]
+          //   )
+          // ) {
+          //   dispatch(allMessagesAreDelivered())
+          // }
+        }
       }
-    })
+    )
+
+    // socket.on(
+    //   'update-user-connected-conversation',
+    //   ({ clientId, usersActiveConversations }) => {
+    //     console.log(Object.values(usersActiveConversations))
+    //     // if (
+    //     //   clientId !== socket.id &&
+    //     //   Object.values(usersActiveConversations)?.includes(
+    //     //     window?.location?.pathname?.split('/')[1]
+    //     //   )
+    //     // ) {
+    //     //   dispatch(allMessagesAreDelivered())
+    //     // }
+    //   }
+    // )
 
     // ON RECEIVED OF NEW MESSAGE!
     socket.on('message-received', ({ data, clientId }) => {
@@ -95,7 +123,6 @@ export default function MiddleSideBar ({}) {
     }
   }, []) // Empty dependency array ensures the effect runs only once on component mount
 
-  
   return (
     <>
       <aside className='bg-[#0c0415] w-[25vw] h-screen pt-6 border-r-2 border-gray-700 '>

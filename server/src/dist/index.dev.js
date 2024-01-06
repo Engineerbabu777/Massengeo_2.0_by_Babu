@@ -75,7 +75,7 @@ socket.on('connection', function (client) {
       onlineUsers: onlineUsers,
       clientId: client.id
     });
-  }); // UPDATE THE REALTIME CONVERSATIONS!!
+  }); // UPDATE THE REALTIME MESSAGE SENT/RECEIVED!!
 
   client.on('message-sent', function (data) {
     console.log(data);

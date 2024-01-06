@@ -11,7 +11,7 @@ export default function Header ({ openSideModal, open }) {
   return (
     <div className='border-b-2 border-gray-700 px-5 py-3 flex items-center'>
       {/* IMAGE! */}
-      <Avatar src={chatUserData?.avatar} online={true} />
+      <Avatar src={chatUserData?.avatar} userId={chatUserData._id} />
 
       {/* NAME & LAST SEEN for single chats */}
       <SingleChat name={chatUserData?.username} userId={chatUserData._id} />
