@@ -32,6 +32,10 @@ var messageSchema = new _mongoose["default"].Schema({
   conversationId: {
     type: _mongoose["default"].Schema.Types.ObjectId,
     ref: 'conversation'
+  },
+  delivered: {
+    type: Boolean,
+    "default": false
   }
 }, {
   timestamps: true
