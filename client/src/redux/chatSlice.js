@@ -50,6 +50,16 @@ const chatSlice = createSlice({
     updateConversationsOnRealtime: (state, actions) => {
       // FIND THE CONVERSATION ID AND REPLACE WITH NEW DATA
       if (state.conversations.find(c => c._id === actions.payload._id)) {
+        console.log(actions.payload)
+        if (
+          window.location.pathname.split('/')[1] !== actions.payload._id &&
+          actions.payload.lastMessage.senderId !==
+            JSON.parse(localStorage.getItem('userData@**@user')).id
+        ) {
+
+          // WHEN NEW MESSAGE RECEIVED PLAY THE NOTIFICATION!
+          document.getElementById('btnClick').click()
+        }
         state.conversations = [
           actions.payload,
           ...state.conversations.filter(c => c._id !== actions.payload._id)

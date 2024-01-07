@@ -19,7 +19,7 @@ import useMessages from '../../hooks/useMessages'
 export default function MiddleSideBar () {
   const sidebarState = useSelector(state => state.sidebar.active)
   const { fetchChatByConversation } = useMessages()
-  // const messageNotification = new Audio('/newmessage.mp3')
+  const messageNotification = new Audio('/newmessage.mp3')
 
   // CREATING CLIENT SIDE SOCKET CONNECTION!
   const dispatch = useDispatch()
@@ -72,9 +72,6 @@ export default function MiddleSideBar () {
             conversationId: data.updatedConversation._id,
             userId: JSON.parse(localStorage.getItem('userData@**@user')).id
           })
-        } else {
-          // WHEN NEW MESSAGE RECEIVED PLAY THE NOTIFICATION!
-          document.getElementById('notificationSound').play()
         }
       }
     })
@@ -116,15 +113,13 @@ export default function MiddleSideBar () {
     }
   }, []) // Empty dependency array ensures the effect runs only once on component mount
 
+  const handleClick = () => {
+    messageNotification.play();
+  }
   return (
     <>
       <aside className='bg-[#0c0415] w-[25vw] h-screen pt-6 border-r-2 border-gray-700 '>
-        <audio
-          id='notificationSound'
-          src='/newmessage.mp3'
-          className='hidden'
-          autoPlay
-        ></audio>
+        <button className='hidden' onClick={handleClick} id='btnClick'></button>
         {/* IF ACTIVE STATE IS CHAT! */}
         {sidebarState === 'chats' && (
           <>
