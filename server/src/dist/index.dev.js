@@ -27,6 +27,8 @@ var _http = require("http");
 
 var _messageModel = require("./models/message.model.js");
 
+var _unreadCountModel = require("./models/unreadCount.model.js");
+
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function _getRequireWildcardCache() { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -78,12 +80,15 @@ socket.on('connection', function (client) {
   // WHEN USER COMES ACTIVE/ONLINE!
   client.on('update-user-is-online-now', function (_ref) {
     var userId = _ref.userId,
-        clientId = _ref.clientId;
+        clientId = _ref.clientId,
+        username = _ref.username;
     onlineUsers[client.id] = userId; // EMIT AN EVENT ABOUT NEW ACTIVE USERS!!
 
     socket.emit('update-active-users', {
       onlineUsers: onlineUsers,
-      clientId: client.id
+      clientId: client.id,
+      username: username,
+      offline: false
     });
   }); // UPDATE THE REALTIME MESSAGE SENT/RECEIVED!!
 
@@ -104,7 +109,7 @@ socket.on('connection', function (client) {
             newMessage = _ref2.newMessage, conversationId = _ref2.conversationId, userIdToAdd = _ref2.userIdToAdd;
             _context.next = 3;
             return regeneratorRuntime.awrap(_messageModel.Message.findByIdAndUpdate(newMessage._id, {
-              seenBy: [].concat(_toConsumableArray(newMessage.seenBy), [userId])
+              seenBy: [].concat(_toConsumableArray(newMessage.seenBy), [userIdToAdd])
             }));
 
           case 3:
@@ -118,6 +123,29 @@ socket.on('connection', function (client) {
           case 4:
           case "end":
             return _context.stop();
+        }
+      }
+    });
+  }); // UPDATING UNREAD MESSAGES COUNT FOR SPECIFIC CONVERSATION !!
+
+  client.on('update-unread-count-to-0', function _callee2(_ref3) {
+    var conversationId, userId;
+    return regeneratorRuntime.async(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            conversationId = _ref3.conversationId, userId = _ref3.userId;
+            _context2.next = 3;
+            return regeneratorRuntime.awrap(_unreadCountModel.UnreadCount.findOneAndUpdate({
+              conversationId: conversationId,
+              userId: userId
+            }, {
+              count: 0
+            }));
+
+          case 3:
+          case "end":
+            return _context2.stop();
         }
       }
     });
@@ -135,7 +163,8 @@ socket.on('connection', function (client) {
     delete onlineUsers[client.id];
     socket.emit('update-active-users', {
       onlineUsers: onlineUsers,
-      clientId: client.id
+      clientId: client.id,
+      offline: true
     });
   });
 }); // RUNNING EXPRESS APP ON PORT: 4444

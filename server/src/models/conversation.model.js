@@ -6,7 +6,8 @@ const conversationSchema = new mongoose.Schema(
     // USERS!
     users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }],
     // LAST MESSAGE!
-    lastMessage: { type: mongoose.Schema.Types.ObjectId, ref: 'message' }
+    lastMessage: { type: mongoose.Schema.Types.ObjectId, ref: 'message' },
+    unreadCount: { type: mongoose.Schema.Types.ObjectId, ref: 'unreadcount' }
   },
   {
     timestamps: true

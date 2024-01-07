@@ -9,6 +9,7 @@ import messagesRoutes from './routes/messages.routes.js'
 import { Server } from 'socket.io'
 import { createServer } from 'http'
 import { Message } from './models/message.model.js'
+import { UnreadCount } from './models/unreadCount.model.js'
 // USING ENV FILE!
 dotenv.config()
 
@@ -42,12 +43,14 @@ export var onlineUsers = {}
 // ON SOCKET CONNECTION!!
 socket.on('connection', client => {
   // WHEN USER COMES ACTIVE/ONLINE!
-  client.on('update-user-is-online-now', ({ userId, clientId }) => {
+  client.on('update-user-is-online-now', ({ userId, clientId, username }) => {
     onlineUsers[client.id] = userId
     // EMIT AN EVENT ABOUT NEW ACTIVE USERS!!
     socket.emit('update-active-users', {
       onlineUsers,
-      clientId: client.id
+      clientId: client.id,
+      username,
+      offline: false
     })
   })
 
@@ -63,7 +66,7 @@ socket.on('connection', client => {
     async ({ newMessage, conversationId, userIdToAdd }) => {
       // UPDATE IN DATABASE AS WELL!
       await Message.findByIdAndUpdate(newMessage._id, {
-        seenBy: [...newMessage.seenBy, userId]
+        seenBy: [...newMessage.seenBy, userIdToAdd]
       })
 
       socket.emit('mark-message-as-read', {
@@ -74,6 +77,16 @@ socket.on('connection', client => {
       })
     }
   )
+
+  // UPDATING UNREAD MESSAGES COUNT FOR SPECIFIC CONVERSATION !!
+  client.on('update-unread-count-to-0', async ({ conversationId, userId }) => {
+    await UnreadCount.findOneAndUpdate(
+      { conversationId, userId },
+      {
+        count: 0
+      }
+    )
+  })
 
   // MARK ALL UNREAD AS READ!
   client.on('marked-all-unread-as-read', data => {
@@ -88,7 +101,8 @@ socket.on('connection', client => {
 
     socket.emit('update-active-users', {
       onlineUsers,
-      clientId: client.id
+      clientId: client.id,
+      offline: true
     })
   })
 })

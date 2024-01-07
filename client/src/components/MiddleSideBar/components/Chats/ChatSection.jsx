@@ -42,7 +42,11 @@ function ChatSection ({}) {
       <div className='mt-8 flex flex-col h-[calc(100vh-270px)] gap-4 overflow-auto no-scrollbar pb-6'>
         {conversations?.map((conversation, ind) => {
           const users = findOtherUsers(conversation.users)
-          const lastMessage = conversation.lastMessage
+          const unreadCount =
+            conversation?.unreadCount?.userId ===
+            JSON.parse(localStorage.getItem('userData@**@user'))?.id
+              ? conversation.unreadCount?.count
+              : 0
           const time =
             conversation?.lastMessage?.createdAt || conversation?.createdAt
           return (
@@ -52,6 +56,7 @@ function ChatSection ({}) {
                 key={ind}
                 conversation={conversation}
                 createdAt={time}
+                unreadCount={unreadCount}
               />
             </>
           )

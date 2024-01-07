@@ -10,6 +10,7 @@ import {
   updateMessageIsRead,
   updateMessagesOnRealtime,
   updateOnlineUsers,
+  updateUnreadCounts
 } from '../../redux/chatSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import { socket } from '../RightSide/Messages/Messages'
@@ -18,6 +19,7 @@ import useMessages from '../../hooks/useMessages'
 export default function MiddleSideBar () {
   const sidebarState = useSelector(state => state.sidebar.active)
   const { fetchChatByConversation } = useMessages()
+  // const messageNotification = new Audio('/newmessage.mp3')
 
   // CREATING CLIENT SIDE SOCKET CONNECTION!
   const dispatch = useDispatch()
@@ -26,21 +28,25 @@ export default function MiddleSideBar () {
     // ONCE THE USER IS CONNECTED!
     socket.emit('update-user-is-online-now', {
       userId: JSON.parse(localStorage.getItem('userData@**@user')).id,
-      clientId: socket.id
+      clientId: socket.id,
+      username: JSON.parse(localStorage.getItem('userData@**@user')).username
     })
 
     // UPDATE USER ACTIVE STATUS!!
-    socket.on('update-active-users', ({ onlineUsers, clientId }) => {
-      toast.success('client online!')
-      console.log({ onlineUsers })
-      if (clientId !== socket.id) {
-        dispatch(updateOnlineUsers({ onlineUsers }))
-        // ONLY IF ANY CHAT ID IS OPEN!
-        if (window?.location?.pathname?.split('/')[1]) {
-          fetchChatByConversation(window?.location?.pathname?.split('/')[1])
+    socket.on(
+      'update-active-users',
+      ({ onlineUsers, clientId, username, offline }) => {
+        if (clientId !== socket.id) {
+          if (offline) toast.success(username + ' is online!')
+
+          dispatch(updateOnlineUsers({ onlineUsers }))
+          // ONLY IF ANY CHAT ID IS OPEN!
+          if (window?.location?.pathname?.split('/')[1]) {
+            fetchChatByConversation(window?.location?.pathname?.split('/')[1])
+          }
         }
       }
-    })
+    )
 
     // ON RECEIVED OF NEW MESSAGE!
     socket.on('message-received', ({ data, clientId }) => {
@@ -59,6 +65,16 @@ export default function MiddleSideBar () {
             socketIdOfUser: socket.id,
             userIdToAdd: JSON.parse(localStorage.getItem('userData@**@user')).id
           })
+          dispatch(
+            updateUnreadCounts({ conversationId: data.updatedConversation._id })
+          )
+          socket.emit('update-unread-count-to-0', {
+            conversationId: data.updatedConversation._id,
+            userId: JSON.parse(localStorage.getItem('userData@**@user')).id
+          })
+        } else {
+          // WHEN NEW MESSAGE RECEIVED PLAY THE NOTIFICATION!
+          document.getElementById('notificationSound').play()
         }
       }
     })
@@ -103,6 +119,12 @@ export default function MiddleSideBar () {
   return (
     <>
       <aside className='bg-[#0c0415] w-[25vw] h-screen pt-6 border-r-2 border-gray-700 '>
+        <audio
+          id='notificationSound'
+          src='/newmessage.mp3'
+          className='hidden'
+          autoPlay
+        ></audio>
         {/* IF ACTIVE STATE IS CHAT! */}
         {sidebarState === 'chats' && (
           <>

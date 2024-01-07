@@ -96,10 +96,19 @@ const chatSlice = createSlice({
         })
       }
     },
-    
+
     // Update the list of online users in real-time
     updateOnlineUsers: (state, actions) => {
       state.allOnlineUsers = Object.values(actions.payload.onlineUsers)
+    },
+    updateUnreadCounts: (state, actions) => {
+      state.conversations = state.conversations.map(c => {
+        if (c._id === actions.payload.conversationId) {
+          return { ...c, unreadCount: { ...c.unreadCount, count: 0 } }
+        } else {
+          return c
+        }
+      })
     }
   }
 })
@@ -119,6 +128,7 @@ export const {
   updateMessageIsRead,
   updateAllUnreadAsRead,
   updateOnlineUsers,
+  updateUnreadCounts
 } = chatSlice.actions
 
 export const chatReducer = chatSlice.reducer

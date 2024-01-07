@@ -84,7 +84,7 @@ var fetchAllConversations = function fetchAllConversations(req, res) {
             users: {
               $in: [req.user._id]
             }
-          }).populate('users lastMessage').sort({
+          }).populate('users lastMessage unreadCount').sort({
             updatedAt: -1
           }));
 

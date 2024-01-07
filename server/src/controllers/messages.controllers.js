@@ -1,16 +1,19 @@
-import { onlineUsers } from '../index.js';
+import { onlineUsers } from '../index.js'
 import { Conversation } from '../models/conversation.model.js'
 import { Message } from '../models/message.model.js'
+import { UnreadCount } from '../models/unreadCount.model.js'
 
 // SEND MESSAGES ROUTES!
 export const sendMessage = async (req, res) => {
   try {
     // EXTRACT USER, MESSAGE, CONVERSATION_ID, AND MESSAGE_TYPE FROM THE REQUEST BODY
     const user = req.user
-    const { message, conversationId, messageType,receiverId } = req.body;
+    const { message, conversationId, messageType, receiverId } = req.body
 
     // Checks if user is online then marked delivered as true else false
-    const isDelivered = Object.values(onlineUsers).includes(receiverId) ? true : false;
+    const isDelivered = Object.values(onlineUsers).includes(receiverId)
+      ? true
+      : false
 
     // CREATE A NEW MESSAGE DOCUMENT IN THE MESSAGE COLLECTION
     const newMessage = await Message.create({
@@ -23,17 +26,37 @@ export const sendMessage = async (req, res) => {
       receiverId: receiverId
     })
 
+    const conversation = await Conversation.findById(conversationId).populate(
+      'unreadCount'
+    )
+    // FINDING THE UNREAD COUNTS FOR THIS CONVERSATION (TO INCREASE RECEIVER COUNTS)!
+    const unreadCountForThisConversation = await UnreadCount.findOneAndUpdate(
+      {
+        userId: receiverId,
+        conversationId: conversationId
+      },
+      {
+        count: conversation?.unreadCount?.count ? conversation.unreadCount.count+1 : 1
+      },{
+        upsert:true,
+        new:true,
+      }
+    )
+
+    console.log({ unreadCountForThisConversation })
+
     // UPDATE THE LAST_MESSAGE FIELD IN THE CORRESPONDING CONVERSATION DOCUMENT
     const updatedConversation = await Conversation.findByIdAndUpdate(
       conversationId,
       {
-        lastMessage: newMessage
+        lastMessage: newMessage,
+        unreadCount: unreadCountForThisConversation._id,
       },
       {
         new: true // RETURNS NEW DOC!
       }
     )
-      .populate('users lastMessage')
+      .populate('users lastMessage unreadCount')
       .exec()
     // SEND A SUCCESS RESPONSE
     res.status(201).json({

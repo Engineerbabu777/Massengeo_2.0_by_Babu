@@ -1,12 +1,20 @@
 import useMessages from '../../../../../hooks/useMessages'
-import { updateOpenChat } from '../../../../../redux/chatSlice'
+import {
+  updateOpenChat,
+  updateUnreadCounts
+} from '../../../../../redux/chatSlice'
 import { formatTimeAgo } from '../../../../../utils/getLastMessageTime'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router-dom'
 import { socket } from '../../../../RightSide/Messages/Messages'
 
-export default function SingleChatOption ({ conversation, createdAt, users }) {
+export default function SingleChatOption ({
+  conversation,
+  createdAt,
+  users,
+  unreadCount
+}) {
   // const isUnread = chat?.unread > 0 ? true : false;
   // const isActive = chat?.active ? true : false;
   // const isGrouped = chat?.isGroup ? true : false;
@@ -25,26 +33,24 @@ export default function SingleChatOption ({ conversation, createdAt, users }) {
 
   const isActive = conversationId === conversation._id ? true : false
 
-  // console.log({
-  //   isSentByMe,
-  //   mineId: JSON.parse(localStorage.getItem('userData@**@user'))?.id,
-  //   otherId: conversation?.lastMessage?.senderId?,
-  //   other: conversation
-  // })
-
   const isGrouped = false
-  const isUnread = false
 
   const handleClick = () => {
     // FETCH CHAT!
     fetchChatByConversation(conversation._id)
-    // UPDATE THE STATE!
-    dispatch(updateOpenChat({ users, conversationId: conversation._id })) // FOR NOW ONLY ONE USER! WILL UPDATE IT LATER!
+    // UPDATE THE STATE FOR THE CURRENT USER!
+    dispatch(updateUnreadCounts({ conversationId: conversation?._id }))
+    dispatch(updateOpenChat({ users, conversationId: conversation?._id })) // FOR NOW ONLY ONE USER! WILL UPDATE IT LATER!
     // MOVE TO CONVERSATION PAGE
     navigate(`/${conversation._id}`)
 
     setTimeout(() => {
       socket.emit('marked-all-unread-as-read', {
+        conversationId: conversation._id,
+        userId: JSON.parse(localStorage.getItem('userData@**@user'))?.id
+      })
+
+      socket.emit('update-unread-count-to-0', {
         conversationId: conversation._id,
         userId: JSON.parse(localStorage.getItem('userData@**@user'))?.id
       })
@@ -107,7 +113,7 @@ export default function SingleChatOption ({ conversation, createdAt, users }) {
           </p>
         </section>
 
-        {/* TIME UNREADS! */}
+        {/* TIME + UNREAD_COUNTS! */}
         <section className=' ml-6 flex flex-col gap-0.5 '>
           <p
             className={` font-bold text-md text-gray-400 group-hover:text-white ${
@@ -118,15 +124,15 @@ export default function SingleChatOption ({ conversation, createdAt, users }) {
             {/* ELSE LAST MESSAGE TIME!*/}
             {formatTimeAgo(createdAt)}
           </p>
-          {/* {isUnread && (
+          {unreadCount > 0 && (
             <p
-              className={`text-gray-400 font-semibold ml-auto mr-2 text-white bg-[#F05454] w-6 h-6 rounded-full flex items-center justify-center ${
+              className={`text-gray-400 font-semibold ml-auto mr-2 text-white bg-[#F05454] w-6 h-6 rounded-full flex items-center justify-center group-hover:bg-white !text-black ${
                 isActive ? 'bg-white !text-black ' : ''
               }`}
             >
-              {chat?.unread}
+              {unreadCount}
             </p>
-          )} */}
+          )}
         </section>
       </div>
     </>
