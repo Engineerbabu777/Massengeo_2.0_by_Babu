@@ -44,7 +44,7 @@ export default function SearchUsers ({}) {
       </nav>
 
       {/* INPUT! */}
-      <section className=' mt-12 w-[95%] mx-auto '>
+      <section className=' mt-12 w-[95%] mx-auto  '>
         <label className='bg-[#272829] border-slate-400 rounded-full px-3 py-2 flex justify-center items-center'>
           <CiSearch className='text-gray-500 w-8 h-8' />
           <input
@@ -60,7 +60,7 @@ export default function SearchUsers ({}) {
       </section>
 
       {/* USERS! */}
-      <section className='mt-12 flex flex-col gap-4'>
+      <section className='mt-12 flex flex-col gap-4 h-[calc(100vh-220px)] overflow-auto no-scrollbar'>
         {searchUsers?.map((user, i) => (
           <SingleUser
             name={user?.username}

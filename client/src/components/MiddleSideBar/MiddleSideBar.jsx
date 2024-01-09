@@ -118,7 +118,7 @@ export default function MiddleSideBar () {
   }
   return (
     <>
-      <aside className='bg-[#0c0415] w-[25vw] h-screen pt-6 border-r-2 border-gray-700 '>
+      <aside className='bg-[#0c0415] w-[25vw] h-screen pt-6 border-r-2 border-gray-700 overflow-hidden '>
         <button className='hidden' onClick={handleClick} id='btnClick'></button>
         {/* IF ACTIVE STATE IS CHAT! */}
         {sidebarState === 'chats' && (
