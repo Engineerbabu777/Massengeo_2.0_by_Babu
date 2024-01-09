@@ -50,13 +50,15 @@ const chatSlice = createSlice({
     updateConversationsOnRealtime: (state, actions) => {
       // FIND THE CONVERSATION ID AND REPLACE WITH NEW DATA
       if (state.conversations.find(c => c._id === actions.payload._id)) {
-        console.log(actions.payload)
+        /*
+         COND:1-> FIRSTS CHECKING PATHNAME IS NOT EQUAL TO UPDATED CONVERSATION!!( OTHER WISE WE WILL CONSIDER USER IS ALREADY CHATTING WITH SAME USER)
+         COND:2-> WE DON'T WANT TO SHOW MESSAGE TO OURSELVES SO WE CHECK THAT SENDER IS NO US!
+        */
         if (
           window.location.pathname.split('/')[1] !== actions.payload._id &&
           actions.payload.lastMessage.senderId !==
             JSON.parse(localStorage.getItem('userData@**@user')).id
         ) {
-
           // WHEN NEW MESSAGE RECEIVED PLAY THE NOTIFICATION!
           document.getElementById('btnClick').click()
         }
@@ -106,11 +108,11 @@ const chatSlice = createSlice({
         })
       }
     },
-
     // Update the list of online users in real-time
     updateOnlineUsers: (state, actions) => {
       state.allOnlineUsers = Object.values(actions.payload.onlineUsers)
     },
+    // UPDATING READ COUNTS TO ZERO!
     updateUnreadCounts: (state, actions) => {
       state.conversations = state.conversations.map(c => {
         if (c._id === actions.payload.conversationId) {

@@ -4,10 +4,12 @@ import IconComponent from '../../../LeftSideBar/components/IconComponent'
 import SingleUser from './components/SingleUser'
 import useUser from '../../../../hooks/useUser'
 import { useSelector } from 'react-redux'
+import GroupSidebarDrawer from '../GroupConversationDrawer'
 
 export default function SearchUsers ({}) {
   const [input, setInput] = useState('')
   const searchUsers = useSelector(state => state.user.searchUsers)
+  const [openSideDrawer, setOpenSideDrawer] = useState(false)
 
   const { findUsers } = useUser()
 
@@ -20,13 +22,25 @@ export default function SearchUsers ({}) {
 
   return (
     <>
+      <GroupSidebarDrawer
+        open={openSideDrawer}
+        closeModal={() => {
+          setOpenSideDrawer(false)
+        }}
+      />
       {/* HEADER */}
       <nav className='flex mx-3'>
         <h2 className='text-3xl text-white font-bold flex-1 font-sans tracking-wider'>
           Search Users
         </h2>
         {/* ICONS */}
-        <IconComponent Icon={FaUserGroup} chats />
+        <IconComponent
+          Icon={FaUserGroup}
+          chats
+          onClick={() => {
+            setOpenSideDrawer(true)
+          }}
+        />
       </nav>
 
       {/* INPUT! */}

@@ -1,10 +1,8 @@
 import { useRef, useState } from 'react'
-import {useSelector} from 'react-redux';
+import { useSelector } from 'react-redux'
 
 export default function SidebarModal ({ closeModal, open }) {
-
-
-  const user = useSelector((state) => state.chat.openedChatUsers)
+  const user = useSelector(state => state.chat.openedChatUsers)
 
   return (
     <>
@@ -20,8 +18,9 @@ export default function SidebarModal ({ closeModal, open }) {
         `}
       >
         {/* BODY!! */}
-        <p className="text-white text-2xl font-semibold p-2">User Information Here!</p>
-        
+        <p className='text-white text-2xl font-semibold p-2'>
+          User Information Here!
+        </p>
       </div>
     </>
   )
