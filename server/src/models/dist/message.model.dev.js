@@ -40,7 +40,8 @@ var messageSchema = new _mongoose["default"].Schema({
   receiverId: [{
     type: _mongoose["default"].Schema.Types.ObjectId,
     ref: 'user'
-  }]
+  }],
+  isGroupMessage: Boolean
 }, {
   timestamps: true
 }); // EXPORTING MESSAGE!

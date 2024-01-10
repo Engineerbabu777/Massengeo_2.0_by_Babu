@@ -17,7 +17,9 @@ const messageSchema = new mongoose.Schema(
       ref: 'conversation'
     },
     delivered: { type: Boolean, default: false },
-    receiverId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }]
+    receiverId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }],
+    isGroupMessage:Boolean,
+    
   },
   {
     timestamps: true

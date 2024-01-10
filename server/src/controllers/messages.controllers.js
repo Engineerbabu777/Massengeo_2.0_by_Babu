@@ -11,7 +11,7 @@ export const sendMessage = async (req, res) => {
     const { message, conversationId, messageType, receiverId } = req.body
 
     // Checks if user is online then marked delivered as true else false
-    const isDelivered = Object.values(onlineUsers).includes(receiverId)
+    const isDelivered = Object.values(onlineUsers).includes(receiverId[0])
       ? true
       : false
 
@@ -23,46 +23,52 @@ export const sendMessage = async (req, res) => {
       messageType,
       seenBy: [req.user._id], // MEANS THE SENDER HAS SEEN THE MESSAGE(BUT OTHERS NOT!)!
       delivered: isDelivered,
-      receiverId: receiverId
+      receiverId: receiverId, // ARRAY OF RECEIVER IDS!
+      isGroupMessage: receiverId.length > 1 ? true : false
     })
 
     const conversation = await Conversation.findById(conversationId).populate(
       'unreadCount'
     )
+
     // FINDING THE UNREAD COUNTS FOR THIS CONVERSATION (TO INCREASE RECEIVER COUNTS)!
-    const unreadCountForThisConversation = await UnreadCount.findOneAndUpdate(
-      {
-        userId: receiverId,
-        conversationId: conversationId
-      },
-      {
-        count: conversation?.unreadCount?.count ? conversation.unreadCount.count+1 : 1
-      },{
-        upsert:true,
-        new:true,
-      }
-    )
+    if (receiverId.length === 1) {
+      const unreadCountForThisConversation = await UnreadCount.findOneAndUpdate(
+        {
+          userId: receiverId[0],
+          conversationId: conversationId
+        },
+        {
+          count: conversation?.unreadCount?.count
+            ? conversation.unreadCount.count + 1
+            : 1
+        },
+        {
+          upsert: true,
+          new: true
+        }
+      )
 
-    console.log({ unreadCountForThisConversation })
+      // UPDATE THE LAST_MESSAGE FIELD IN THE CORRESPONDING CONVERSATION DOCUMENT
+      await Conversation.findByIdAndUpdate(
+        conversationId,
+        {
+          lastMessage: newMessage,
+          unreadCount: unreadCountForThisConversation._id
+        },
+        {
+          new: true // RETURNS NEW DOC!
+        }
+      )
+        .populate('users lastMessage unreadCount')
+        .exec()
+    }
 
-    // UPDATE THE LAST_MESSAGE FIELD IN THE CORRESPONDING CONVERSATION DOCUMENT
-    const updatedConversation = await Conversation.findByIdAndUpdate(
-      conversationId,
-      {
-        lastMessage: newMessage,
-        unreadCount: unreadCountForThisConversation._id,
-      },
-      {
-        new: true // RETURNS NEW DOC!
-      }
-    )
-      .populate('users lastMessage unreadCount')
-      .exec()
     // SEND A SUCCESS RESPONSE
     res.status(201).json({
       success: true,
       message: 'MESSAGE SENT SUCCESSFULLY!',
-      updatedConversation,
+      updatedConversation: await Conversation.findById(conversationId),
       newMessage: await Message.findById(newMessage._id)
         .populate('senderId')
         .exec()

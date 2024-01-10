@@ -49,6 +49,8 @@ function ChatSection ({}) {
               : 0
           const time =
             conversation?.lastMessage?.createdAt || conversation?.createdAt
+
+            console.log({conversation});
           return (
             <>
               <SingleChatOption

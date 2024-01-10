@@ -25,7 +25,7 @@ const MineMessage = ({ message, isRead }) => {
           {me?.username} {formatTimeAgo(message?.createdAt)}
           {/* CHECKMARK ICON INDICATING WHETHER THE MESSAGE HAS BEEN READ */}
           <IoCheckmarkDoneSharp
-            className={`${
+            className={`${message.isGroupMessage ? 'hidden' : ''} ${
               message?.delivered
                 ? isRead
                   ? 'text-green-500'
