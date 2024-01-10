@@ -91,7 +91,7 @@ export default function SingleChatOption ({
           src={
             isGrouped
               ? conversation?.avatar
-              : otherUser?.avatar
+              : findOtherUsers(conversation.users)[0]?.avatar
           }
         />
 

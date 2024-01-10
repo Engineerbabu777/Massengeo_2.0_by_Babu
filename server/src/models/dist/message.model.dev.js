@@ -37,10 +37,10 @@ var messageSchema = new _mongoose["default"].Schema({
     type: Boolean,
     "default": false
   },
-  receiverId: {
+  receiverId: [{
     type: _mongoose["default"].Schema.Types.ObjectId,
     ref: 'user'
-  }
+  }]
 }, {
   timestamps: true
 }); // EXPORTING MESSAGE!

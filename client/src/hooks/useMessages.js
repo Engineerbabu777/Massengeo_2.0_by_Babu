@@ -8,14 +8,26 @@ import {
   updateMessagesOnRealtime
 } from '../redux/chatSlice'
 import { socket } from '../components/RightSide/Messages/Messages'
+import { useSelector } from 'react-redux'
+import { findOtherUsers } from '../utils/otherUsers'
 
 export default function useMessages () {
   const dispatch = useDispatch()
 
-  const sendMessages = async (messageType, message, conversationId,receiverId) => {
+  const activeConversationInfo = useSelector(
+    state => state.chat.activeConversationInfo
+  )
+
+  const sendMessages = async (messageType, message, conversationId) => {
     // FOR NOW!
     // TYPE = TEXT!
     // MESSAGE CAN ON BE TEXT!
+
+    // LETS CONFIRM THE RECEIVERS OF THE MESSAGE!
+    // LETS CHECK IF GROUP CHAT OR NOT!
+    const isGroupChat = activeConversationInfo.group // IF GROUP THAN TRUE ELSE FALSE!!!
+    const receiverIDS = findOtherUsers(activeConversationInfo.users).map((u) => u?._id) // REMOVING OUR SELF FROM THE CONVERSATION USERS!
+    
 
     try {
       const response = await fetch(
@@ -27,7 +39,12 @@ export default function useMessages () {
             authorization: JSON.parse(localStorage.getItem('userData@**@user'))
               ?.token
           },
-          body: JSON.stringify({ message, messageType, conversationId,receiverId })
+          body: JSON.stringify({
+            message,
+            messageType,
+            conversationId,
+            receiverId: receiverIDS // ALL IDS IN AN ARRAY!!
+          })
         }
       ).then(resp => resp.json())
 
@@ -35,8 +52,7 @@ export default function useMessages () {
 
       // I NEED TO UPDATE THE MESSAGES ARRAY AS WELL AS THE CONVERSATIONS ARRAY!
       dispatch(updateConversationsOnRealtime(response.updatedConversation))
-      dispatch(updateMessagesOnRealtime(response.newMessage));
-
+      dispatch(updateMessagesOnRealtime(response.newMessage))
 
       // NOTE: CHECKS WHETHER THE CHAT IS OPEN OR NOT!
 
@@ -79,9 +95,9 @@ export default function useMessages () {
     }
   }
 
-  const markMessageAsReadOnRealTime = async(conversationId,messageId) => {
+  const markMessageAsReadOnRealTime = async (conversationId, messageId) => {
     /*THAT MEANS THE CURRENT USER HAS SEEN THE RECEIVED MESSAGE SO WE NEED TO UPDATE IT TO BE READ ON REALTIME!
-    */
+     */
     try {
       dispatch(fetchingConversationMessages())
       const response = await fetch(
@@ -97,13 +113,13 @@ export default function useMessages () {
 
       if (response?.error) throw new Error(response?.message)
 
-      console.log({response})
+      console.log({ response })
 
       console.log({ response })
     } catch (error) {
       console.log('UPDATE READ MESSAGE ERROR: ', error?.message)
       toast.error('message failed!')
     }
-  } 
-  return { sendMessages, fetchChatByConversation,markMessageAsReadOnRealTime }
+  }
+  return { sendMessages, fetchChatByConversation, markMessageAsReadOnRealTime }
 }

@@ -26,7 +26,6 @@ export default function useConversation () {
       // DATA!
       if (users?.length > 1 && group === true)
         data = users.map(user => user?._id)
-      if (users?.length === 0) data = userId
 
       console.log(userId)
       // MAKE A REQUEST!
@@ -45,7 +44,7 @@ export default function useConversation () {
           },
           // REQUEST BODY CONTAINING THE USER_IDS IN JSON FORMAT AS WELL GROUP!!
           body: JSON.stringify({
-            userIds: data,
+            userIds: users?.length > 1 ? data : userId,
             group: users?.length > 1 ? true : false
           })
         }

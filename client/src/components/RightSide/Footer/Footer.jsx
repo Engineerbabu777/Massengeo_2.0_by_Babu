@@ -8,17 +8,17 @@ import {
 import useMessages from '../../../hooks/useMessages'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import { findOtherUsers } from '../../../utils/otherUsers'
 
 const Footer = () => {
   const [input, setInput] = useState('')
   const { sendMessages } = useMessages()
   const [messageType, setMessageType] = useState('text')
   const { conversationId } = useParams()
-  const receiverId = useSelector(state => state.chat.activeConversationInfo[0]?._id)
 
   const handleMessages = () => {
-    if (input && conversationId && receiverId)
-      sendMessages(messageType, input, conversationId,receiverId)
+    if (input && conversationId)
+      sendMessages(messageType, input, conversationId)
     setInput('');
   }
 
