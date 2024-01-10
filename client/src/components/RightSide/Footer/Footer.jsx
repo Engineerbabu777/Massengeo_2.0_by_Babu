@@ -14,7 +14,7 @@ const Footer = () => {
   const { sendMessages } = useMessages()
   const [messageType, setMessageType] = useState('text')
   const { conversationId } = useParams()
-  const receiverId = useSelector(state => state.chat.openedChatUsers?._id)
+  const receiverId = useSelector(state => state.chat.activeConversationInfo[0]?._id)
 
   const handleMessages = () => {
     if (input && conversationId && receiverId)

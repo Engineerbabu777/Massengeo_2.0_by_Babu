@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router-dom'
 import { socket } from '../../../../RightSide/Messages/Messages'
+import { findOtherUsers } from '../../../../../utils/otherUsers'
 
 export default function SingleChatOption ({
   conversation,
@@ -17,9 +18,12 @@ export default function SingleChatOption ({
 }) {
   // const isUnread = chat?.unread > 0 ? true : false;
   // const isActive = chat?.active ? true : false;
-  // const isGrouped = chat?.isGroup ? true : false;
+  const isGrouped = conversation?.group ? true : false
   const { fetchChatByConversation } = useMessages()
-  const openedChatUsers = useSelector(state => state.chat.openedChatUsers)
+ 
+  const openedChatUsers = useSelector(state =>
+    state.chat.activeConversationInfo?.users
+  )
 
   // CHECKING IS MESSAGE SENT BY ME OTHERS!
   const isSentByMe =
@@ -32,8 +36,6 @@ export default function SingleChatOption ({
   const navigate = useNavigate()
 
   const isActive = conversationId === conversation._id ? true : false
-
-  const isGrouped = false
 
   const handleClick = () => {
     // FETCH CHAT!
@@ -77,7 +79,7 @@ export default function SingleChatOption ({
         <img
           className='w-16 h-16 rounded-full object-cover '
           alt='test0image'
-          src={users?.avatar}
+          src={isGrouped ? conversation?.avatar : users?.avatar}
         />
 
         {/* NAME & MESSAGE! */}
@@ -87,7 +89,7 @@ export default function SingleChatOption ({
               isActive ? 'text-white' : ''
             }`}
           >
-            {users?.username}
+            {isGrouped ? conversation.groupName : users?.username}
           </p>
           <p
             className={`text-gray-400 font-semibold group-hover:text-white tracking-wider line-clamp-1 ${

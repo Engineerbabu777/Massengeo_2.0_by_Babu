@@ -52,7 +52,7 @@ function ChatSection ({}) {
           return (
             <>
               <SingleChatOption
-                users={users[0]}
+                users={users}
                 key={ind}
                 conversation={conversation}
                 createdAt={time}

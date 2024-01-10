@@ -4,20 +4,17 @@ import { createSlice } from '@reduxjs/toolkit'
 const chatSlice = createSlice({
   name: 'chats',
   initialState: {
-    openedChatUsers: null, // Users in the currently opened chat
+    activeConversationInfo: null, // Users in the currently opened chat
     conversations: [], // List of conversations
     fetchingConversations: false, // Flag indicating whether conversations are being fetched
     activeUserMessages: [], // Messages in the active user's conversation
     fetchingMessages: false, // Flag indicating whether messages are being fetched
-    activeConversationId: null, // ID of the active conversation
     allOnlineUsers: [] // List of all online users
   },
   reducers: {
     // Update the currently opened chat
     updateOpenChat: (state, actions) => {
-      state.openedChatUsers = actions.payload.users
-      state.activeConversationId = actions.payload.conversationId
-      console.log(actions.payload.conversationId)
+      state.activeConversationInfo = actions.payload
     },
     // Handle successful fetching of conversations
     fetchingConversationsSuccess: (state, actions) => {

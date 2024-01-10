@@ -3,17 +3,34 @@ import { useSelector } from 'react-redux'
 import useUser from '../../../hooks/useUser'
 import { CiSearch, GoSearch, FaUserGroup } from '../../../icons'
 import SingleUser from './SearchUsers/components/SingleUser'
+import useConversation from '../../../hooks/useConversation'
+import toast from 'react-hot-toast'
 
 export default function GroupSidebarDrawer ({ closeModal, open }) {
   const [input, setInput] = useState('')
   const searchUsers = useSelector(state => state.user.searchUsers)
 
   const { findUsers } = useUser()
+  const { createConversation } = useConversation()
+
+  const [newConversationUsers, setNewConversationUsers] = useState([])
 
   // THIS FUNCTION WILL HANDLE SEARCH ON KEY ENTER WILL BE PRESSED!
   const handleSearch = e => {
     if (e.key === 'Enter' || e.keyCode === 13) {
       if (input.length > 3) findUsers(input)
+    }
+  }
+
+  // HANDLE GROUP CONVERSATION!!
+  const handleGroupConversations = async() => {
+    toast.success('hi 1')
+    if (newConversationUsers?.length > 1) {
+      toast.success('hi 2')
+      await createConversation('6566565',newConversationUsers,true)
+      // closeModal()
+    } else {
+      toast.error('at least 2 members!')
     }
   }
 
@@ -31,7 +48,10 @@ export default function GroupSidebarDrawer ({ closeModal, open }) {
         `}
       >
         {/* BODY!! */}
-        <p className='text-white text-2xl font-semibold p-2'>
+        <p
+          className='text-white text-2xl font-semibold mx-auto w-[95%] flex flex-col 
+        h-[calc(100vh-50px)]  '
+        >
           {/* USERS WILL BE DISPLAYED HERE! */}
 
           {/* HEADER! */}
@@ -60,17 +80,47 @@ export default function GroupSidebarDrawer ({ closeModal, open }) {
             </label>
           </section>
 
+          {/* DISPLAY THE ADDED USERS! */}
+          <div className='flex gap-2 flex-wrap mt-8 m-4 '>
+            {newConversationUsers?.length > 0 &&
+              newConversationUsers?.map((u, i) => (
+                <>
+                  <div
+                    className='bg-cyan-600 text-black font-semibold p-2 rounded-sm max-w-content cursor-pointer'
+                    onClick={() => {
+                      setNewConversationUsers([
+                        newConversationUsers.filter(user => user._id !== u._id)
+                      ])
+                    }}
+                  >
+                    {u?.username}
+                  </div>
+                </>
+              ))}
+          </div>
+
           {/* USERS! */}
-          <section className='mt-12 flex flex-col gap-4 h-[calc(100vh-255px)] overflow-auto no-scrollbar'>
+          <section className='mt-12 flex flex-col flex-1 gap-4 overflow-auto no-scrollbar '>
             {searchUsers?.map((user, i) => (
               <SingleUser
                 name={user?.username}
                 src={user?.avatar}
                 key={i}
-                _id={user?._id}
+                _id={user}
+                single={false}
+                setAddNewUser={setNewConversationUsers}
               />
             ))}
           </section>
+
+          {/* BUTTON! */}
+          <button
+            type='button'
+            className='bg-cyan-600 text-white font-semibold p-2 rounded-md mt-2'
+            onClick={handleGroupConversations}
+          >
+            Create Conversation
+          </button>
         </p>
       </div>
     </>

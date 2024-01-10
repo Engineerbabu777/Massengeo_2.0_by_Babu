@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 export default function SidebarModal ({ closeModal, open }) {
-  const user = useSelector(state => state.chat.openedChatUsers)
+  const user = useSelector(state => state.chat.activeConversationInfo?.users)
 
   return (
     <>

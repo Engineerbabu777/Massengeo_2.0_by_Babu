@@ -24,6 +24,18 @@ var conversationSchema = new _mongoose["default"].Schema({
   unreadCount: {
     type: _mongoose["default"].Schema.Types.ObjectId,
     ref: 'unreadcount'
+  },
+  group: {
+    type: Boolean,
+    "default": false
+  },
+  groupName: {
+    type: String,
+    "default": 'A' + Math.random() * 3 + 'B' + Math.random() * 3 + 'Z' + Math.random() * 3 + 'Y'
+  },
+  avatar: {
+    type: String,
+    "default": 'https://icons.veryicon.com/png/o/education-technology/cloud-platform-1/group-icon.png'
   }
 }, {
   timestamps: true

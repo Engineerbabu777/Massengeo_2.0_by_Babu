@@ -11,12 +11,23 @@ export default function useConversation () {
   const [creatingConversation, setCreatingConversation] = useState(false)
   const dispatch = useDispatch()
 
-  const createConversation = async userId => {
-    // CHECK IF USERID IS PROVIDED
-    if (!userId) return
+  const createConversation = async (
+    userId = 'change-later',
+    users,
+    group = false
+  ) => {
+    // CHECK IF USER_ID IS PROVIDED
+    if (!userId && !group) return
 
     try {
       setCreatingConversation(true)
+      let data
+
+      // DATA!
+      if (users?.length > 1 && group === true)
+        data = users.map(user => user?._id)
+      if (users?.length === 0) data = userId
+
       // MAKE A REQUEST!
       const response = await fetch(
         // API ENDPOINT FOR CREATING A CONVERSATION
@@ -31,8 +42,11 @@ export default function useConversation () {
             authorization: JSON.parse(localStorage.getItem('userData@**@user'))
               ?.token
           },
-          // REQUEST BODY CONTAINING THE USERID IN JSON FORMAT
-          body: JSON.stringify({ userId })
+          // REQUEST BODY CONTAINING THE USER_IDS IN JSON FORMAT AS WELL GROUP!!
+          body: JSON.stringify({
+            userIds: data,
+            group: users.length > 1 ? true : false
+          })
         }
       ).then(resp => resp.json())
 

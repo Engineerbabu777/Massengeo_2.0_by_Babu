@@ -5,15 +5,25 @@ import { Message } from '../models/message.model.js'
 export const createConversation = async (req, res) => {
   try {
     // EXTRACT USER IDS FROM REQUEST BODY (FOR NOW, SUPPORTING ONLY SINGLE CONVERSATION!)
-    const { userId } = req.body
+    const { userIds, group } = req.body
 
     // USER ID OF THE REQUESTING USER WHO IS CREATING THE CONVERSATION
     const requestedUserID = req.user._id
 
-    // CREATE A NEW CONVERSATION IN THE DATABASE
-    await Conversation.create({
-      users: [requestedUserID, userId]
-    })
+    // CREATE A NEW CONVERSATIONS IN THE DATABASE
+
+    if (group) {
+      // GROUP CONVERSATION!!
+      await Conversation.create({
+        users: [...userIds, requestedUserID],
+        group: true
+      })
+    } else {
+      // SINGLE CONVERSATION!!
+      await Conversation.create({
+        users: [requestedUserID, userIds]
+      })
+    }
 
     // RETURN A SUCCESSFUL RESPONSE WITH A STATUS OF 201 CREATED
     res

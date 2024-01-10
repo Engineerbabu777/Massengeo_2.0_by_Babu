@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { formatTimeAgo } from '../../../../../utils/getLastMessageTime'
 
 const OtherUserMessage = ({ message }) => {
-  const openedChatUsers = useSelector(state => state.chat.openedChatUsers)
+  const openedChatUsers = useSelector(state => state.chat.activeConversationInfo.users[0])
   return (
     <section className='flex max-w-[75%] gap-2'>
       {/* AVATAR! */}
