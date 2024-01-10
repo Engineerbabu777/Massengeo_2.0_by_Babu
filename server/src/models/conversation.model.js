@@ -13,11 +13,11 @@ const conversationSchema = new mongoose.Schema(
       type: String,
       default:
         'A' +
-        Math.random() * 3 +
+        Math.floor(Math.random() * 3+3) +
         'B' +
-        Math.random() * 3 +
+        Math.floor(Math.random() * 3+6) +
         'Z' +
-        Math.random() * 3 +
+        Math.floor(Math.random() * 12-4) +
         'Y'
     },
     avatar: {

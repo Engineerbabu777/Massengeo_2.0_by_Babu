@@ -14,7 +14,7 @@ const chatSlice = createSlice({
   reducers: {
     // Update the currently opened chat
     updateOpenChat: (state, actions) => {
-      state.activeConversationInfo = actions.payload
+      state.activeConversationInfo = actions.payload.conversation
     },
     // Handle successful fetching of conversations
     fetchingConversationsSuccess: (state, actions) => {

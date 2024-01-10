@@ -1,3 +1,4 @@
+import { findOtherUsers } from '../../../utils/otherUsers'
 import Avatar from './components/Avatar'
 import ChatInfo from './components/ChatInfo'
 import GroupChat from './components/GroupChat'
@@ -6,18 +7,41 @@ import SingleChat from './components/SingleChat'
 import { useSelector } from 'react-redux'
 
 export default function Header ({ openSideModal, open }) {
-  const chatUserData = useSelector(state => state.chat.openedChatUsers)
+  const conversationInfo = useSelector(
+    state => state.chat.activeConversationInfo
+  )
 
   return (
     <div className='border-b-2 border-gray-700 px-5 py-3 flex items-center'>
       {/* IMAGE! */}
-      <Avatar src={chatUserData?.avatar} userId={chatUserData?._id} />
+      <Avatar
+        src={
+          conversationInfo?.group
+            ? conversationInfo?.avatar
+            : findOtherUsers(conversationInfo?.users)[0].avatar
+        }
+        userId={
+          conversationInfo
+            ? null
+            : findOtherUsers(conversationInfo?.users)[0]._id
+        }
+      />
 
       {/* NAME & LAST SEEN for single chats */}
-      <SingleChat name={chatUserData?.username} userId={chatUserData?._id} />
+      {!conversationInfo?.group && (
+        <SingleChat
+          name={findOtherUsers(conversationInfo?.users)[0].username}
+          userId={findOtherUsers(conversationInfo?.users)[0]._id}
+        />
+      )}
 
       {/* NAME & members length for group chats */}
-      {/* <GroupChat /> */}
+      {conversationInfo?.group && (
+        <GroupChat
+          name={conversationInfo?.groupName}
+          participants={conversationInfo?.users.length}
+        />
+      )}
 
       {/* SEARCH FOR CHAT */}
       <SearchChatMessage />
@@ -26,8 +50,16 @@ export default function Header ({ openSideModal, open }) {
       <ChatInfo
         openSideModal={openSideModal}
         open={open}
-        src={chatUserData?.avatar}
-        name={chatUserData?.username}
+        src={
+          conversationInfo.group
+            ? conversationInfo?.avatar
+            : findOtherUsers(conversationInfo?.users)[0].avatar
+        }
+        name={
+          conversationInfo.group
+            ? conversationInfo?.groupName
+            : findOtherUsers(conversationInfo?.users)[0].username
+        }
       />
     </div>
   )

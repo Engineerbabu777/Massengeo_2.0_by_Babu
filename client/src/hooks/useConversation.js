@@ -28,6 +28,7 @@ export default function useConversation () {
         data = users.map(user => user?._id)
       if (users?.length === 0) data = userId
 
+      console.log(userId)
       // MAKE A REQUEST!
       const response = await fetch(
         // API ENDPOINT FOR CREATING A CONVERSATION
@@ -45,7 +46,7 @@ export default function useConversation () {
           // REQUEST BODY CONTAINING THE USER_IDS IN JSON FORMAT AS WELL GROUP!!
           body: JSON.stringify({
             userIds: data,
-            group: users.length > 1 ? true : false
+            group: users?.length > 1 ? true : false
           })
         }
       ).then(resp => resp.json())

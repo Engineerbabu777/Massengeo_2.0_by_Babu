@@ -31,7 +31,7 @@ var conversationSchema = new _mongoose["default"].Schema({
   },
   groupName: {
     type: String,
-    "default": 'A' + Math.random() * 3 + 'B' + Math.random() * 3 + 'Z' + Math.random() * 3 + 'Y'
+    "default": 'A' + Math.floor(Math.random() * 3 + 3) + 'B' + Math.floor(Math.random() * 3 + 6) + 'Z' + Math.floor(Math.random() * 12 - 4) + 'Y'
   },
   avatar: {
     type: String,

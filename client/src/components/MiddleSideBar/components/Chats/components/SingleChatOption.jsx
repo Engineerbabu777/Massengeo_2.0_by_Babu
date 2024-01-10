@@ -20,9 +20,9 @@ export default function SingleChatOption ({
   // const isActive = chat?.active ? true : false;
   const isGrouped = conversation?.group ? true : false
   const { fetchChatByConversation } = useMessages()
- 
-  const openedChatUsers = useSelector(state =>
-    state.chat.activeConversationInfo?.users
+
+  const openedChatUsers = useSelector(
+    state => state.chat.activeConversationInfo?.users
   )
 
   // CHECKING IS MESSAGE SENT BY ME OTHERS!
@@ -31,6 +31,10 @@ export default function SingleChatOption ({
     JSON.parse(localStorage.getItem('userData@**@user'))?.id
 
   const { conversationId } = useParams()
+
+  const otherUser = findOtherUsers(conversation?.users)
+
+  console.log(conversation)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -42,7 +46,12 @@ export default function SingleChatOption ({
     fetchChatByConversation(conversation._id)
     // UPDATE THE STATE FOR THE CURRENT USER!
     dispatch(updateUnreadCounts({ conversationId: conversation?._id }))
-    dispatch(updateOpenChat({ users, conversationId: conversation?._id })) // FOR NOW ONLY ONE USER! WILL UPDATE IT LATER!
+    dispatch(
+      updateOpenChat({
+        conversation,
+        conversationId: conversation?._id
+      })
+    ) // FOR NOW ONLY ONE USER! WILL UPDATE IT LATER!
     // MOVE TO CONVERSATION PAGE
     navigate(`/${conversation._id}`)
 
@@ -79,7 +88,11 @@ export default function SingleChatOption ({
         <img
           className='w-16 h-16 rounded-full object-cover '
           alt='test0image'
-          src={isGrouped ? conversation?.avatar : users?.avatar}
+          src={
+            isGrouped
+              ? conversation?.avatar
+              : otherUser?.avatar
+          }
         />
 
         {/* NAME & MESSAGE! */}
@@ -89,7 +102,9 @@ export default function SingleChatOption ({
               isActive ? 'text-white' : ''
             }`}
           >
-            {isGrouped ? conversation.groupName : users?.username}
+            {isGrouped
+              ? conversation.groupName
+              : findOtherUsers(conversation.users)[0]?.username}
           </p>
           <p
             className={`text-gray-400 font-semibold group-hover:text-white tracking-wider line-clamp-1 ${

@@ -7,6 +7,8 @@ export const createConversation = async (req, res) => {
     // EXTRACT USER IDS FROM REQUEST BODY (FOR NOW, SUPPORTING ONLY SINGLE CONVERSATION!)
     const { userIds, group } = req.body
 
+    console.log(userIds)
+
     // USER ID OF THE REQUESTING USER WHO IS CREATING THE CONVERSATION
     const requestedUserID = req.user._id
 

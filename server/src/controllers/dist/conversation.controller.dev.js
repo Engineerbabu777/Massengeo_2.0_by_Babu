@@ -26,42 +26,43 @@ var createConversation = function createConversation(req, res) {
         case 0:
           _context.prev = 0;
           // EXTRACT USER IDS FROM REQUEST BODY (FOR NOW, SUPPORTING ONLY SINGLE CONVERSATION!)
-          _req$body = req.body, userIds = _req$body.userIds, group = _req$body.group; // USER ID OF THE REQUESTING USER WHO IS CREATING THE CONVERSATION
+          _req$body = req.body, userIds = _req$body.userIds, group = _req$body.group;
+          console.log(userIds); // USER ID OF THE REQUESTING USER WHO IS CREATING THE CONVERSATION
 
           requestedUserID = req.user._id; // CREATE A NEW CONVERSATIONS IN THE DATABASE
 
           if (!group) {
-            _context.next = 8;
+            _context.next = 9;
             break;
           }
 
-          _context.next = 6;
+          _context.next = 7;
           return regeneratorRuntime.awrap(_conversationModel.Conversation.create({
             users: [].concat(_toConsumableArray(userIds), [requestedUserID]),
             group: true
           }));
 
-        case 6:
-          _context.next = 10;
+        case 7:
+          _context.next = 11;
           break;
 
-        case 8:
-          _context.next = 10;
+        case 9:
+          _context.next = 11;
           return regeneratorRuntime.awrap(_conversationModel.Conversation.create({
             users: [requestedUserID, userIds]
           }));
 
-        case 10:
+        case 11:
           // RETURN A SUCCESSFUL RESPONSE WITH A STATUS OF 201 CREATED
           res.status(201).json({
             success: true,
             message: 'Conversation created successfully'
           });
-          _context.next = 17;
+          _context.next = 18;
           break;
 
-        case 13:
-          _context.prev = 13;
+        case 14:
+          _context.prev = 14;
           _context.t0 = _context["catch"](0);
           // LOG AND HANDLE ERROR IF CREATION FAILS
           console.log('Creating Conversation Error: ', _context.t0.message); // RETURN AN ERROR RESPONSE WITH A STATUS OF 504 GATEWAY TIMEOUT
@@ -71,12 +72,12 @@ var createConversation = function createConversation(req, res) {
             message: 'Conversation creation failed'
           });
 
-        case 17:
+        case 18:
         case "end":
           return _context.stop();
       }
     }
-  }, null, null, [[0, 13]]);
+  }, null, null, [[0, 14]]);
 }; // FETCH ALL CONVERSATIONS CONTROLLER
 
 
