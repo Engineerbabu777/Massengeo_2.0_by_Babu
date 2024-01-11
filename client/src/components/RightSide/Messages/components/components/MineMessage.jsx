@@ -4,6 +4,7 @@ import { IoCheckmarkDoneSharp, MdKeyboardArrowDown } from '../../../../../icons'
 import { formatTimeAgo } from '../../../../../utils/getLastMessageTime'
 import { messageOptions } from '../../../../../utils/messageOptions'
 import { useDispatch } from 'react-redux'
+import { updateEditMessageId } from '../../../../../redux/chatSlice'
 
 const MineMessage = ({ message, isRead }) => {
   // RETRIEVE USER DATA FROM LOCAL STORAGE
@@ -14,7 +15,8 @@ const MineMessage = ({ message, isRead }) => {
 
   const handleMenuSelect = (opt, m) => {
     messageOptions(opt, m, dispatch)
-    setShowMenu(false);
+    setShowMenu(false)
+    dispatch(updateEditMessageId(m._id))
   }
 
   return (

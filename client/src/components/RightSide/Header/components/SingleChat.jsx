@@ -10,10 +10,10 @@ export default function SingleChat ({ name, userId }) {
       <span className={`text-white font-bold text-xl`}>{name}</span>
       <span
         className={`${
-          onlineUsers.includes(userId) ? 'text-green-600' : 'text-gray-500'
+          onlineUsers?.includes(userId) ? 'text-green-600' : 'text-gray-500'
         } text-md font-semibold`}
       >
-        {onlineUsers.includes(userId) ? 'Online' : 'Offline'}
+        {onlineUsers?.includes(userId) ? 'Online' : 'Offline'}
       </span>
     </div>
   )

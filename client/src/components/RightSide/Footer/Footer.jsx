@@ -11,10 +11,12 @@ import { useSelector, useDispatch } from 'react-redux'
 import { updateEditedMode, updateFooterInput } from '../../../redux/chatSlice'
 
 const Footer = () => {
-  const { sendMessages } = useMessages()
+  const { sendMessages, updateMessage } = useMessages()
   const [messageType, setMessageType] = useState('text')
   const { conversationId } = useParams()
   const inputValueEdit = useSelector(state => state.chat.footerInput)
+  const editMode = useSelector(state => state.chat.inputUpdateState)
+  const messageId = useSelector(state => state.chat.messageId)
   const [input, setInput] = useState('')
   const dispatch = useDispatch()
 
@@ -27,8 +29,12 @@ const Footer = () => {
   }, [inputValueEdit])
 
   const handleMessages = () => {
-    if (input && conversationId)
+    if (input && conversationId && !editMode) {
       sendMessages(messageType, input, conversationId)
+    }
+    if (input && conversationId && editMode && messageId) {
+      updateMessage(messageType, input, messageId,conversationId)
+    }
     setInput('')
   }
 

@@ -5,7 +5,8 @@ import {
   fetchingMessagesFailed,
   fetchingMessagesSuccess,
   updateConversationsOnRealtime,
-  updateMessagesOnRealtime
+  updateMessagesOnRealtime,
+  updateMessagesWithEditedMessage
 } from '../redux/chatSlice'
 import { socket } from '../components/RightSide/Messages/Messages'
 import { useSelector } from 'react-redux'
@@ -126,10 +127,10 @@ export default function useMessages () {
   }
 
   const updateMessage = async (
-    conversationId,
-    messageId,
+    messageType,
     newMessage,
-    messageType
+    messageId,
+    conversationId
   ) => {
     const isGroupChat = activeConversationInfo.group // IF GROUP THAN TRUE ELSE FALSE!!!
     const receiverIDS = findOtherUsers(activeConversationInfo.users).map(
@@ -138,16 +139,17 @@ export default function useMessages () {
 
     try {
       const response = await fetch(
-        'http://localhost:4444/api/v1/messages/send-message',
+        'http://localhost:4444/api/v1/messages/update-message',
         {
-          method: 'POST',
+          method: 'PUT',
           headers: {
             'content-Type': 'application/json',
             authorization: JSON.parse(localStorage.getItem('userData@**@user'))
               ?.token
           },
           body: JSON.stringify({
-            message,
+            newMessage,
+            messageId,
             messageType,
             conversationId,
             receiverId: receiverIDS // ALL IDS IN AN ARRAY!!
@@ -159,7 +161,7 @@ export default function useMessages () {
 
       // I NEED TO UPDATE THE MESSAGES ARRAY AS WELL AS THE CONVERSATIONS ARRAY!
       dispatch(updateConversationsOnRealtime(response.updatedConversation))
-      dispatch(updateMessagesOnRealtime(response.newMessage))
+      dispatch(updateMessagesWithEditedMessage(response.newMessage))
 
       // NOTE: CHECKS WHETHER THE CHAT IS OPEN OR NOT!
 

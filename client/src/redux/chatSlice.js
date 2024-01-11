@@ -11,7 +11,8 @@ const chatSlice = createSlice({
     fetchingMessages: false, // Flag indicating whether messages are being fetched
     allOnlineUsers: [], // List of all online users
     footerInput: '',
-    inputUpdateState:false,
+    inputUpdateState: false,
+    messageId: null
   },
   reducers: {
     // Update the currently opened chat
@@ -127,7 +128,27 @@ const chatSlice = createSlice({
     },
     // UPDATE INPUT STATE LIKE EDITED MODE IS ON OR NOT!!
     updateEditedMode: (state, actions) => {
-      state.inputUpdateState = actions.payload;
+      state.inputUpdateState = actions.payload
+    },
+    // UPDATE THE MESSAGE ID!!
+    updateEditMessageId: (state, actions) => {
+      state.messageId = actions.payload
+    },
+    // UPDATE MESSAGES WITH EDITED MESSAGE AS WELL!
+    updateMessagesWithEditedMessage: (state, actions) => {
+      if (
+        state?.activeUserMessages[0]?.conversationId ===
+        actions.payload.conversationId
+      )
+        state.activeUserMessages = [
+          ...state.activeUserMessages.map(m => {
+            if (m._id === actions._id) {
+              return { ...m, message: actions.payload.message }
+            } else {
+              return m
+            }
+          })
+        ]
     }
   }
 })
@@ -149,7 +170,9 @@ export const {
   updateOnlineUsers,
   updateUnreadCounts,
   updateFooterInput,
-  updateEditedMode
+  updateEditedMode,
+  updateEditMessageId,
+  updateMessagesWithEditedMessage
 } = chatSlice.actions
 
 export const chatReducer = chatSlice.reducer

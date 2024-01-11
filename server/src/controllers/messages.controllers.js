@@ -68,7 +68,7 @@ export const sendMessage = async (req, res) => {
     res.status(201).json({
       success: true,
       message: 'MESSAGE SENT SUCCESSFULLY!',
-      updatedConversation: await Conversation.findById(conversationId),
+      updatedConversation: await Conversation.findById(conversationId).populate('users lastMessage unreadCount'),
       newMessage: await Message.findById(newMessage._id)
         .populate('senderId')
         .exec()
