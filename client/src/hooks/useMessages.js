@@ -18,6 +18,8 @@ export default function useMessages () {
     state => state.chat.activeConversationInfo
   )
 
+  const isEditedMode = useSelector(state => state.chat.inputUpdateState)
+
   const sendMessages = async (messageType, message, conversationId) => {
     // FOR NOW!
     // TYPE = TEXT!
@@ -26,8 +28,9 @@ export default function useMessages () {
     // LETS CONFIRM THE RECEIVERS OF THE MESSAGE!
     // LETS CHECK IF GROUP CHAT OR NOT!
     const isGroupChat = activeConversationInfo.group // IF GROUP THAN TRUE ELSE FALSE!!!
-    const receiverIDS = findOtherUsers(activeConversationInfo.users).map((u) => u?._id) // REMOVING OUR SELF FROM THE CONVERSATION USERS!
-    
+    const receiverIDS = findOtherUsers(activeConversationInfo.users).map(
+      u => u?._id
+    ) // REMOVING OUR SELF FROM THE CONVERSATION USERS!
 
     try {
       const response = await fetch(
@@ -121,5 +124,63 @@ export default function useMessages () {
       toast.error('message failed!')
     }
   }
-  return { sendMessages, fetchChatByConversation, markMessageAsReadOnRealTime }
+
+  const updateMessage = async (
+    conversationId,
+    messageId,
+    newMessage,
+    messageType
+  ) => {
+    const isGroupChat = activeConversationInfo.group // IF GROUP THAN TRUE ELSE FALSE!!!
+    const receiverIDS = findOtherUsers(activeConversationInfo.users).map(
+      u => u?._id
+    ) // REMOVING OUR SELF FROM THE CONVERSATION USERS!
+
+    try {
+      const response = await fetch(
+        'http://localhost:4444/api/v1/messages/send-message',
+        {
+          method: 'POST',
+          headers: {
+            'content-Type': 'application/json',
+            authorization: JSON.parse(localStorage.getItem('userData@**@user'))
+              ?.token
+          },
+          body: JSON.stringify({
+            message,
+            messageType,
+            conversationId,
+            receiverId: receiverIDS // ALL IDS IN AN ARRAY!!
+          })
+        }
+      ).then(resp => resp.json())
+
+      if (response?.error) throw new Error(response?.message)
+
+      // I NEED TO UPDATE THE MESSAGES ARRAY AS WELL AS THE CONVERSATIONS ARRAY!
+      dispatch(updateConversationsOnRealtime(response.updatedConversation))
+      dispatch(updateMessagesOnRealtime(response.newMessage))
+
+      // NOTE: CHECKS WHETHER THE CHAT IS OPEN OR NOT!
+
+      socket.emit('message-sent', {
+        newMessage: response?.newMessage,
+        updatedConversation: response?.updatedConversation,
+        conversationId: response?.updatedConversation?._id
+      })
+
+      console.log({ response })
+      toast.success('message sent!')
+    } catch (error) {
+      console.log('Sending Messages Error: ', error?.message)
+      toast.error('message failed!')
+    }
+  }
+
+  return {
+    sendMessages,
+    fetchChatByConversation,
+    markMessageAsReadOnRealTime,
+    updateMessage
+  }
 }

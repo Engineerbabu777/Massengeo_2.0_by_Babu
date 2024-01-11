@@ -9,7 +9,9 @@ const chatSlice = createSlice({
     fetchingConversations: false, // Flag indicating whether conversations are being fetched
     activeUserMessages: [], // Messages in the active user's conversation
     fetchingMessages: false, // Flag indicating whether messages are being fetched
-    allOnlineUsers: [] // List of all online users
+    allOnlineUsers: [], // List of all online users
+    footerInput: '',
+    inputUpdateState:false,
   },
   reducers: {
     // Update the currently opened chat
@@ -118,6 +120,14 @@ const chatSlice = createSlice({
           return c
         }
       })
+    },
+    // UPDATE THE FOOTER STATE!!
+    updateFooterInput: (state, actions) => {
+      state.footerInput = actions.payload
+    },
+    // UPDATE INPUT STATE LIKE EDITED MODE IS ON OR NOT!!
+    updateEditedMode: (state, actions) => {
+      state.inputUpdateState = actions.payload;
     }
   }
 })
@@ -137,7 +147,9 @@ export const {
   updateMessageIsRead,
   updateAllUnreadAsRead,
   updateOnlineUsers,
-  updateUnreadCounts
+  updateUnreadCounts,
+  updateFooterInput,
+  updateEditedMode
 } = chatSlice.actions
 
 export const chatReducer = chatSlice.reducer

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   FaMicrophone,
   IoIosSend,
@@ -7,19 +7,29 @@ import {
 } from '../../../icons'
 import useMessages from '../../../hooks/useMessages'
 import { useParams } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { findOtherUsers } from '../../../utils/otherUsers'
+import { useSelector, useDispatch } from 'react-redux'
+import { updateEditedMode, updateFooterInput } from '../../../redux/chatSlice'
 
 const Footer = () => {
-  const [input, setInput] = useState('')
   const { sendMessages } = useMessages()
   const [messageType, setMessageType] = useState('text')
   const { conversationId } = useParams()
+  const inputValueEdit = useSelector(state => state.chat.footerInput)
+  const [input, setInput] = useState('')
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (inputValueEdit) {
+      setInput(inputValueEdit)
+      dispatch(updateFooterInput(''))
+      dispatch(updateEditedMode(true))
+    }
+  }, [inputValueEdit])
 
   const handleMessages = () => {
     if (input && conversationId)
       sendMessages(messageType, input, conversationId)
-    setInput('');
+    setInput('')
   }
 
   return (

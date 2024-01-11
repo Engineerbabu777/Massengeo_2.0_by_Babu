@@ -15,6 +15,7 @@ import { FaMicrophone } from 'react-icons/fa6'
 import { IoIosSend } from 'react-icons/io'
 import { IoCheckmarkDoneSharp } from "react-icons/io5";
 import { GoSearch } from "react-icons/go";
+import { MdKeyboardArrowDown } from "react-icons/md";
 export {
   CgLogOff,
   MdOutlineMessage,
@@ -30,5 +31,6 @@ export {
   IoIosSend,
   MdAttachFile,
   MdOutlineEmojiEmotions,
-  GoSearch
+  GoSearch,
+  MdKeyboardArrowDown
 }
