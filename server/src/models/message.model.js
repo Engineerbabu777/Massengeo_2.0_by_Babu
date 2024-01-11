@@ -16,10 +16,17 @@ const messageSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'conversation'
     },
+    // IS THE MESSAGE IS EDITED!
     isEdited: { type: Boolean, default: false },
+    // CHECK THE DELIVERY STATUS OF MESSAGE!
     delivered: { type: Boolean, default: false },
+    // RECEIVER IDS (ARRAY)!
     receiverId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }],
-    isGroupMessage: Boolean
+    // IS THIS MESSAGE IS IN ANY GROUPS!
+    isGroupMessage: Boolean,
+    // MESSAGE DELETED OPTIONS!
+    deleteForMe: { type: Boolean, default: false },
+    deleteForEveryOne: { type: Boolean, default: false }
   },
   {
     timestamps: true

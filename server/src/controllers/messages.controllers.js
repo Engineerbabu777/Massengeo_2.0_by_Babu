@@ -136,7 +136,7 @@ export const readTheMessageThatWasSent = async (req, res) => {
 }
 
 // SEND MESSAGES ROUTES!
-export const editMessage = async (req, res) => {
+export const updateMessage = async (req, res) => {
   try {
     // EXTRACT USER, MESSAGE, CONVERSATION_ID, AND MESSAGE_TYPE , MESSAGE_ID FROM THE REQUEST BODY
     const user = req.user
@@ -157,11 +157,11 @@ export const editMessage = async (req, res) => {
       updatedConversation: await Conversation.findById(conversationId).populate(
         'users lastMessage unreadCount'
       ),
-      editedMessage: await Message.findById(editedMessage._id)
+      editedMessage: await Message.findById(editedMessage?._id)
         .populate('senderId')
         .exec()
     })
-    
+
     // SEND RESPONSE BACK!
   } catch (error) {
     // LOG AND SEND AN ERROR RESPONSE WITH A MORE DETAILED MESSAGE

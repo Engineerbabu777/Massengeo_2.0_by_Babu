@@ -71,7 +71,7 @@ const chatSlice = createSlice({
     // Update messages in real-time
     updateMessagesOnRealtime: (state, actions) => {
       if (
-        state?.activeUserMessages[0]?.conversationId ===
+        window?.location?.pathname?.split('/')[1] ===
         actions.payload.conversationId
       )
         state.activeUserMessages = [
@@ -137,12 +137,12 @@ const chatSlice = createSlice({
     // UPDATE MESSAGES WITH EDITED MESSAGE AS WELL!
     updateMessagesWithEditedMessage: (state, actions) => {
       if (
-        state?.activeUserMessages[0]?.conversationId ===
-        actions.payload.conversationId
+        window?.location?.pathname?.split('/')[1] ===
+        actions?.payload?.conversationId
       )
         state.activeUserMessages = [
           ...state.activeUserMessages.map(m => {
-            if (m._id === actions._id) {
+            if (m._id === actions.payload._id) {
               return { ...m, message: actions.payload.message }
             } else {
               return m

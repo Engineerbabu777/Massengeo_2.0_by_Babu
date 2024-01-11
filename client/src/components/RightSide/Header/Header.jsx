@@ -21,7 +21,7 @@ export default function Header ({ openSideModal, open }) {
             : findOtherUsers(conversationInfo?.users)[0].avatar
         }
         userId={
-          conversationInfo
+          conversationInfo?.group
             ? null
             : findOtherUsers(conversationInfo?.users)[0]._id
         }

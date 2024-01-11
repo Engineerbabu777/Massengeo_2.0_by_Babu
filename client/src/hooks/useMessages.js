@@ -150,7 +150,7 @@ export default function useMessages () {
               ?.token
           },
           body: JSON.stringify({
-            newMessage,
+            message:newMessage,
             messageId,
             messageType,
             conversationId,
@@ -162,10 +162,10 @@ export default function useMessages () {
       if (response?.error) throw new Error(response?.message)
 
       // I NEED TO UPDATE THE MESSAGES ARRAY AS WELL AS THE CONVERSATIONS ARRAY!
-      // dispatch(updateConversationsOnRealtime(response.updatedConversation)) // WILL SEE IT LATER!!
-      dispatch(updateMessagesWithEditedMessage(response.editedMessage))
-      dispatch(updateEditMessageId(null))
-      dispatch(updateEditedMode(false));
+      dispatch(updateConversationsOnRealtime(response?.updatedConversation)) // WILL SEE IT LATER!!
+      dispatch(updateMessagesWithEditedMessage(response?.editedMessage))
+      // dispatch(updateEditMessageId(null))
+      // dispatch(updateEditedMode(false));
 
       // NOTE: CHECKS WHETHER THE CHAT IS OPEN OR NOT!
 

@@ -54,7 +54,7 @@ export default function MiddleSideBar () {
       if (clientId !== socket.id) {
         // DISPATCH!
         dispatch(updateConversationsOnRealtime(data.updatedConversation))
-        // dispatch(updateMessagesOnRealtime(data.newMessage))
+        dispatch(updateMessagesOnRealtime(data.newMessage))
 
         if (
           window.location.pathname.split('/')[1] ===
@@ -78,10 +78,10 @@ export default function MiddleSideBar () {
     })
 
     // UPDATE EDITED MESSAGE ON REAL_TIME!!
-    socket.on('message-received', ({ data, clientId }) => {
+    socket.on('edited-message-received', ({ data, clientId }) => {
       if (clientId !== socket.id) {
         // DISPATCH!
-        // dispatch(updateConversationsOnRealtime(data.updatedConversation))
+        dispatch(updateConversationsOnRealtime(data.updatedConversation))
         dispatch(updateMessagesWithEditedMessage(data.editedMessage))
 
         if (

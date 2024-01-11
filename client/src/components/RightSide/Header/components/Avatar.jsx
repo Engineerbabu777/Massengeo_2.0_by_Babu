@@ -1,8 +1,7 @@
 import { useSelector } from 'react-redux'
 
 export default function Avatar ({ src, sm, userId }) {
-  const onlineUsers = useSelector(state => state.chat.allOnlineUsers)
-
+  const onlineUsers = useSelector(state => state?.chat?.allOnlineUsers)
 
   return (
     <>

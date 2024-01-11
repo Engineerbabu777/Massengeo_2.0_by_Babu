@@ -2,7 +2,8 @@ import express from 'express'
 import {
   sendMessage,
   fetchAllMessages,
-  readTheMessageThatWasSent
+  readTheMessageThatWasSent,
+  updateMessage
 } from '../controllers/messages.controllers.js'
 import { authProtection } from '../middlewares/user.middleware.js'
 const routes = express.Router()

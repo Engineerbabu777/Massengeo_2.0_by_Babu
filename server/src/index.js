@@ -70,7 +70,7 @@ socket.on('connection', client => {
     'message-read-by-user',
     async ({ newMessage, conversationId, userIdToAdd }) => {
       // UPDATE IN DATABASE AS WELL!
-      await Message.findByIdAndUpdate(newMessage._id, {
+      await Message.findByIdAndUpdate(newMessage?._id, {
         seenBy: [...newMessage.seenBy, userIdToAdd]
       })
 

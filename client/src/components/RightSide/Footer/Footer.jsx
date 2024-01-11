@@ -8,7 +8,7 @@ import {
 import useMessages from '../../../hooks/useMessages'
 import { useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { updateEditedMode, updateFooterInput } from '../../../redux/chatSlice'
+import { updateEditMessageId, updateEditedMode, updateFooterInput } from '../../../redux/chatSlice'
 
 const Footer = () => {
   const { sendMessages, updateMessage } = useMessages()
@@ -31,11 +31,19 @@ const Footer = () => {
   const handleMessages = () => {
     if (input && conversationId && !editMode) {
       sendMessages(messageType, input, conversationId)
+      setInput('')
+
+      return
     }
+
     if (input && conversationId && editMode && messageId) {
-      updateMessage(messageType, input, messageId,conversationId)
+      updateMessage(messageType, input, messageId, conversationId)
+      dispatch(updateEditedMode(false))
+      dispatch(updateEditMessageId(null))
+      setInput('')
+
+      return
     }
-    setInput('')
   }
 
   return (
