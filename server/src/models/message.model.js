@@ -16,10 +16,10 @@ const messageSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'conversation'
     },
+    isEdited: { type: Boolean, default: false },
     delivered: { type: Boolean, default: false },
     receiverId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }],
-    isGroupMessage:Boolean,
-    
+    isGroupMessage: Boolean
   },
   {
     timestamps: true

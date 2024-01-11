@@ -33,6 +33,10 @@ var messageSchema = new _mongoose["default"].Schema({
     type: _mongoose["default"].Schema.Types.ObjectId,
     ref: 'conversation'
   },
+  isEdited: {
+    type: Boolean,
+    "default": false
+  },
   delivered: {
     type: Boolean,
     "default": false

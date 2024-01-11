@@ -20,6 +20,8 @@ routes.post('/send-message', _userMiddleware.authProtection, _messagesController
 
 routes.get('/get-messages/:conversationId', _userMiddleware.authProtection, _messagesControllers.fetchAllMessages); // UPDATE READ MESSAGES!
 
-routes.put('/update-read-message/:conversationId/:messageId', _userMiddleware.authProtection, _messagesControllers.readTheMessageThatWasSent);
+routes.put('/update-read-message/:conversationId/:messageId', _userMiddleware.authProtection, _messagesControllers.readTheMessageThatWasSent); // UPDATE MESSAGE!
+
+routes.put('/update-message', _userMiddleware.authProtection, updateMessage);
 var _default = routes;
 exports["default"] = _default;

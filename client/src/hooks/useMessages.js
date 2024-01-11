@@ -5,6 +5,8 @@ import {
   fetchingMessagesFailed,
   fetchingMessagesSuccess,
   updateConversationsOnRealtime,
+  updateEditMessageId,
+  updateEditedMode,
   updateMessagesOnRealtime,
   updateMessagesWithEditedMessage
 } from '../redux/chatSlice'
@@ -160,13 +162,15 @@ export default function useMessages () {
       if (response?.error) throw new Error(response?.message)
 
       // I NEED TO UPDATE THE MESSAGES ARRAY AS WELL AS THE CONVERSATIONS ARRAY!
-      dispatch(updateConversationsOnRealtime(response.updatedConversation))
-      dispatch(updateMessagesWithEditedMessage(response.newMessage))
+      // dispatch(updateConversationsOnRealtime(response.updatedConversation)) // WILL SEE IT LATER!!
+      dispatch(updateMessagesWithEditedMessage(response.editedMessage))
+      dispatch(updateEditMessageId(null))
+      dispatch(updateEditedMode(false));
 
       // NOTE: CHECKS WHETHER THE CHAT IS OPEN OR NOT!
 
-      socket.emit('message-sent', {
-        newMessage: response?.newMessage,
+      socket.emit('message-edited', {
+        editedMessage: response?.newMessage,
         updatedConversation: response?.updatedConversation,
         conversationId: response?.updatedConversation?._id
       })

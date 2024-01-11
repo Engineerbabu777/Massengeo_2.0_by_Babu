@@ -60,6 +60,11 @@ socket.on('connection', client => {
     socket.emit('message-received', { data, clientId: client.id })
   })
 
+  // UPDATE MESSAGE ON REALTIME!!!
+  client.on('message-edited', data => {
+    socket.emit('edited-message-received', { data, clientId: client.id })
+  })
+
   // UPDATE SEEN ON REALTIME!
   client.on(
     'message-read-by-user',

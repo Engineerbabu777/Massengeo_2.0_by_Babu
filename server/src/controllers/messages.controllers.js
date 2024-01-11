@@ -68,7 +68,9 @@ export const sendMessage = async (req, res) => {
     res.status(201).json({
       success: true,
       message: 'MESSAGE SENT SUCCESSFULLY!',
-      updatedConversation: await Conversation.findById(conversationId).populate('users lastMessage unreadCount'),
+      updatedConversation: await Conversation.findById(conversationId).populate(
+        'users lastMessage unreadCount'
+      ),
       newMessage: await Message.findById(newMessage._id)
         .populate('senderId')
         .exec()
@@ -129,6 +131,41 @@ export const readTheMessageThatWasSent = async (req, res) => {
   } catch (error) {
     // LOG AND SEND AN ERROR RESPONSE WITH A MORE DETAILED MESSAGE
     console.log('UPDATING MESSAGE READ ERROR: ', error?.message)
+    res.status(500).json({ error: true, message: 'INTERNAL SERVER ERROR' })
+  }
+}
+
+// SEND MESSAGES ROUTES!
+export const editMessage = async (req, res) => {
+  try {
+    // EXTRACT USER, MESSAGE, CONVERSATION_ID, AND MESSAGE_TYPE , MESSAGE_ID FROM THE REQUEST BODY
+    const user = req.user
+    const { message, conversationId, messageType, receiverId, messageId } =
+      req.body
+
+    // UPDATE THE MESSAGE WITH NEW MESSAGE!
+    const editedMessage = await Message.findByIdAndUpdate(messageId, {
+      message,
+      messageType,
+      isEdited:true
+    })
+
+    // SEND A SUCCESS RESPONSE
+    res.status(201).json({
+      success: true,
+      message: 'MESSAGE SENT SUCCESSFULLY!',
+      updatedConversation: await Conversation.findById(conversationId).populate(
+        'users lastMessage unreadCount'
+      ),
+      editedMessage: await Message.findById(editedMessage._id)
+        .populate('senderId')
+        .exec()
+    })
+    
+    // SEND RESPONSE BACK!
+  } catch (error) {
+    // LOG AND SEND AN ERROR RESPONSE WITH A MORE DETAILED MESSAGE
+    console.log('API SEND MESSAGE ERROR: ', error?.message)
     res.status(500).json({ error: true, message: 'INTERNAL SERVER ERROR' })
   }
 }

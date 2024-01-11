@@ -9,6 +9,7 @@ import {
   updateConversationsOnRealtime,
   updateMessageIsRead,
   updateMessagesOnRealtime,
+  updateMessagesWithEditedMessage,
   updateOnlineUsers,
   updateUnreadCounts
 } from '../../redux/chatSlice'
@@ -53,7 +54,7 @@ export default function MiddleSideBar () {
       if (clientId !== socket.id) {
         // DISPATCH!
         dispatch(updateConversationsOnRealtime(data.updatedConversation))
-        dispatch(updateMessagesOnRealtime(data.newMessage))
+        // dispatch(updateMessagesOnRealtime(data.newMessage))
 
         if (
           window.location.pathname.split('/')[1] ===
@@ -75,6 +76,28 @@ export default function MiddleSideBar () {
         }
       }
     })
+
+    // UPDATE EDITED MESSAGE ON REAL_TIME!!
+    socket.on('message-received', ({ data, clientId }) => {
+      if (clientId !== socket.id) {
+        // DISPATCH!
+        // dispatch(updateConversationsOnRealtime(data.updatedConversation))
+        dispatch(updateMessagesWithEditedMessage(data.editedMessage))
+
+        if (
+          window.location.pathname.split('/')[1] ===
+          data.updatedConversation._id
+        ) {
+          socket.emit('message-read-by-user', {
+            conversationId: data.updatedConversation._id,
+            newMessage: data.editedMessage,
+            socketIdOfUser: socket.id,
+            userIdToAdd: JSON.parse(localStorage.getItem('userData@**@user')).id
+          })
+        }
+      }
+    })
+
 
     // UPDATE THAT SINGLE MESSAGE AS READ!
     socket.on(

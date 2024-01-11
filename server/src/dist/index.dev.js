@@ -98,6 +98,13 @@ socket.on('connection', function (client) {
       data: data,
       clientId: client.id
     });
+  }); // UPDATE MESSAGE ON REALTIME!!!
+
+  client.on('message-edited', function (data) {
+    socket.emit('edited-message-received', {
+      data: data,
+      clientId: client.id
+    });
   }); // UPDATE SEEN ON REALTIME!
 
   client.on('message-read-by-user', function _callee(_ref2) {

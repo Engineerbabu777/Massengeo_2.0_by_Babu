@@ -20,4 +20,7 @@ routes.put(
   readTheMessageThatWasSent
 )
 
+// UPDATE MESSAGE!
+routes.put('/update-message', authProtection, updateMessage)
+
 export default routes
