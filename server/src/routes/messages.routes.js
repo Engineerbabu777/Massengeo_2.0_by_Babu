@@ -3,7 +3,8 @@ import {
   sendMessage,
   fetchAllMessages,
   readTheMessageThatWasSent,
-  updateMessage
+  updateMessage,
+  deleteMessage
 } from '../controllers/messages.controllers.js'
 import { authProtection } from '../middlewares/user.middleware.js'
 const routes = express.Router()
@@ -23,5 +24,8 @@ routes.put(
 
 // UPDATE MESSAGE!
 routes.put('/update-message', authProtection, updateMessage)
+
+// DELETE MESSAGE!
+routes.delete('/delete-message', authProtection, deleteMessage)
 
 export default routes

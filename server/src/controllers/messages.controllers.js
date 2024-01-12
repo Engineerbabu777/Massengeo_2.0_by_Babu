@@ -114,6 +114,7 @@ export const fetchAllMessages = async (req, res) => {
   }
 }
 
+// MARK MESSAGE AS READ!
 export const readTheMessageThatWasSent = async (req, res) => {
   try {
     // EXTRACT USER AND CONVERSATION_ID FROM REQUEST PARAMETERS
@@ -147,7 +148,7 @@ export const updateMessage = async (req, res) => {
     const editedMessage = await Message.findByIdAndUpdate(messageId, {
       message,
       messageType,
-      isEdited:true
+      isEdited: true
     })
 
     // SEND A SUCCESS RESPONSE
@@ -166,6 +167,41 @@ export const updateMessage = async (req, res) => {
   } catch (error) {
     // LOG AND SEND AN ERROR RESPONSE WITH A MORE DETAILED MESSAGE
     console.log('API SEND MESSAGE ERROR: ', error?.message)
+    res.status(500).json({ error: true, message: 'INTERNAL SERVER ERROR' })
+  }
+}
+
+// DELETE MESSAGE ROUTE HANDLER!
+export const deleteMessage = async (req, res) => {
+  try {
+    // EXTRACT USER AND MESSAGE,TYPE FROM REQUEST PARAMETERS
+    const user = req.user
+    const { type, messageId } = req.body
+
+    // UPDATE MESSAGE DELETION TYPE!
+    await Message.findByIdAndUpdate(messageId, {
+      deleteForMe: type === 'delete_me' ? true : false,
+      deleteForEveryOne: type === 'delete_everyone' ? true : false
+    })
+
+    // SEND A SUCCESS RESPONSE WITH THE FETCHED MESSAGES
+    res.status(200).json({
+      success: true,
+      message: 'Message Marked as Read!',
+      deletedMessage: await Message.findById(messageId)
+        .populate('senderId')
+        .exec(),
+      updatedConversation: await Conversation.findById(
+        (
+          await Message.findById(messageId)
+        ).conversationId
+      )
+        .populate('users lastMessage unreadCount')
+        .exec()
+    })
+  } catch (error) {
+    // LOG AND SEND AN ERROR RESPONSE WITH A MORE DETAILED MESSAGE
+    console.log('UPDATING MESSAGE READ ERROR: ', error?.message)
     res.status(500).json({ error: true, message: 'INTERNAL SERVER ERROR' })
   }
 }

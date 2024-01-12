@@ -149,6 +149,22 @@ const chatSlice = createSlice({
             }
           })
         ]
+    },
+     // UPDATE MESSAGES WITH DELETED MESSAGE AS WELL!
+     updateMessagesWithDeletedOne: (state, actions) => {
+      if (
+        window?.location?.pathname?.split('/')[1] ===
+        actions?.payload?.conversationId
+      )
+        state.activeUserMessages = [
+          ...state.activeUserMessages.map(m => {
+            if (m._id === actions.payload._id) {
+              return { ...m, message: actions.payload.message }
+            } else {
+              return m
+            }
+          })
+        ]
     }
   }
 })
@@ -172,7 +188,8 @@ export const {
   updateFooterInput,
   updateEditedMode,
   updateEditMessageId,
-  updateMessagesWithEditedMessage
+  updateMessagesWithEditedMessage,
+  updateMessagesWithDeletedOne
 } = chatSlice.actions
 
 export const chatReducer = chatSlice.reducer

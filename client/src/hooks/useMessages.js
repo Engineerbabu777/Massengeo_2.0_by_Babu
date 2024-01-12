@@ -8,6 +8,7 @@ import {
   updateEditMessageId,
   updateEditedMode,
   updateMessagesOnRealtime,
+  updateMessagesWithDeletedOne,
   updateMessagesWithEditedMessage
 } from '../redux/chatSlice'
 import { socket } from '../components/RightSide/Messages/Messages'
@@ -20,7 +21,6 @@ export default function useMessages () {
   const activeConversationInfo = useSelector(
     state => state.chat.activeConversationInfo
   )
-
   const isEditedMode = useSelector(state => state.chat.inputUpdateState)
 
   const sendMessages = async (messageType, message, conversationId) => {
@@ -150,7 +150,7 @@ export default function useMessages () {
               ?.token
           },
           body: JSON.stringify({
-            message:newMessage,
+            message: newMessage,
             messageId,
             messageType,
             conversationId,
@@ -164,8 +164,7 @@ export default function useMessages () {
       // I NEED TO UPDATE THE MESSAGES ARRAY AS WELL AS THE CONVERSATIONS ARRAY!
       dispatch(updateConversationsOnRealtime(response?.updatedConversation)) // WILL SEE IT LATER!!
       dispatch(updateMessagesWithEditedMessage(response?.editedMessage))
-      // dispatch(updateEditMessageId(null))
-      // dispatch(updateEditedMode(false));
+
 
       // NOTE: CHECKS WHETHER THE CHAT IS OPEN OR NOT!
 
@@ -183,10 +182,41 @@ export default function useMessages () {
     }
   }
 
+  const deleteMessage = async (type, messageId) => {
+    try {
+      const response = await fetch(
+        'http://localhost:4444/api/v1/messages/delete-message',
+        {
+          method: 'DELETE',
+          headers: {
+            'content-Type': 'application/json',
+            authorization: JSON.parse(localStorage.getItem('userData@**@user'))
+              ?.token
+          },
+          body: JSON.stringify({ type, messageId })
+        }
+      ).then(resp => resp.json())
+
+      // IF ERROR!
+      if (response?.error) throw new Error(response?.message)
+
+      // I NEED TO UPDATE THE MESSAGES ARRAY AS WELL AS THE CONVERSATIONS ARRAY!
+      dispatch(updateConversationsOnRealtime(response?.updatedConversation)) // WILL SEE IT LATER!!
+      dispatch(updateMessagesWithDeletedOne(response?.deletedMessage))
+
+
+      // IF SUCCESS!!
+    } catch (error) {
+      console.log('delete message Error: ', error?.message)
+      toast.error('deletion failed!')
+    }
+  }
+
   return {
     sendMessages,
     fetchChatByConversation,
     markMessageAsReadOnRealTime,
-    updateMessage
+    updateMessage,
+    deleteMessage
   }
 }

@@ -22,6 +22,8 @@ routes.get('/get-messages/:conversationId', _userMiddleware.authProtection, _mes
 
 routes.put('/update-read-message/:conversationId/:messageId', _userMiddleware.authProtection, _messagesControllers.readTheMessageThatWasSent); // UPDATE MESSAGE!
 
-routes.put('/update-message', _userMiddleware.authProtection, _messagesControllers.updateMessage);
+routes.put('/update-message', _userMiddleware.authProtection, _messagesControllers.updateMessage); // DELETE MESSAGE!
+
+routes["delete"]('/delete-message', _userMiddleware.authProtection, _messagesControllers.deleteMessage);
 var _default = routes;
 exports["default"] = _default;

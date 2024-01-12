@@ -5,6 +5,7 @@ import { formatTimeAgo } from '../../../../../utils/getLastMessageTime'
 import { messageOptions } from '../../../../../utils/messageOptions'
 import { useDispatch } from 'react-redux'
 import { updateEditMessageId } from '../../../../../redux/chatSlice'
+import useMessages from '../../../../../hooks/useMessages'
 
 const MineMessage = ({ message, isRead }) => {
   // RETRIEVE USER DATA FROM LOCAL STORAGE
@@ -12,11 +13,16 @@ const MineMessage = ({ message, isRead }) => {
   const dispatch = useDispatch()
   // HANDLE MENU!!
   const [showMenu, setShowMenu] = React.useState(false)
+  const { deleteMessage } = useMessages()
 
   const handleMenuSelect = (opt, m) => {
-    messageOptions(opt, m, dispatch)
     setShowMenu(false)
-    dispatch(updateEditMessageId(m._id))
+    if (opt === 'edit') {
+      messageOptions(opt, m, dispatch)
+      dispatch(updateEditMessageId(m._id))
+    } else {
+      deleteMessage(opt, m?._id)
+    }
   }
 
   return (
@@ -56,11 +62,17 @@ const MineMessage = ({ message, isRead }) => {
       <div className='w-full flex flex-col'>
         {/* MESSAGE BUBBLE WITH BACKGROUND COLOR, ROUNDED CORNERS, AND STYLING */}
         <div
-          className='bg-[#F05454] rounded-l-xl  rounded-tr-xl px-8 py-4 text-white text-xl cursor-pointer'
-          onClick={() => setShowMenu(!showMenu)}
+          className={`bg-[#F05454] rounded-l-xl  rounded-tr-xl px-8 py-4 text-white text-xl cursor-pointer ${
+            message?.deletedForMe ? 'italic' : null
+          }`}
+          onClick={() => {
+            if (!message?.deleteForMe) {
+              setShowMenu(!showMenu)
+            }
+          }}
         >
           {/* DISPLAY THE MESSAGE TEXT */}
-          {message.message}
+          {message?.deleteForMe ? 'you deleted this message' : message.message}
         </div>
 
         {/* TIME AND READ STATUS OF THE MESSAGE */}
@@ -71,6 +83,8 @@ const MineMessage = ({ message, isRead }) => {
           {/* CHECKMARK ICON INDICATING WHETHER THE MESSAGE HAS BEEN READ */}
           <IoCheckmarkDoneSharp
             className={`${message.isGroupMessage ? 'hidden' : ''} ${
+              message.deleteForMe ? 'hidden' : ''
+            } ${
               message?.delivered
                 ? isRead
                   ? 'text-green-500'
