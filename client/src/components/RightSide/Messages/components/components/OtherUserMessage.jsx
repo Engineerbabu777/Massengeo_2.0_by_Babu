@@ -2,6 +2,7 @@ import React from 'react'
 import Avatar from '../../../Header/components/Avatar'
 import { useSelector } from 'react-redux'
 import { formatTimeAgo } from '../../../../../utils/getLastMessageTime'
+import { MdDoNotDisturb } from 'react-icons/md'
 
 const OtherUserMessage = ({ message }) => {
   return (
@@ -14,9 +15,14 @@ const OtherUserMessage = ({ message }) => {
             message.deleteForEveryOne ? 'italic' : null
           } `}
         >
-          {message?.deleteForEveryOne
-            ? 'this message was deleted'
-            : message?.message}
+          {message?.deleteForEveryOne ? (
+            <p className='text-gray-800 flex gap-2 items-center'>
+              <MdDoNotDisturb className='h-6 w-6' />
+              this message was deleted{' '}
+            </p>
+          ) : (
+            message?.message
+          )}
         </div>
         {/* TIME! */}
         <span className='text-gray-400 font-semibold'>

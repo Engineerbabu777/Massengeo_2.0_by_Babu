@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router-dom'
 import { socket } from '../../../../RightSide/Messages/Messages'
 import { findOtherUsers } from '../../../../../utils/otherUsers'
+import { MdDoNotDisturb } from 'react-icons/md'
 
 export default function SingleChatOption ({
   conversation,
@@ -29,6 +30,9 @@ export default function SingleChatOption ({
   const isSentByMe =
     conversation?.lastMessage?.senderId ===
     JSON.parse(localStorage.getItem('userData@**@user'))?.id
+
+  const deleteForMe = conversation?.lastMessage?.deleteForMe
+  const deleteForEveryOne = conversation?.lastMessage?.deleteForEveryOne
 
   const { conversationId } = useParams()
 
@@ -76,6 +80,7 @@ export default function SingleChatOption ({
       })
     }, 500)
   }
+
   return (
     <>
       <div
@@ -123,8 +128,33 @@ export default function SingleChatOption ({
             ) : (
               <>
                 {' '}
-                {isSentByMe && 'me: '}
-                {conversation?.lastMessage?.message || 'start a conversation'}
+                {isSentByMe &&
+                  (!deleteForMe || deleteForEveryOne) && // !false || true
+                  (deleteForMe || !deleteForEveryOne) && // false || !true
+                  'me: '}
+                {/* OTHER USER CAN SEE THE MESSAGE IF ITS JUST DELETED FOR ME! */}
+                {conversation?.lastMessage?.message &&
+                  deleteForMe &&
+                  !deleteForEveryOne &&
+                  !isSentByMe && <>{conversation?.lastMessage?.message}</>}
+                {/* IF DELETED FOR ALL! */}
+                {conversation?.lastMessage?.message &&
+                  (deleteForEveryOne || (deleteForMe && isSentByMe)) && (
+                    <span className='text-gray-500 flex gap-2 items-center text-sm'>
+                      <MdDoNotDisturb className='h-4 w-4' />
+                      message was deleted
+                    </span>
+                  )}
+                {/* IF LAST MESSAGE HAS TO BE DISPLAY! */}
+                {!deleteForMe && !deleteForEveryOne && (
+                  <>
+                    {conversation?.lastMessage?.message ? (
+                      <>{conversation?.lastMessage?.message}</>
+                    ) : (
+                      'start a conversation'
+                    )}
+                  </>
+                )}
               </>
             )}
           </p>

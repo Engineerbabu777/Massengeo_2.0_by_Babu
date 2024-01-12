@@ -6,6 +6,8 @@ import { messageOptions } from '../../../../../utils/messageOptions'
 import { useDispatch } from 'react-redux'
 import { updateEditMessageId } from '../../../../../redux/chatSlice'
 import useMessages from '../../../../../hooks/useMessages'
+import { MdDoNotDisturb } from 'react-icons/md'
+import { IoCheckmarkSharp } from 'react-icons/io5'
 
 const MineMessage = ({ message, isRead }) => {
   // RETRIEVE USER DATA FROM LOCAL STORAGE
@@ -63,16 +65,23 @@ const MineMessage = ({ message, isRead }) => {
         {/* MESSAGE BUBBLE WITH BACKGROUND COLOR, ROUNDED CORNERS, AND STYLING */}
         <div
           className={`bg-[#F05454] rounded-l-xl  rounded-tr-xl px-8 py-4 text-white text-xl cursor-pointer ${
-            (message?.deleteForMe || message.deleteForEveryOne) ? 'italic' : null
+            message?.deleteForMe || message.deleteForEveryOne ? 'italic' : null
           }`}
           onClick={() => {
-            if (!message?.deleteForMe) {
+            if (!message?.deleteForMe && !message?.deleteForEveryOne) {
               setShowMenu(!showMenu)
             }
           }}
         >
           {/* DISPLAY THE MESSAGE TEXT */}
-          {message?.deleteForMe ? 'you deleted this message' : message.message}
+          {message?.deleteForMe || message.deleteForEveryOne ? (
+            <p className='text-gray-800 flex gap-2 items-center'>
+              <MdDoNotDisturb className='h-6 w-6' />
+              you deleted this message{' '}
+            </p>
+          ) : (
+            message.message
+          )}
         </div>
 
         {/* TIME AND READ STATUS OF THE MESSAGE */}
@@ -83,14 +92,27 @@ const MineMessage = ({ message, isRead }) => {
           {/* CHECKMARK ICON INDICATING WHETHER THE MESSAGE HAS BEEN READ */}
           <IoCheckmarkDoneSharp
             className={`${message.isGroupMessage ? 'hidden' : ''} ${
-              message.deleteForMe ? 'hidden' : ''
+              message?.deleteForMe || message?.deleteForEveryOne ? 'hidden' : ''
             } ${
               message?.delivered
                 ? isRead
                   ? 'text-green-500'
-                  : 'text-blue-500'
-                : 'text-red-400'
+                  : 'text-gray-300'
+                : 'hidden'
             } w-6 h-6`}
+          />
+          <IoCheckmarkSharp
+            className={`
+          ${message.isGroupMessage ? 'hidden' : ''} ${
+              message?.deleteForMe || message?.deleteForEveryOne ? 'hidden' : ''
+            } ${
+              message?.delivered
+                ? isRead
+                  ? 'hidden'
+                  : 'hidden'
+                : 'text-gray-300'
+            } w-6 h-6
+          `}
           />
         </span>
       </div>

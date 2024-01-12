@@ -203,6 +203,8 @@ export default function useMessages () {
       dispatch(updateConversationsOnRealtime(response?.updatedConversation)) // WILL SEE IT LATER!!
       dispatch(updateMessagesWithDeletedOne(response?.deletedMessage))
 
+      toast.success('message deleted '+type+'!')
+
       socket.emit('message-deleted', {
         deletedMessage: response?.deletedMessage,
         updatedConversation: response?.updatedConversation,
