@@ -9,8 +9,14 @@ const OtherUserMessage = ({ message }) => {
       {/* AVATAR! */}
       <Avatar src={message?.senderId?.avatar} sm test />
       <div className=''>
-        <div className='bg-gray-400 rounded-r-xl mr-auto rounded-tl-xl px-8 py-4 text-white text-xl '>
-          {message?.message}
+        <div
+          className={`bg-gray-400 rounded-r-xl mr-auto rounded-tl-xl px-8 py-4 text-white text-xl    ${
+            message.deleteForEveryOne ? 'italic' : null
+          } `}
+        >
+          {message?.deleteForEveryOne
+            ? 'this message was deleted'
+            : message?.message}
         </div>
         {/* TIME! */}
         <span className='text-gray-400 font-semibold'>

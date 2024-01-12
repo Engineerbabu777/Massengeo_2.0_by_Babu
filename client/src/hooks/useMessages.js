@@ -165,7 +165,6 @@ export default function useMessages () {
       dispatch(updateConversationsOnRealtime(response?.updatedConversation)) // WILL SEE IT LATER!!
       dispatch(updateMessagesWithEditedMessage(response?.editedMessage))
 
-
       // NOTE: CHECKS WHETHER THE CHAT IS OPEN OR NOT!
 
       socket.emit('message-edited', {
@@ -204,6 +203,11 @@ export default function useMessages () {
       dispatch(updateConversationsOnRealtime(response?.updatedConversation)) // WILL SEE IT LATER!!
       dispatch(updateMessagesWithDeletedOne(response?.deletedMessage))
 
+      socket.emit('message-deleted', {
+        deletedMessage: response?.deletedMessage,
+        updatedConversation: response?.updatedConversation,
+        conversationId: response?.updatedConversation?._id
+      })
 
       // IF SUCCESS!!
     } catch (error) {

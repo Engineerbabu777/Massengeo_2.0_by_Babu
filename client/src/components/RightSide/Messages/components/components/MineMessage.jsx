@@ -63,7 +63,7 @@ const MineMessage = ({ message, isRead }) => {
         {/* MESSAGE BUBBLE WITH BACKGROUND COLOR, ROUNDED CORNERS, AND STYLING */}
         <div
           className={`bg-[#F05454] rounded-l-xl  rounded-tr-xl px-8 py-4 text-white text-xl cursor-pointer ${
-            message?.deletedForMe ? 'italic' : null
+            (message?.deleteForMe || message.deleteForEveryOne) ? 'italic' : null
           }`}
           onClick={() => {
             if (!message?.deleteForMe) {

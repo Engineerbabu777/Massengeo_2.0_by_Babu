@@ -9,6 +9,7 @@ import {
   updateConversationsOnRealtime,
   updateMessageIsRead,
   updateMessagesOnRealtime,
+  updateMessagesWithDeletedOne,
   updateMessagesWithEditedMessage,
   updateOnlineUsers,
   updateUnreadCounts
@@ -84,17 +85,38 @@ export default function MiddleSideBar () {
         dispatch(updateConversationsOnRealtime(data.updatedConversation))
         dispatch(updateMessagesWithEditedMessage(data.editedMessage))
 
-        if (
-          window.location.pathname.split('/')[1] ===
-          data.updatedConversation._id
-        ) {
-          socket.emit('message-read-by-user', {
-            conversationId: data.updatedConversation._id,
-            newMessage: data.editedMessage,
-            socketIdOfUser: socket.id,
-            userIdToAdd: JSON.parse(localStorage.getItem('userData@**@user')).id
-          })
-        }
+        // if (
+        //   window.location.pathname.split('/')[1] ===
+        //   data.updatedConversation._id
+        // ) {
+        //   socket.emit('message-read-by-user', {
+        //     conversationId: data.updatedConversation._id,
+        //     newMessage: data.editedMessage,
+        //     socketIdOfUser: socket.id,
+        //     userIdToAdd: JSON.parse(localStorage.getItem('userData@**@user')).id
+        //   })
+        // }
+      }
+    })
+
+    // UPDATE EDITED MESSAGE ON REAL_TIME!!
+    socket.on('deleted-message-received', ({ data, clientId }) => {
+      if (clientId !== socket.id) {
+        // DISPATCH!
+        dispatch(updateConversationsOnRealtime(data.updatedConversation))
+        dispatch(updateMessagesWithDeletedOne(data.deletedMessage))
+
+        // if (
+        //   window.location.pathname.split('/')[1] ===
+        //   data.updatedConversation._id
+        // ) {
+        //   socket.emit('message-read-by-user', {
+        //     conversationId: data.updatedConversation._id,
+        //     newMessage: data.deletedMessage,
+        //     socketIdOfUser: socket.id,
+        //     userIdToAdd: JSON.parse(localStorage.getItem('userData@**@user')).id
+        //   })
+        // }
       }
     })
 
