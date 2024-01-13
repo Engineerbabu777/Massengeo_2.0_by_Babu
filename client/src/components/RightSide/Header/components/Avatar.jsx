@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux'
 
-export default function Avatar ({ src, sm, userId }) {
+export default function Avatar ({ src, sm, userId,info }) {
   const onlineUsers = useSelector(state => state?.chat?.allOnlineUsers)
 
   return (
@@ -10,7 +10,7 @@ export default function Avatar ({ src, sm, userId }) {
           src={src}
           alt='test'
           className={`overflow-hidden rounded-full object-cover ${
-            sm ? 'w-10 h-10' : 'w-20 h-20'
+            sm ? 'w-10 h-10' : info ? 'w-44 h-44' : 'w-20 h-20'
           }`}
         />
         {onlineUsers?.includes(userId) && (

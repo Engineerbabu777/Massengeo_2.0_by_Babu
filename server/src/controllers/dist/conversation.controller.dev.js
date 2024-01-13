@@ -84,7 +84,7 @@ var createConversation = function createConversation(req, res) {
 exports.createConversation = createConversation;
 
 var fetchAllConversations = function fetchAllConversations(req, res) {
-  var data, conversations;
+  var conversations;
   return regeneratorRuntime.async(function fetchAllConversations$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
@@ -104,8 +104,7 @@ var fetchAllConversations = function fetchAllConversations(req, res) {
           }));
 
         case 3:
-          data = _context2.sent;
-          _context2.next = 6;
+          _context2.next = 5;
           return regeneratorRuntime.awrap(_conversationModel.Conversation.find({
             users: {
               $in: [req.user._id]
@@ -114,7 +113,7 @@ var fetchAllConversations = function fetchAllConversations(req, res) {
             updatedAt: -1
           }));
 
-        case 6:
+        case 5:
           conversations = _context2.sent;
           // RETURN A SUCCESSFUL RESPONSE WITH A STATUS OF 200 OK AND THE FETCHED CONVERSATIONS!!
           res.status(200).json({
@@ -122,11 +121,11 @@ var fetchAllConversations = function fetchAllConversations(req, res) {
             message: 'Conversations fetched successfully',
             conversations: conversations
           });
-          _context2.next = 14;
+          _context2.next = 13;
           break;
 
-        case 10:
-          _context2.prev = 10;
+        case 9:
+          _context2.prev = 9;
           _context2.t0 = _context2["catch"](0);
           // LOG AND HANDLE ERROR IF FETCHING FAILS!!
           console.log('Fetching Conversations Error: ', _context2.t0.message); // RETURN AN ERROR RESPONSE WITH A STATUS OF 504 GATEWAY TIMEOUT!!
@@ -136,12 +135,12 @@ var fetchAllConversations = function fetchAllConversations(req, res) {
             message: 'Conversations fetching failed'
           });
 
-        case 14:
+        case 13:
         case "end":
           return _context2.stop();
       }
     }
-  }, null, null, [[0, 10]]);
+  }, null, null, [[0, 9]]);
 };
 
 exports.fetchAllConversations = fetchAllConversations;

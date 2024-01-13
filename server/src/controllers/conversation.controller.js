@@ -46,7 +46,7 @@ export const createConversation = async (req, res) => {
 export const fetchAllConversations = async (req, res) => {
   try {
     // MARKED ALL UN_DELIVERED MESSAGES OF THIS USER TO BE DELIVERED!
-    const data = await Message.updateMany(
+    await Message.updateMany(
       {
         receiverId: req.user._id, // MEANS THOSE MESSAGE THAT WHERE SEND TO THIS USER WILL BE DELIVERED FOR OTHERS!
         delivered: false // FINDING BOTH CONDITIONS TO BE TRUE!

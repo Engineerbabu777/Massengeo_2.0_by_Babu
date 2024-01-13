@@ -4,7 +4,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const chatSlice = createSlice({
   name: 'chats',
   initialState: {
-    activeConversationInfo: null, // Users in the currently opened chat
+    activeConversationInfo: null, // active Chat Data!
     conversations: [], // List of conversations
     fetchingConversations: false, // Flag indicating whether conversations are being fetched
     activeUserMessages: [], // Messages in the active user's conversation
