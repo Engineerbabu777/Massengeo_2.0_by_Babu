@@ -1,5 +1,5 @@
 import React from 'react'
-import { findOtherUsers } from '../../../../utils/otherUsers'
+import { findMySelf, findOtherUsers } from '../../../../utils/otherUsers'
 import Avatar from './Avatar'
 
 const GroupInfo = ({ activeChat }) => {
@@ -35,27 +35,38 @@ const GroupInfo = ({ activeChat }) => {
       {/* USERS NAMES! */}
       <section className='flex flex-col p-4 '>
         <span className='text-lg text-gray-400'>Group Members</span>
+        {findMySelf(activeChat?.users).map(u => (
+          <div
+            className={`py-1 
+                `}
+          >
+            <p className='font-bold text-white text-xl -mb-1'>You</p>
+            <p className='text-lg text-gray-400 font-semibold italic'>
+              {u?.about || 'Hey there, I am using massengero 2.0😎'}
+            </p>
+          </div>
+        ))}
+
         {!showFullUsers &&
-          activeChat?.users.slice(0, 2)?.map((u, i) => (
-            <>
-              <div
-                className={`py-1 
+          findOtherUsers(activeChat?.users)
+            .slice(0, 1)
+            ?.map((u, i) => (
+              <>
+                <div
+                  className={`py-1 
               `}
-              >
-                <p className='font-bold text-white text-xl -mb-1'>
-                  {u?.username ===
-                  JSON.parse(localStorage.getItem('userData@**@user')).username
-                    ? 'You'
-                    : u?.username}
-                </p>
-                <p className='text-lg text-gray-400 font-semibold italic'>
-                  {u?.about || 'Hey there, I am using massengero 2.0😎'}
-                </p>
-              </div>
-            </>
-          ))}
+                >
+                  <p className='font-bold text-white text-xl -mb-1'>
+                    {u?.username}
+                  </p>
+                  <p className='text-lg text-gray-400 font-semibold italic'>
+                    {u?.about || 'Hey there, I am using massengero 2.0😎'}
+                  </p>
+                </div>
+              </>
+            ))}
         {showFullUsers &&
-          activeChat?.users?.map((u, i) => (
+          findOtherUsers(activeChat?.users)?.map((u, i) => (
             <>
               <div
                 className={`py-1 

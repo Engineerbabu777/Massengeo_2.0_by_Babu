@@ -25,7 +25,7 @@ export const sendMessage = async (req, res) => {
       delivered: isDelivered,
       receiverId: receiverId, // ARRAY OF RECEIVER IDS!
       isGroupMessage: receiverId.length > 1 ? true : false
-    })
+    });
 
     const conversation = await Conversation.findById(conversationId).populate(
       'unreadCount'

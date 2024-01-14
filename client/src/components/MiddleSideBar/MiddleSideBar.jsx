@@ -17,13 +17,15 @@ import {
 import { useSelector, useDispatch } from 'react-redux'
 import { socket } from '../RightSide/Messages/Messages'
 import useMessages from '../../hooks/useMessages'
+import IconComponent from '../LeftSideBar/components/IconComponent'
+import { CiSettings } from 'react-icons/ci'
+import { updateSidebar } from '../../redux/sidebarSlice'
+import { IoIosNotifications } from 'react-icons/io'
 
 export default function MiddleSideBar () {
   const sidebarState = useSelector(state => state.sidebar.active)
   const { fetchChatByConversation } = useMessages()
   const messageNotification = new Audio('/newmessage.mp3')
-
-  // CREATING CLIENT SIDE SOCKET CONNECTION!
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -42,10 +44,6 @@ export default function MiddleSideBar () {
           if (offline) toast.success(username + ' is online!')
 
           dispatch(updateOnlineUsers({ onlineUsers }))
-          // ONLY IF ANY CHAT ID IS OPEN!
-          if (window?.location?.pathname?.split('/')[1]) {
-            fetchChatByConversation(window?.location?.pathname?.split('/')[1])
-          }
         }
       }
     )
@@ -84,7 +82,6 @@ export default function MiddleSideBar () {
         // DISPATCH!
         dispatch(updateConversationsOnRealtime(data.updatedConversation))
         dispatch(updateMessagesWithEditedMessage(data.editedMessage))
-
       }
     })
 
@@ -94,10 +91,8 @@ export default function MiddleSideBar () {
         // DISPATCH!
         dispatch(updateConversationsOnRealtime(data.updatedConversation))
         dispatch(updateMessagesWithDeletedOne(data.deletedMessage))
-
       }
     })
-
 
     // UPDATE THAT SINGLE MESSAGE AS READ!
     socket.on(
@@ -128,6 +123,14 @@ export default function MiddleSideBar () {
       }
     })
 
+    dispatch(
+      updateSidebar(
+        window.location.pathname.split('/')[1].length > 15
+          ? 'chats'
+          : window.location.pathname.split('/')[1]
+      )
+    )
+
     // Clean up the WebSocket connection on component unmount
     return () => {
       socket.emit('disconnect', {
@@ -137,7 +140,7 @@ export default function MiddleSideBar () {
   }, []) // Empty dependency array ensures the effect runs only once on component mount
 
   const handleClick = () => {
-    messageNotification.play();
+    messageNotification.play()
   }
   return (
     <>
@@ -165,8 +168,36 @@ export default function MiddleSideBar () {
         )}
 
         {/* NOTIFICATIONS!! */}
+        {sidebarState === 'notifications' && (
+          <>
+            {/* HEADER! */}
+            <nav className='flex mx-3'>
+              <h2 className='text-3xl text-white font-bold flex-1 font-sans tracking-wider'>
+                Notifications
+              </h2>
+
+              {/* ICONS */}
+              <IconComponent Icon={IoIosNotifications} chats />
+            </nav>
+          </>
+        )}
 
         {/* SETTINGS! */}
+        {sidebarState === 'settings' && (
+          <>
+            {/* HEADER! */}
+            <nav className='flex mx-3'>
+              <h2 className='text-3xl text-white font-bold flex-1 font-sans tracking-wider'>
+                Settings
+              </h2>
+
+              {/* ICONS */}
+              <IconComponent Icon={CiSettings} chats />
+            </nav>
+
+            {/* OPTIONS! */}
+          </>
+        )}
       </aside>
     </>
   )

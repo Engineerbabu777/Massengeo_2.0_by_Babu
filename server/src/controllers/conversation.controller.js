@@ -57,7 +57,7 @@ export const fetchAllConversations = async (req, res) => {
       {
         new: true
       }
-    )
+    );
 
     // RETRIEVE ALL CONVERSATIONS FROM THE DATABASE WHERE THE REQUESTING USER ID IS INCLUDED!!
     const conversations = await Conversation.find({
@@ -82,3 +82,5 @@ export const fetchAllConversations = async (req, res) => {
       .json({ error: true, message: 'Conversations fetching failed' })
   }
 }
+
+

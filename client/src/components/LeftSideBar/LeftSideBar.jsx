@@ -9,14 +9,21 @@ import {
 import { updateSidebar } from '../../redux/sidebarSlice'
 import IconComponent from './components/IconComponent'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 export default function LeftSideBar ({}) {
   const dispatch = useDispatch()
+  const navigation = useNavigate()
 
-  const active = useSelector((state) => state.sidebar.active)
+  const active = useSelector(state => state.sidebar.active)
 
   const updateActiveState = active => {
     dispatch(updateSidebar(active))
+  }
+
+  const handleNavigate = (navigateTo, option) => {
+    updateActiveState(option)
+    navigation(navigateTo)
   }
 
   return (
@@ -31,22 +38,22 @@ export default function LeftSideBar ({}) {
           <IconComponent
             Icon={MdOutlineMessage}
             active={active === 'chats'}
-            onClick={() => updateActiveState('chats')}
+            onClick={() => handleNavigate('/', 'chats')}
           />
           <IconComponent
             Icon={FaUserGroup}
             active={active === 'users'}
-            onClick={() => updateActiveState('users')}
+            onClick={() => handleNavigate('/friends', 'users')}
           />
           <IconComponent
             Icon={IoNotifications}
             active={active === 'notifications'}
-            onClick={() => updateActiveState('notifications')}
+            onClick={() => handleNavigate('/notifications', 'notifications')}
           />
           <IconComponent
             Icon={IoSettingsSharp}
             active={active === 'settings'}
-            onClick={() => updateActiveState('settings')}
+            onClick={() => handleNavigate('/settings', 'settings')}
           />
         </div>
         {/* LOGOUT! */}
