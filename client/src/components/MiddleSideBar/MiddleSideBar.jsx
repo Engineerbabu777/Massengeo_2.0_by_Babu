@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import ChatSection from './components/Chats/ChatSection'
 import Header from './components/Header'
 import StoriesParent from './components/Stories/StoriesParent'
@@ -23,9 +23,13 @@ import { updateSidebar } from '../../redux/sidebarSlice'
 import { IoIosNotifications } from 'react-icons/io'
 import { FaShieldCat, FaUserPen } from 'react-icons/fa6'
 import { MdBlockFlipped, MdPrivacyTip } from 'react-icons/md'
+import SingleSettingsOption from './components/Settings/components/SingleOption'
+import { updateActiveSettingState } from '../../redux/settingSlice'
 
 export default function MiddleSideBar () {
   const sidebarState = useSelector(state => state.sidebar.active)
+  const activeSetting = useSelector(state => state.setting.activeSetting)
+
   const { fetchChatByConversation } = useMessages()
   const messageNotification = new Audio('/newmessage.mp3')
   const dispatch = useDispatch()
@@ -144,6 +148,10 @@ export default function MiddleSideBar () {
   const handleClick = () => {
     messageNotification.play()
   }
+
+  const handleUpdateSettingState = state => {
+    dispatch(updateActiveSettingState(state))
+  }
   return (
     <>
       <aside className='bg-[#0c0415] w-[25vw] h-screen pt-6 border-r-2 border-gray-700 overflow-hidden '>
@@ -200,34 +208,38 @@ export default function MiddleSideBar () {
             {/* OPTIONS! */}
             <>
               <section className='mt-20 flex flex-col gap-6'>
-                <div
-                  onClick={() => {}}
-                  className='flex gap-6 w-[95%] mx-auto items-center transition-all group hover:bg-gray-700/50 py-4 px-1 rounded-md cursor-pointer bg-slate-800/50 border-gray-700 border text-white'
-                >
-                  <IconComponent Icon={FaUserPen} />
-                  <span className='font-semibold text-xl'>User Settings</span>
-                </div>
+                <SingleSettingsOption
+                  option={'User Settings'}
+                  ICON={FaUserPen}
+                  onClick={() => {
+                    handleUpdateSettingState('user')
+                  }}
+                  selected={activeSetting === 'user'}
+                />
+                <SingleSettingsOption
+                  option={'Privacy Settings'}
+                  ICON={MdPrivacyTip}
+                  onClick={() => {
+                    handleUpdateSettingState('privacy')
+                  }}
+                  selected={activeSetting === 'privacy'}
+                />
+                <SingleSettingsOption
+                  option={'Blocked Users'}
+                  ICON={MdBlockFlipped}
+                  onClick={() => {
+                    handleUpdateSettingState('block')
+                  }}
+                  selected={activeSetting === 'block'}
+                />
 
                 <div
-                  onClick={() => {}}
-                  className='flex gap-6 w-[95%] mx-auto items-center transition-all group hover:bg-gray-700/50 py-4 px-1 rounded-md cursor-pointer bg-slate-800/50 border-gray-700 border text-white'
-                >
-                  <IconComponent Icon={MdPrivacyTip} />
-                  <span className='font-semibold text-xl'>
-                    Privacy Settings
-                  </span>
-                </div>
-
-                <div
-                  onClick={() => {}}
-                  className='flex gap-6 w-[95%] mx-auto items-center transition-all group hover:bg-gray-700/50 py-4 px-1 rounded-md cursor-pointer bg-slate-800/50 border-gray-700 border text-white'
-                >
-                  <IconComponent Icon={MdBlockFlipped} />
-                  <span className='font-semibold text-xl '>Blocked Users</span>
-                </div>
-                <div
-                  onClick={() => {}}
-                  className='flex gap-6 w-[95%] mx-auto items-center transition-all group hover:bg-gray-700/50 py-4 px-1 rounded-md cursor-pointer bg-slate-800/50 border-gray-700 border text-white'
+                  onClick={() => {
+                    handleUpdateSettingState('premium')
+                  }}
+                  className={`flex gap-6 w-[95%] mx-auto items-center transition-all group hover:bg-gray-700/50 py-4 px-1 rounded-md cursor-pointer bg-slate-800/50 border-gray-700 border text-white ${
+                    activeSetting === 'premium' ? ' !bg-gray-700/50 ' : ''
+                  }`}
                 >
                   <IconComponent Icon={FaShieldCat} premium />
                   <span className='font-bold text-xl text-[#F05454]'>
