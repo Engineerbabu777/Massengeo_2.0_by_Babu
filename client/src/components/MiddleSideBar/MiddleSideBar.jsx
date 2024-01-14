@@ -21,6 +21,8 @@ import IconComponent from '../LeftSideBar/components/IconComponent'
 import { CiSettings } from 'react-icons/ci'
 import { updateSidebar } from '../../redux/sidebarSlice'
 import { IoIosNotifications } from 'react-icons/io'
+import { FaShieldCat, FaUserPen } from 'react-icons/fa6'
+import { MdBlockFlipped, MdPrivacyTip } from 'react-icons/md'
 
 export default function MiddleSideBar () {
   const sidebarState = useSelector(state => state.sidebar.active)
@@ -196,6 +198,44 @@ export default function MiddleSideBar () {
             </nav>
 
             {/* OPTIONS! */}
+            <>
+              <section className='mt-20 flex flex-col gap-6'>
+                <div
+                  onClick={() => {}}
+                  className='flex gap-6 w-[95%] mx-auto items-center transition-all group hover:bg-gray-700/50 py-4 px-1 rounded-md cursor-pointer bg-slate-800/50 border-gray-700 border text-white'
+                >
+                  <IconComponent Icon={FaUserPen} />
+                  <span className='font-semibold text-xl'>User Settings</span>
+                </div>
+
+                <div
+                  onClick={() => {}}
+                  className='flex gap-6 w-[95%] mx-auto items-center transition-all group hover:bg-gray-700/50 py-4 px-1 rounded-md cursor-pointer bg-slate-800/50 border-gray-700 border text-white'
+                >
+                  <IconComponent Icon={MdPrivacyTip} />
+                  <span className='font-semibold text-xl'>
+                    Privacy Settings
+                  </span>
+                </div>
+
+                <div
+                  onClick={() => {}}
+                  className='flex gap-6 w-[95%] mx-auto items-center transition-all group hover:bg-gray-700/50 py-4 px-1 rounded-md cursor-pointer bg-slate-800/50 border-gray-700 border text-white'
+                >
+                  <IconComponent Icon={MdBlockFlipped} />
+                  <span className='font-semibold text-xl '>Blocked Users</span>
+                </div>
+                <div
+                  onClick={() => {}}
+                  className='flex gap-6 w-[95%] mx-auto items-center transition-all group hover:bg-gray-700/50 py-4 px-1 rounded-md cursor-pointer bg-slate-800/50 border-gray-700 border text-white'
+                >
+                  <IconComponent Icon={FaShieldCat} premium />
+                  <span className='font-bold text-xl text-[#F05454]'>
+                    Get Premium Features
+                  </span>
+                </div>
+              </section>
+            </>
           </>
         )}
       </aside>

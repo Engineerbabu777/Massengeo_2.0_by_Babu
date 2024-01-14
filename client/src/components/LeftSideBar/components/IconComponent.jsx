@@ -2,7 +2,8 @@ export default function IconComponent ({
   Icon,
   active,
   chats = false,
-  onClick
+  onClick,
+  premium
 }) {
   return (
     <>
@@ -16,9 +17,9 @@ export default function IconComponent ({
           chats
             ? ' text-white bg-[#F05454] !w-10 !h-10 !rounded-full ml-4 '
             : ' '
-        }`}
+        }  `}
       >
-        <Icon size={30} />
+        <Icon size={30} color={premium && '#F05454'}/>
       </p>
     </>
   )
