@@ -1,13 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const settingSlice = createSlice({
-  name: 'user',
+  name: 'setting',
   initialState: {
     activeSetting: 'user'
   },
   reducers: {
     updateActiveSettingState: (state, actions) => {
-      state.activeSetting = actions.payload.payload
+      state.activeSetting = actions.payload
     }
   }
 })
