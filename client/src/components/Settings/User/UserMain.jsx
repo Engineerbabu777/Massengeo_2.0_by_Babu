@@ -6,7 +6,8 @@ const UserMain = () => {
     username: 'Elon Musk',
     email: 'elonmusk123@gmail.com',
     password: '*********',
-    avatar: ''
+    avatar: '',
+    about: ''
   })
 
   const onChangeInputHandler = event => {
@@ -14,7 +15,6 @@ const UserMain = () => {
   }
 
   const onChangeImageHandler = event => {}
-
 
   return (
     <div className='flex items-center justify-center mt-[100px] flex-col gap-6'>
@@ -36,6 +36,7 @@ const UserMain = () => {
       <div className='flex flex-col gap-1'>
         <label className='text-gray-500 text-2xl font-bold'>Username:</label>
         <input
+          onChange={onChangeInputHandler}
           value={userDetails.username}
           placeholder='Enter your name....'
           className='flex-1 px-4 py-2 bg-inherit rounded-md outline-none text-white font-semibold text-xl border-2 border-gray-700 w-[450px]'
@@ -48,6 +49,7 @@ const UserMain = () => {
       <div className='flex flex-col gap-1'>
         <label className='text-gray-500 text-2xl font-bold'>Email:</label>
         <input
+          onChange={onChangeInputHandler}
           value={userDetails.email}
           placeholder='Enter your email....'
           name='email'
@@ -56,10 +58,25 @@ const UserMain = () => {
         />
       </div>
 
+      {/* ABOUT! */}
+      <div className='flex flex-col gap-1'>
+        <label className='text-gray-500 text-2xl font-bold'>About:</label>
+        <textarea
+          onChange={onChangeInputHandler}
+          rows={4}
+          value={userDetails.about}
+          placeholder='Enter your about....'
+          name='about'
+          type='about'
+          className=' resize-none flex-1 px-4 py-2 bg-inherit rounded-md outline-none text-white font-semibold text-xl border-2 border-gray-700 w-[450px]'
+        />
+      </div>
+
       {/* PASSWORD! */}
       <div className='flex flex-col gap-1'>
         <label className='text-gray-500 text-2xl font-bold'>Password:</label>
         <input
+          onChange={onChangeInputHandler}
           name='password'
           type='password'
           value={userDetails.password}
