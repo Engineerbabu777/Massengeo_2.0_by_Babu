@@ -6,7 +6,9 @@ import {
   fetchedUsers,
   fetchingSearchUsers,
   fetchingUsers,
-  fetchingUsersSuccess
+  fetchingUsersSuccess,
+  updatingUser,
+  userHasUpdated
 } from '../redux/userSlice'
 import { useSelector, useDispatch } from 'react-redux'
 export default function useUser () {
@@ -15,8 +17,6 @@ export default function useUser () {
   const [loadingUser, setLoadingUser] = useState(false)
   const isALreadyGetUsers = useSelector(state => state.user.alreadyLoadedUsers)
   const dispatch = useDispatch()
-
-  console.log({ isALreadyGetUsers })
 
   // FUNCTION FOR NEW USER REGISTRATION!
   const userRegistration = async data => {
@@ -156,6 +156,46 @@ export default function useUser () {
     }
   }
 
+  // UPDATE USER DATA!
+  const updateUserData = async userData => {
+    try {
+      // SET USER IS UPDATING!
+      dispatch(updatingUser())
+
+      // THEN MAKE REQUEST!
+      const response = await fetch(
+        'http://localhost:4444/api/v1/user/user-update',
+        {
+          method: 'PUT', // METHOD PUT!
+          headers: {
+            // HEADERS
+            'Content-Type': 'application/json',
+            authorization: JSON.parse(localStorage.getItem('userData@**@user'))
+            ?.token
+          },
+          body: JSON.stringify(userData) // BODY IS IN JSON FORMAT!
+        }
+      )
+      const data = await response.json()
+
+      // IF ERROR THEN THROW THE ERROR!
+      if (data?.error) throw new Error(data.message)
+
+      console.log(data.userData)
+
+      // SETTING STATE BACK TO DEFAULT!
+      dispatch(userHasUpdated(data.userData))
+      toast.success('User updated successfully!') // SHOWING THE TOAST ERROR!
+
+      return true
+    } catch (error) {
+      // IF USER UPDATE FAILED!
+      toast.error(error.message)
+      console.log({ error: error.message })
+      setSavingNewUser(false)
+    }
+  }
+
   return {
     userLogin,
     userLogout,
@@ -164,6 +204,7 @@ export default function useUser () {
     loadingUser,
     setLoadingUser,
     getAllUsers,
-    findUsers
+    findUsers,
+    updateUserData
   }
 }

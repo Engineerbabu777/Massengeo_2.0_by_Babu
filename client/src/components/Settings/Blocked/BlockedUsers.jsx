@@ -65,7 +65,7 @@ const BlockedUsers = () => {
           <SingleComponent
             username={'Kajal Aggarwal'}
             avatar={'/images/pic9.webp'}
-          />
+          />m r
         </section>
       </section>
     </>

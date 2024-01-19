@@ -56,7 +56,12 @@ export const loginUser = async (req, res) => {
     res.status(200).json({
       success: true,
       token,
-      user: { id: user._id, username: user.username, email: user.email,image:user?.avatar }
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        image: user?.avatar
+      }
     })
   } catch (error) {
     // RETURN ERROR RESPONSE!
@@ -110,6 +115,34 @@ export const getAllUsers = async (req, res) => {
     const users = await User.find({ _id: { $ne: req.user._id } })
     //RETURN ALL USERS
     return res.status(200).json({ success: true, users: users })
+  } catch (error) {
+    return res.status(500).json({ error: true, message: error.message })
+  }
+}
+
+// UPDATE USER INFORMATION!!
+export const updateUser = async (req, res) => {
+  try {
+    // EXTRACT DATA!
+    const { avatar, username, about } = req.body
+
+    // USER ID!
+    const userId = req.user.id
+
+    // UPDATE DATA TO DATABASE!
+    await User.findByIdAndUpdate(
+      userId,
+      { avatar, username, about },
+      { new: true }
+    )
+
+    return res
+      .status(200)
+      .json({
+        success: true,
+        userData:await User.findById(userId).select('username email avatar about'),
+        message: 'User data updated successfully!'
+      })
   } catch (error) {
     return res.status(500).json({ error: true, message: error.message })
   }

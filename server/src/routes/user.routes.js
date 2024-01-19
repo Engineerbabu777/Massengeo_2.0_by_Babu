@@ -3,7 +3,8 @@ import { User } from '../models/user.model.js'
 import {
   getAllUsers,
   loginUser,
-  registerUser
+  registerUser,
+  updateUser
 } from '../controllers/user.controllers.js'
 import { authProtection } from '../middlewares/user.middleware.js'
 
@@ -17,6 +18,9 @@ routes.post('/login', loginUser)
 
 // GET ALL USERS!
 routes.get('/users', authProtection, getAllUsers)
+
+// UPDATE USER ROUTE!
+routes.put('/user-update', authProtection, updateUser);
 
 // USER REFRESH/ACCESS!
 

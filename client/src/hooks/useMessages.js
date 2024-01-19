@@ -42,8 +42,7 @@ export default function useMessages () {
           method: 'POST',
           headers: {
             'content-Type': 'application/json',
-            authorization: JSON.parse(localStorage.getItem('userData@**@user'))
-              ?.token
+            authorization: localStorage.getItem('token')
           },
           body: JSON.stringify({
             message,
@@ -84,8 +83,7 @@ export default function useMessages () {
         {
           method: 'GET',
           headers: {
-            authorization: JSON.parse(localStorage.getItem('userData@**@user'))
-              ?.token
+            authorization: localStorage.getItem('token')
           }
         }
       ).then(resp => resp.json())
@@ -111,8 +109,7 @@ export default function useMessages () {
         {
           method: 'PUT',
           headers: {
-            authorization: JSON.parse(localStorage.getItem('userData@**@user'))
-              ?.token
+            authorization: localStorage.getItem('token')
           }
         }
       ).then(resp => resp.json())
@@ -146,8 +143,7 @@ export default function useMessages () {
           method: 'PUT',
           headers: {
             'content-Type': 'application/json',
-            authorization: JSON.parse(localStorage.getItem('userData@**@user'))
-              ?.token
+            authorization: localStorage.getItem('token')
           },
           body: JSON.stringify({
             message: newMessage,

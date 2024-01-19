@@ -8,6 +8,7 @@ const userSlice = createSlice({
     alreadyLoadedUsers: false,
     searchUsers: [],
     loadingSearchUsers: false,
+    updatingUser: false
   },
   reducers: {
     fetchedUsers: (state, action) => {
@@ -26,6 +27,24 @@ const userSlice = createSlice({
     fetchedSearchUsers: (state, action) => {
       state.searchUsers = action.payload
       state.loadingSearchUsers = false
+    },
+    updatingUser: (state, action) => {
+      state.updatingUser = true
+    },
+    userHasUpdated: (state, action) => {
+      state.updatingUser = false
+      console.log(action.payload)
+      localStorage.setItem(
+        'userData@**@user',
+        JSON.stringify({
+          username: action.payload.username,
+          email: action.payload.email,
+          avatar: action.payload.avatar,
+          about: action.payload.about,
+          id: action.payload._id,
+          token: localStorage.getItem('token')
+        })
+      ) // Update the user in local storage!
     }
   }
 })
@@ -35,6 +54,8 @@ export const {
   fetchingUsersSuccess,
   fetchingUsers,
   fetchedSearchUsers,
-  fetchingSearchUsers
+  fetchingSearchUsers,
+  updatingUser,
+  userHasUpdated
 } = userSlice.actions
 export const userReducer = userSlice.reducer
