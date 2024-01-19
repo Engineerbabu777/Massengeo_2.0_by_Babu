@@ -136,13 +136,14 @@ export const updateUser = async (req, res) => {
       { new: true }
     )
 
-    return res
-      .status(200)
-      .json({
-        success: true,
-        userData:await User.findById(userId).select('username email avatar about'),
-        message: 'User data updated successfully!'
-      })
+    // RETURN BACK THE RESPONSE!!
+    return res.status(200).json({
+      success: true,
+      userData: await User.findById(userId).select(
+        'username email avatar about'
+      ),
+      message: 'User data updated successfully!'
+    })
   } catch (error) {
     return res.status(500).json({ error: true, message: error.message })
   }
