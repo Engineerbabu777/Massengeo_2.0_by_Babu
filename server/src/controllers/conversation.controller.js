@@ -12,6 +12,24 @@ export const createConversation = async (req, res) => {
     // USER ID OF THE REQUESTING USER WHO IS CREATING THE CONVERSATION
     const requestedUserID = req.user._id
 
+    // CHECK IF THERE IS EXISTING CONVERSATION WITH THESE ONE!
+    const existingConversation = await Conversation.findOne({
+      users: {
+        $all: !group
+          ? [userIds, requestedUserID]
+          : [...userIds, requestedUserID]
+      }, // IF USERS CONTAINS ALL OF THESE IDS THEN CONVERSATION EXISTS!
+      group: group
+    })
+
+    // RETURN RESPONSE THAT CONVERSATION IS ALREADY EXISTS!
+    if (existingConversation) {
+      return res.status(200).json({
+        message: 'Conversation already exists!',
+        conversation: existingConversation
+      })
+    }
+
     // CREATE A NEW CONVERSATIONS IN THE DATABASE
 
     if (group) {
@@ -57,7 +75,7 @@ export const fetchAllConversations = async (req, res) => {
       {
         new: true
       }
-    );
+    )
 
     // RETRIEVE ALL CONVERSATIONS FROM THE DATABASE WHERE THE REQUESTING USER ID IS INCLUDED!!
     const conversations = await Conversation.find({
@@ -82,5 +100,3 @@ export const fetchAllConversations = async (req, res) => {
       .json({ error: true, message: 'Conversations fetching failed' })
   }
 }
-
-

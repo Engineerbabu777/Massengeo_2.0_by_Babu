@@ -149,5 +149,17 @@ export const updateUser = async (req, res) => {
   }
 }
 
+// BLOCK USER!
+// to be include
+
+// MAKE USER TO BE AS PREMIUM USER!
+// to be include
+
+// UNBLOCK USER!
+// to be include
+
 // USER FORGOT PASSWORD!!
+// to be include
+
 // USER VERIFY EMAIL!
+// to be include

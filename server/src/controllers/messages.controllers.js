@@ -25,7 +25,7 @@ export const sendMessage = async (req, res) => {
       delivered: isDelivered,
       receiverId: receiverId, // ARRAY OF RECEIVER IDS!
       isGroupMessage: receiverId.length > 1 ? true : false
-    });
+    })
 
     const conversation = await Conversation.findById(conversationId).populate(
       'unreadCount'
@@ -201,7 +201,10 @@ export const deleteMessage = async (req, res) => {
     })
   } catch (error) {
     // LOG AND SEND AN ERROR RESPONSE WITH A MORE DETAILED MESSAGE
-    console.log('UPDATING MESSAGE READ ERROR: ', error?.message)
+    console.log('DELETING MESSAGE READ ERROR: ', error?.message)
     res.status(500).json({ error: true, message: 'INTERNAL SERVER ERROR' })
   }
 }
+
+// CLEAR MESSAGES FOR ON END!!
+// to be include

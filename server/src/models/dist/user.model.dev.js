@@ -20,7 +20,11 @@ var userSchema = new _mongoose["default"].Schema({
     type: String,
     "default": 'https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png'
   },
-  about: String
+  about: String,
+  blockedList: [{
+    type: _mongoose["default"].Schema.Types.ObjectId,
+    ref: 'user'
+  }]
 }, {
   timestamps: true
 });

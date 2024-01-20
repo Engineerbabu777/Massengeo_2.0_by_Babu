@@ -18,7 +18,7 @@ function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
 var createConversation = function createConversation(req, res) {
-  var _req$body, userIds, group, requestedUserID;
+  var _req$body, userIds, group, requestedUserID, existingConversation;
 
   return regeneratorRuntime.async(function createConversation$(_context) {
     while (1) {
@@ -29,40 +29,63 @@ var createConversation = function createConversation(req, res) {
           _req$body = req.body, userIds = _req$body.userIds, group = _req$body.group;
           console.log(userIds); // USER ID OF THE REQUESTING USER WHO IS CREATING THE CONVERSATION
 
-          requestedUserID = req.user._id; // CREATE A NEW CONVERSATIONS IN THE DATABASE
+          requestedUserID = req.user._id; // CHECK IF THERE IS EXISTING CONVERSATION WITH THESE ONE!
 
-          if (!group) {
+          _context.next = 6;
+          return regeneratorRuntime.awrap(_conversationModel.Conversation.findOne({
+            users: {
+              $all: !group ? [userIds, requestedUserID] : [].concat(_toConsumableArray(userIds), [requestedUserID])
+            },
+            // IF USERS CONTAINS ALL OF THESE IDS THEN CONVERSATION EXISTS!
+            group: group
+          }));
+
+        case 6:
+          existingConversation = _context.sent;
+
+          if (!existingConversation) {
             _context.next = 9;
             break;
           }
 
-          _context.next = 7;
+          return _context.abrupt("return", res.status(200).json({
+            message: 'Conversation already exists!',
+            conversation: existingConversation
+          }));
+
+        case 9:
+          if (!group) {
+            _context.next = 14;
+            break;
+          }
+
+          _context.next = 12;
           return regeneratorRuntime.awrap(_conversationModel.Conversation.create({
             users: [].concat(_toConsumableArray(userIds), [requestedUserID]),
             group: true
           }));
 
-        case 7:
-          _context.next = 11;
+        case 12:
+          _context.next = 16;
           break;
 
-        case 9:
-          _context.next = 11;
+        case 14:
+          _context.next = 16;
           return regeneratorRuntime.awrap(_conversationModel.Conversation.create({
             users: [requestedUserID, userIds]
           }));
 
-        case 11:
+        case 16:
           // RETURN A SUCCESSFUL RESPONSE WITH A STATUS OF 201 CREATED
           res.status(201).json({
             success: true,
             message: 'Conversation created successfully'
           });
-          _context.next = 18;
+          _context.next = 23;
           break;
 
-        case 14:
-          _context.prev = 14;
+        case 19:
+          _context.prev = 19;
           _context.t0 = _context["catch"](0);
           // LOG AND HANDLE ERROR IF CREATION FAILS
           console.log('Creating Conversation Error: ', _context.t0.message); // RETURN AN ERROR RESPONSE WITH A STATUS OF 504 GATEWAY TIMEOUT
@@ -72,12 +95,12 @@ var createConversation = function createConversation(req, res) {
             message: 'Conversation creation failed'
           });
 
-        case 18:
+        case 23:
         case "end":
           return _context.stop();
       }
     }
-  }, null, null, [[0, 14]]);
+  }, null, null, [[0, 19]]);
 }; // FETCH ALL CONVERSATIONS CONTROLLER
 
 
