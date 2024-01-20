@@ -14,6 +14,7 @@ import {
   updateFooterInput
 } from '../../../redux/chatSlice'
 import { findOtherUsers } from '../../../utils/otherUsers'
+import BlockedUserDisplay from './components/BlockedUserDisplay'
 
 const Footer = () => {
   const { sendMessages, updateMessage } = useMessages()
@@ -54,21 +55,27 @@ const Footer = () => {
     }
   }
 
-  if (JSON.parse(localStorage.getItem('userData@**@user'))?.blockedList.length>0) {
-    console.log('hi')
+  // CHECKING FOR THE BLOCKED USERS!
+  if (
+    JSON.parse(localStorage.getItem('userData@**@user'))?.blockedList?.length > 0
+  ) {
+    // FINDING OTHER USERS!
     const users = findOtherUsers(activeChatInfo?.users)
-    console.log(users[0]?._id)
 
+    // GETTING BLOCKED LIST FROM THE LOCAL STORAGE!!
     const blockedList = JSON.parse(
       localStorage.getItem('userData@**@user')
     )?.blockedList
-    console.log(blockedList)
 
+    // CHECKING IF THE OTHER USER IS IN THE BLOCKED LIST!
     const isBlocked = blockedList?.includes(users[0]?._id)
+
+    // DISPLAY BLOCKAGE MESSAGE!
     if (isBlocked) {
-      return <>you have blocked this user!</>
+      return <BlockedUserDisplay />
     }
   }
+  
 
   return (
     <div className=' mb-4 mx-5 flex gap-3'>

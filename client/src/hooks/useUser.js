@@ -86,15 +86,23 @@ export default function useUser () {
       // GET USER DATA (ID, username, EMAIL) AND SAVE IN LOCAL STORAGE!
       const {
         token,
-        user: { id, username, email, image, blockedList,about }
+        user: { id, username, email, image, blockedList, about }
       } = response
 
-      console.log({ token, id, username, email,image,blockedList,about })
+      console.log({ token, id, username, email, image, blockedList, about })
 
       // SAVING USER LOCAL STORAGE!
       localStorage.setItem(
         'userData@**@user',
-        JSON.stringify({ id, username, email, token, image, blockedList,about })
+        JSON.stringify({
+          id,
+          username,
+          email,
+          token,
+          image,
+          blockedList,
+          about
+        })
       )
 
       localStorage.setItem('token', token)
@@ -206,6 +214,7 @@ export default function useUser () {
     try {
       // SET USER IS BLOCKING!
       // dispatch(updatingUser())
+      console.log(userId, action);
       toast.success(`user is been ${action} !`)
 
       // THEN MAKE REQUEST!
@@ -229,12 +238,16 @@ export default function useUser () {
 
       console.log(data)
 
-      // SETTING STATE BACK TO DEFAULT!
-      // dispatch(userHasUpdated(data.userData))
-      toast.success('User blocked successfully!') // SHOWING THE TOAST ERROR!
+      if (data.success) {
+        console.log(userId, action)
 
-      // update user data in local storage!
-      updateUserBlockedListInLocalStorage(userId, action)
+        // SETTING STATE BACK TO DEFAULT!
+        // dispatch(userHasUpdated(data.userData))
+        toast.success('User blocked successfully!') // SHOWING THE TOAST ERROR!
+
+        // update user data in local storage!
+        updateUserBlockedListInLocalStorage(userId, action)
+      }
     } catch (error) {
       // IF USER UPDATE FAILED!
       toast.error(error.message)

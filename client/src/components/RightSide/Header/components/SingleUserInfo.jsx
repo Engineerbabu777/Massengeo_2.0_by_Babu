@@ -3,11 +3,11 @@ import { findOtherUsers } from '../../../../utils/otherUsers'
 import Avatar from './Avatar'
 import useUser from '../../../../hooks/useUser'
 
-const SingleUserInfo = ({ activeChat, isGroupChat }) => {
+const SingleUserInfo = ({ activeChat, isGroupChat, isBlocked }) => {
   const { updateBlockUnBlockUsers } = useUser()
 
-  const handleBlockUnblockUsers = async () => {
-    await updateBlockUnBlockUsers((activeChat?.users)[0]?._id, 'block')
+  const handleBlockUnblockUsers = async (type) => {
+    await updateBlockUnBlockUsers((activeChat?.users)[0]?._id, type)
   }
 
   return (
@@ -49,23 +49,55 @@ const SingleUserInfo = ({ activeChat, isGroupChat }) => {
       </p>
 
       <section className='w-full flex flex-col items-center justify-center'>
-        {/* BLOCK THIS USER!! */}
-        <button
-          onClick={handleBlockUnblockUsers}
-          className='w-[95%] items-center justify-center rounded-md bg-red-500 text-white font-bold p-2 mt-12 hover:bg-red-700'
-        >
-          Block this user
-        </button>
-
-        {/* UNLOCK THIS USER!! */}
+        {!isBlocked ? (
+          <>
+            {/* BLOCK THIS USER!! */}
+            <Button
+              text='Block this user'
+              onClick={() => handleBlockUnblockUsers('block')}
+              type='block'
+            />
+          </>
+        ) : (
+          <>
+            {/* UNLOCK THIS USER!! */}
+            <Button
+              text='UnBlock this user'
+              onClick={() => handleBlockUnblockUsers('unblock')}
+              type='unblock'
+            />
+          </>
+        )}
 
         {/* REPORT THIS USER!! */}
-        <button className='w-[95%] items-center justify-center rounded-md bg-blue-500 text-white font-bold p-2 mt-6 hover:bg-blue-700'>
-          Report this user
-        </button>
+        <Button text='Report this user' onClick={() => {}} type='report' />
       </section>
     </>
   )
 }
 
 export default SingleUserInfo
+
+function Button ({onClick, text, type}) {
+  const blockedStyles =
+    'w-[95%] items-center justify-center rounded-md bg-red-500 text-white font-bold p-2 mt-12 hover:bg-red-700'
+  const unBlockStyles =
+    'w-[95%] items-center justify-center rounded-md bg-yellow-500 text-white font-bold p-2 mt-12 hover:bg-yellow-700'
+  const reportStyles =
+    'w-[95%] items-center justify-center rounded-md bg-blue-500 text-white font-bold p-2 mt-6 hover:bg-blue-700'
+
+  return (
+    <button
+      onClick={onClick}
+      className={
+        type === 'block'
+          ? blockedStyles
+          : type === 'report'
+          ? reportStyles
+          : unBlockStyles
+      }
+    >
+      {text}
+    </button>
+  )
+}

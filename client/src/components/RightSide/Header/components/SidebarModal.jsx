@@ -1,7 +1,5 @@
-import { useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { findOtherUsers } from '../../../../utils/otherUsers'
-import Avatar from './Avatar'
 import SingleUserInfo from './SingleUserInfo'
 import GroupInfo from './GroupInfo'
 
@@ -9,6 +7,25 @@ export default function SidebarModal ({ closeModal, open }) {
   const activeChat = useSelector(state => state.chat.activeConversationInfo)
 
   const isGroupChat = activeChat?.group
+
+  const isBlocked = () => {
+    // CHECKING FOR THE BLOCKED USERS!
+    if (
+      JSON.parse(localStorage.getItem('userData@**@user'))?.blockedList
+        ?.length > 0
+    ) {
+      // FINDING OTHER USERS!
+      const users = findOtherUsers(activeChat?.users)
+
+      // GETTING BLOCKED LIST FROM THE LOCAL STORAGE!!
+      const blockedList = JSON.parse(
+        localStorage.getItem('userData@**@user')
+      )?.blockedList
+
+      // CHECKING IF THE OTHER USER IS IN THE BLOCKED LIST!
+      return blockedList?.includes(users[0]?._id)
+    }
+  }
 
   return (
     <>
@@ -27,13 +44,15 @@ export default function SidebarModal ({ closeModal, open }) {
         <section className='text-white text-2xl font-semibold h-screen overflow-auto no-scrollbar pb-6 '>
           {/* WILL ONLY SHOW IF THE CONVERSATION IS OF TYPE ONE TO ONE CHAT! */}
           {!isGroupChat && (
-            <SingleUserInfo activeChat={activeChat} isGroupChat={isGroupChat} />
+            <SingleUserInfo
+              activeChat={activeChat}
+              isGroupChat={isGroupChat}
+              isBlocked={isBlocked()}
+            />
           )}
 
           {/* WILL ONLY SHOW IF THE CONVERSATION IS OF TYPE MANY TO MANY CHAT!! */}
-          {isGroupChat && (
-            <GroupInfo activeChat={activeChat} />
-          )}
+          {isGroupChat && <GroupInfo activeChat={activeChat} />}
         </section>
       </div>
     </>

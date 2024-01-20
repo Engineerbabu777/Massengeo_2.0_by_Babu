@@ -16,6 +16,7 @@ export const getWholeUserDetails = JSON.parse(
 )
 
 export const updateUserBlockedListInLocalStorage = (userId, action) => {
+  console.log(userId, action)
   if (action === 'block') {
     // add to the list!
     let updatedUserData = getWholeUserDetails; // PREVIOUS DATA IN VAR!

@@ -120,7 +120,7 @@ const MineMessage = ({ message, isRead }) => {
       {/* CONTAINER FOR THE USER'S AVATAR */}
       <div className='w-16 h-16 rounded-full '>
         {/* DISPLAY THE USER'S AVATAR */}
-        <Avatar src={me?.avatar} sm />
+        <Avatar src={me?.image} sm />
       </div>
     </section>
   )

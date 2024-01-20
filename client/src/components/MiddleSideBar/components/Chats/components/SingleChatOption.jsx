@@ -10,6 +10,7 @@ import { useParams } from 'react-router-dom'
 import { socket } from '../../../../RightSide/Messages/Messages'
 import { findOtherUsers } from '../../../../../utils/otherUsers'
 import { MdDoNotDisturb } from 'react-icons/md'
+import Avatar from '../../../../RightSide/Header/components/Avatar'
 
 export default function SingleChatOption ({
   conversation,
@@ -90,14 +91,14 @@ export default function SingleChatOption ({
         }`}
       >
         {/* IMAGE */}
-        <img
-          className='w-16 h-16 rounded-full object-cover '
-          alt='test0image'
+        <Avatar
+          xs
           src={
             isGrouped
               ? conversation?.avatar
               : findOtherUsers(conversation.users)[0]?.avatar
           }
+          userId={isGrouped ? null : findOtherUsers(conversation.users)[0]?._id}
         />
 
         {/* NAME & MESSAGE! */}
