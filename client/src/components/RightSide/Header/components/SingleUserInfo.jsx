@@ -1,8 +1,15 @@
 import React from 'react'
 import { findOtherUsers } from '../../../../utils/otherUsers'
 import Avatar from './Avatar'
+import useUser from '../../../../hooks/useUser'
 
-const SingleUserInfo = ({activeChat, isGroupChat}) => {
+const SingleUserInfo = ({ activeChat, isGroupChat }) => {
+  const { updateBlockUnBlockUsers } = useUser()
+
+  const handleBlockUnblockUsers = async () => {
+    await updateBlockUnBlockUsers((activeChat?.users)[0]?._id, 'block')
+  }
+
   return (
     <>
       <div className='flex flex-col w-full border-b-2 border-gray-500 p-4'>
@@ -43,7 +50,10 @@ const SingleUserInfo = ({activeChat, isGroupChat}) => {
 
       <section className='w-full flex flex-col items-center justify-center'>
         {/* BLOCK THIS USER!! */}
-        <button className='w-[95%] items-center justify-center rounded-md bg-red-500 text-white font-bold p-2 mt-12 hover:bg-red-700'>
+        <button
+          onClick={handleBlockUnblockUsers}
+          className='w-[95%] items-center justify-center rounded-md bg-red-500 text-white font-bold p-2 mt-12 hover:bg-red-700'
+        >
           Block this user
         </button>
 

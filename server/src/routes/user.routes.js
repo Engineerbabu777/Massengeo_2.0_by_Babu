@@ -1,6 +1,7 @@
 import express from 'express'
 import { User } from '../models/user.model.js'
 import {
+  blockUnblockUser,
   getAllUsers,
   loginUser,
   registerUser,
@@ -20,7 +21,10 @@ routes.post('/login', loginUser)
 routes.get('/users', authProtection, getAllUsers)
 
 // UPDATE USER ROUTE!
-routes.put('/user-update', authProtection, updateUser);
+routes.put('/user-update', authProtection, updateUser)
+
+// UPDATE USER BLOCKED TO UNBLOCK OR VIVE VERSA!
+routes.put('/block-unblock-user', authProtection, blockUnblockUser)
 
 // USER REFRESH/ACCESS!
 

@@ -60,7 +60,9 @@ export const loginUser = async (req, res) => {
         id: user._id,
         username: user.username,
         email: user.email,
-        image: user?.avatar
+        image: user?.avatar,
+        blockedList: user?.blockedList,
+        about: user?.about,
       }
     })
   } catch (error) {
@@ -127,7 +129,7 @@ export const updateUser = async (req, res) => {
     const { avatar, username, about } = req.body
 
     // USER ID!
-    const userId = req.user.id
+    const userId = req.user._id
 
     // UPDATE DATA TO DATABASE!
     await User.findByIdAndUpdate(
@@ -140,7 +142,7 @@ export const updateUser = async (req, res) => {
     return res.status(200).json({
       success: true,
       userData: await User.findById(userId).select(
-        'username email avatar about'
+        'username email avatar about blockedList'
       ),
       message: 'User data updated successfully!'
     })
@@ -149,13 +151,47 @@ export const updateUser = async (req, res) => {
   }
 }
 
-// BLOCK USER!
-// to be include
+// BLOCK USER / UNBLOCK!
+export const blockUnblockUser = async (req, res) => {
+  try {
+    // EXTRACT DATA!
+    const { userId, action } = req.body
+    // EXTRACT USER ID!
+    const requestedUserID = req.user._id
+
+    // USER WANTS TO BLOCK THE USER!
+    if (action === 'block') {
+      await User.findByIdAndUpdate(requestedUserID, {
+        $push: {
+          blockedList: userId
+        }
+      })
+      // RETURNING THE SUCCESS RESPONSE TO THE USER!
+      return res.status(200).json({
+        success: true,
+        message: 'User blocked successfully!'
+      })
+    }
+
+    // USER WANTS TO UNBLOCK THE USER!
+    if (action === 'unblock') {
+      await User.findByIdAndUpdate(requestedUserID, {
+        $pull: {
+          blockedList: userId
+        }
+      })
+      // RETURNING THE SUCCESS RESPONSE TO THE USER!
+
+      return res
+        .status(200)
+        .json({ success: 'true', message: 'User unblocked successfully!' })
+    }
+  } catch (error) {
+    return res.status(500).json({ error: true, message: error.message })
+  }
+}
 
 // MAKE USER TO BE AS PREMIUM USER!
-// to be include
-
-// UNBLOCK USER!
 // to be include
 
 // USER FORGOT PASSWORD!!

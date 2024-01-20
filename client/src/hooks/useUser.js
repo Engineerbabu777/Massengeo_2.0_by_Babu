@@ -11,6 +11,11 @@ import {
   userHasUpdated
 } from '../redux/userSlice'
 import { useSelector, useDispatch } from 'react-redux'
+import {
+  getWholeUserDetails,
+  updateUserBlockedListInLocalStorage,
+  userDetails
+} from '../utils/getUserDetails'
 export default function useUser () {
   // STATES!
   const [savingNewUser, setSavingNewUser] = useState(false)
@@ -81,15 +86,15 @@ export default function useUser () {
       // GET USER DATA (ID, username, EMAIL) AND SAVE IN LOCAL STORAGE!
       const {
         token,
-        user: { id, username, email, image }
+        user: { id, username, email, image, blockedList,about }
       } = response
 
-      console.log({ token, id, username, email })
+      console.log({ token, id, username, email,image,blockedList,about })
 
       // SAVING USER LOCAL STORAGE!
       localStorage.setItem(
         'userData@**@user',
-        JSON.stringify({ id, username, email, token, image })
+        JSON.stringify({ id, username, email, token, image, blockedList,about })
       )
 
       localStorage.setItem('token', token)
@@ -171,7 +176,7 @@ export default function useUser () {
             // HEADERS
             'Content-Type': 'application/json',
             authorization: JSON.parse(localStorage.getItem('userData@**@user'))
-            ?.token
+              ?.token
           },
           body: JSON.stringify(userData) // BODY IS IN JSON FORMAT!
         }
@@ -196,6 +201,48 @@ export default function useUser () {
     }
   }
 
+  // BLOCK UNBLOCK USERS!
+  const updateBlockUnBlockUsers = async (userId, action) => {
+    try {
+      // SET USER IS BLOCKING!
+      // dispatch(updatingUser())
+      toast.success(`user is been ${action} !`)
+
+      // THEN MAKE REQUEST!
+      const response = await fetch(
+        'http://localhost:4444/api/v1/user/block-unblock-user',
+        {
+          method: 'PUT', // METHOD PUT!
+          headers: {
+            // HEADERS
+            'Content-Type': 'application/json',
+            authorization: JSON.parse(localStorage.getItem('userData@**@user'))
+              ?.token
+          },
+          body: JSON.stringify({ userId, action }) // BODY IS IN JSON FORMAT!
+        }
+      )
+      const data = await response.json()
+
+      // IF ERROR THEN THROW THE ERROR!
+      if (data?.error) throw new Error(data.message)
+
+      console.log(data)
+
+      // SETTING STATE BACK TO DEFAULT!
+      // dispatch(userHasUpdated(data.userData))
+      toast.success('User blocked successfully!') // SHOWING THE TOAST ERROR!
+
+      // update user data in local storage!
+      updateUserBlockedListInLocalStorage(userId, action)
+    } catch (error) {
+      // IF USER UPDATE FAILED!
+      toast.error(error.message)
+      console.log({ error: error.message })
+      // setSavingNewUser(false)
+    }
+  }
+
   return {
     userLogin,
     userLogout,
@@ -205,6 +252,7 @@ export default function useUser () {
     setLoadingUser,
     getAllUsers,
     findUsers,
-    updateUserData
+    updateUserData,
+    updateBlockUnBlockUsers
   }
 }

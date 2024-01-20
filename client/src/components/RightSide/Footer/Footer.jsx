@@ -8,7 +8,12 @@ import {
 import useMessages from '../../../hooks/useMessages'
 import { useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { updateEditMessageId, updateEditedMode, updateFooterInput } from '../../../redux/chatSlice'
+import {
+  updateEditMessageId,
+  updateEditedMode,
+  updateFooterInput
+} from '../../../redux/chatSlice'
+import { findOtherUsers } from '../../../utils/otherUsers'
 
 const Footer = () => {
   const { sendMessages, updateMessage } = useMessages()
@@ -17,8 +22,11 @@ const Footer = () => {
   const inputValueEdit = useSelector(state => state.chat.footerInput)
   const editMode = useSelector(state => state.chat.inputUpdateState)
   const messageId = useSelector(state => state.chat.messageId)
+  const activeChatInfo = useSelector(state => state.chat.activeConversationInfo)
   const [input, setInput] = useState('')
   const dispatch = useDispatch()
+
+  // console.log((JSON.parse(localStorage.getItem('userData@**@user'))).blockedList);
 
   useEffect(() => {
     if (inputValueEdit) {
@@ -43,6 +51,22 @@ const Footer = () => {
       setInput('')
 
       return
+    }
+  }
+
+  if (JSON.parse(localStorage.getItem('userData@**@user'))?.blockedList.length>0) {
+    console.log('hi')
+    const users = findOtherUsers(activeChatInfo?.users)
+    console.log(users[0]?._id)
+
+    const blockedList = JSON.parse(
+      localStorage.getItem('userData@**@user')
+    )?.blockedList
+    console.log(blockedList)
+
+    const isBlocked = blockedList?.includes(users[0]?._id)
+    if (isBlocked) {
+      return <>you have blocked this user!</>
     }
   }
 
