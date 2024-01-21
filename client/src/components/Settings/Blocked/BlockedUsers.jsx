@@ -1,7 +1,19 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import SingleComponent from './SingleComponent'
+import useUser from '../../../hooks/useUser'
+import { useSelector } from 'react-redux'
 
 const BlockedUsers = () => {
+  const { fetchedAllBlockedUsers } = useUser()
+  const blockedUsers = useSelector(state => state.user.blockedUsers)
+
+  useEffect(() => {
+    const fetchBlockedUsers = async () => {
+      await fetchedAllBlockedUsers()
+    }
+    fetchBlockedUsers()
+  }, [])
+
   return (
     <>
       <section className='m-5'>
@@ -12,60 +24,15 @@ const BlockedUsers = () => {
 
         {/* GRIDS AT LEAST 5 ON THIS SCREEN! */}
         <section className='grid grid-cols-4 gap-4 mt-12'>
-          <SingleComponent username={'Elon Musk'} avatar={'/images/pic4.jpg'} />
-          <SingleComponent
-            username={'Mark Zuckerburg'}
-            avatar={'/images/pic3.webp'}
-          />
-          <SingleComponent
-            username={'Allu Arjun'}
-            avatar={'/images/pic7.jpg'}
-          />
-          <SingleComponent
-            username={'Kajal Aggarwal'}
-            avatar={'/images/pic9.webp'}
-          />
-
-          <SingleComponent username={'Elon Musk'} avatar={'/images/pic4.jpg'} />
-          <SingleComponent
-            username={'Mark Zuckerburg'}
-            avatar={'/images/pic3.webp'}
-          />
-          <SingleComponent
-            username={'Allu Arjun'}
-            avatar={'/images/pic7.jpg'}
-          />
-          <SingleComponent
-            username={'Kajal Aggarwal'}
-            avatar={'/images/pic9.webp'}
-          />
-          <SingleComponent username={'Elon Musk'} avatar={'/images/pic4.jpg'} />
-          <SingleComponent
-            username={'Mark Zuckerburg'}
-            avatar={'/images/pic3.webp'}
-          />
-          <SingleComponent
-            username={'Allu Arjun'}
-            avatar={'/images/pic7.jpg'}
-          />
-          <SingleComponent
-            username={'Kajal Aggarwal'}
-            avatar={'/images/pic9.webp'}
-          />
-
-          <SingleComponent username={'Elon Musk'} avatar={'/images/pic4.jpg'} />
-          <SingleComponent
-            username={'Mark Zuckerburg'}
-            avatar={'/images/pic3.webp'}
-          />
-          <SingleComponent
-            username={'Allu Arjun'}
-            avatar={'/images/pic7.jpg'}
-          />
-          <SingleComponent
-            username={'Kajal Aggarwal'}
-            avatar={'/images/pic9.webp'}
-          />m r
+          {blockedUsers?.length > 0 &&
+            blockedUsers?.map((user, index) => (
+              <>
+                <SingleComponent
+                  username={user.username}
+                  avatar={user?.avatar}
+                />
+              </>
+            ))}
         </section>
       </section>
     </>

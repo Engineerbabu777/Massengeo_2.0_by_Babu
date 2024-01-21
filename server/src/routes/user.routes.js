@@ -3,6 +3,7 @@ import { User } from '../models/user.model.js'
 import {
   blockUnblockUser,
   getAllUsers,
+  getBlockedUsers,
   loginUser,
   registerUser,
   updateUser
@@ -26,6 +27,8 @@ routes.put('/user-update', authProtection, updateUser)
 // UPDATE USER BLOCKED TO UNBLOCK OR VIVE VERSA!
 routes.put('/block-unblock-user', authProtection, blockUnblockUser)
 
+// GET ALL BLOCKED USERS!
+routes.get('/get-all-blocked-users', authProtection, getBlockedUsers)
 // USER REFRESH/ACCESS!
 
 // USER FORGOT PASSWORD!!

@@ -26,7 +26,9 @@ routes.get('/users', _userMiddleware.authProtection, _userControllers.getAllUser
 
 routes.put('/user-update', _userMiddleware.authProtection, _userControllers.updateUser); // UPDATE USER BLOCKED TO UNBLOCK OR VIVE VERSA!
 
-routes.put('/block-unblock-user', _userMiddleware.authProtection, _userControllers.blockUnblockUser); // USER REFRESH/ACCESS!
+routes.put('/block-unblock-user', _userMiddleware.authProtection, _userControllers.blockUnblockUser); // GET ALL BLOCKED USERS!
+
+routes.get('/get-all-blocked-users', _userMiddleware.authProtection, _userControllers.getBlockedUsers); // USER REFRESH/ACCESS!
 // USER FORGOT PASSWORD!!
 // USER VERIFY EMAIL!
 

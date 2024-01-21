@@ -62,7 +62,7 @@ export const loginUser = async (req, res) => {
         email: user.email,
         image: user?.avatar,
         blockedList: user?.blockedList,
-        about: user?.about,
+        about: user?.about
       }
     })
   } catch (error) {
@@ -191,6 +191,26 @@ export const blockUnblockUser = async (req, res) => {
   }
 }
 
+// GET ALL BLOCKED USERS!
+export const getBlockedUsers = async (req, res) => {
+  try {
+    // FETCHING AND POPULATING USERS!
+    const blockedListUsers = await User.findById(req.user.id)
+      .select('blockedList')
+      .populate({
+        path: 'blockedList',
+        select: 'avatar username email'
+      })
+    // RETURNING BACK RESPONSE!
+    return res.status(200).json({
+      success: 'true',
+      message: 'fetched all users successfully!',
+      blockedListUsers
+    })
+  } catch (error) {
+    return res.status(500).json({ error: true, message: error.message })
+  }
+}
 // MAKE USER TO BE AS PREMIUM USER!
 // to be include
 

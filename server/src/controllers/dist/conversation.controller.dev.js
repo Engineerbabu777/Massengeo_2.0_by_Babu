@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.fetchAllConversations = exports.createConversation = void 0;
+exports.fetchAllUserConversationsFriends = exports.fetchAllConversations = exports.createConversation = void 0;
 
 var _conversationModel = require("../models/conversation.model.js");
 
@@ -164,6 +164,60 @@ var fetchAllConversations = function fetchAllConversations(req, res) {
       }
     }
   }, null, null, [[0, 9]]);
-};
+}; // FETCH USERS INVOLVED IN SINGLE CHAT WITH REQUESTED USERS
+
 
 exports.fetchAllConversations = fetchAllConversations;
+
+var fetchAllUserConversationsFriends = function fetchAllUserConversationsFriends(req, res) {
+  var conversations, friends;
+  return regeneratorRuntime.async(function fetchAllUserConversationsFriends$(_context3) {
+    while (1) {
+      switch (_context3.prev = _context3.next) {
+        case 0:
+          _context3.prev = 0;
+          _context3.next = 3;
+          return regeneratorRuntime.awrap(_conversationModel.Conversation.find({
+            users: {
+              $in: [req.user._id]
+            },
+            group: false
+          }).select('users').populate('users'));
+
+        case 3:
+          conversations = _context3.sent;
+          // FROM ALL CONVERSATION GET OTHER USERS IN AN ARRAY CONTAINING USERS OBJECT!
+          friends = conversations.map(function (conversation) {
+            return conversation.users.filter(function (user) {
+              return user._id.toString() !== req.user._id.toString();
+            });
+          }); // RETURN A SUCCESSFUL RESPONSE WITH A STATUS OF 200 OK AND THE FETCHED FRIENDS!!
+
+          res.status(200).json({
+            success: true,
+            message: 'Friends fetched successfully',
+            friends: friends
+          });
+          _context3.next = 12;
+          break;
+
+        case 8:
+          _context3.prev = 8;
+          _context3.t0 = _context3["catch"](0);
+          // LOG AND HANDLE ERROR IF FETCHING FAILS!!
+          console.log('Fetching Friends Error: ', _context3.t0.message); // RETURN AN ERROR RESPONSE WITH A STATUS OF 504 GATEWAY TIMEOUT!!
+
+          res.status(504).json({
+            error: true,
+            message: 'Friends fetching failed'
+          });
+
+        case 12:
+        case "end":
+          return _context3.stop();
+      }
+    }
+  }, null, null, [[0, 8]]);
+};
+
+exports.fetchAllUserConversationsFriends = fetchAllUserConversationsFriends;

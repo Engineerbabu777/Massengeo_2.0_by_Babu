@@ -7,7 +7,7 @@ const SingleUserInfo = ({ activeChat, isGroupChat, isBlocked }) => {
   const { updateBlockUnBlockUsers } = useUser()
 
   const handleBlockUnblockUsers = async (type) => {
-    await updateBlockUnBlockUsers((activeChat?.users)[0]?._id, type)
+    await updateBlockUnBlockUsers((findOtherUsers(activeChat?.users))[0]?._id, type)
   }
 
   return (

@@ -2,8 +2,10 @@ import { useState } from 'react'
 import { loginData, registerData } from '../utils/authDataValidate'
 import toast from 'react-hot-toast'
 import {
+  fetchedAllBlockedUsersSuccess,
   fetchedSearchUsers,
   fetchedUsers,
+  fetchingBlockedUsers,
   fetchingSearchUsers,
   fetchingUsers,
   fetchingUsersSuccess,
@@ -214,7 +216,7 @@ export default function useUser () {
     try {
       // SET USER IS BLOCKING!
       // dispatch(updatingUser())
-      console.log(userId, action);
+      console.log(userId, action)
       toast.success(`user is been ${action} !`)
 
       // THEN MAKE REQUEST!
@@ -256,6 +258,43 @@ export default function useUser () {
     }
   }
 
+  // FETCHED ALL BLOCKED USERS!!
+  const fetchedAllBlockedUsers = async () => {
+    try {
+      // SET USER IS BLOCKING!
+      dispatch(fetchingBlockedUsers())
+
+      // THEN MAKE REQUEST!
+      const response = await fetch(
+        'http://localhost:4444/api/v1/user/get-all-blocked-users',
+        {
+          method: 'GET', // METHOD PUT!
+          headers: {
+            authorization: JSON.parse(localStorage.getItem('userData@**@user'))
+              ?.token
+          }
+        }
+      )
+      const data = await response.json()
+
+      // IF ERROR THEN THROW THE ERROR!
+      if (data?.error) throw new Error(data.message)
+
+      console.log(data.blockedListUsers.blockedList)
+
+      if (data.success) {
+        // SETTING STATE BACK TO DEFAULT!
+        dispatch(fetchedAllBlockedUsersSuccess(data.blockedListUsers.blockedList))
+        toast.success('User blocked successfully!') // SHOWING THE TOAST ERROR!
+      }
+    } catch (error) {
+      // IF USER UPDATE FAILED!
+      toast.error(error.message)
+      console.log({ error: error.message })
+      // setSavingNewUser(false)
+    }
+  }
+
   return {
     userLogin,
     userLogout,
@@ -266,6 +305,7 @@ export default function useUser () {
     getAllUsers,
     findUsers,
     updateUserData,
-    updateBlockUnBlockUsers
+    updateBlockUnBlockUsers,
+    fetchedAllBlockedUsers
   }
 }

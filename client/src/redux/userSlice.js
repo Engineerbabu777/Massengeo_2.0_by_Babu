@@ -8,7 +8,10 @@ const userSlice = createSlice({
     alreadyLoadedUsers: false,
     searchUsers: [],
     loadingSearchUsers: false,
-    updatingUser: false
+    updatingUser: false,
+    blockedUsers: [],
+    fetchingBlockedUsers: false,
+    alreadyFetchedBlockedUsers: false
   },
   reducers: {
     fetchedUsers: (state, action) => {
@@ -45,6 +48,17 @@ const userSlice = createSlice({
           token: localStorage.getItem('token')
         })
       ) // Update the user in local storage!
+    },
+    fetchingBlockedUsers: (state, action) => {
+      state.fetchingBlockedUsers = true
+    },
+    fetchedAllBlockedUsersSuccess: (state, action) => {
+      state.fetchingBlockedUsers = false
+      state.alreadyFetchedBlockedUsers = true
+      state.blockedUsers = action.payload
+    },
+    fetchedAllBlockedUsersError: (state, action) => {
+      state.fetchingBlockedUsers = false
     }
   }
 })
@@ -56,6 +70,9 @@ export const {
   fetchedSearchUsers,
   fetchingSearchUsers,
   updatingUser,
-  userHasUpdated
+  userHasUpdated,
+  fetchedAllBlockedUsersError,
+  fetchedAllBlockedUsersSuccess,
+  fetchingBlockedUsers
 } = userSlice.actions
 export const userReducer = userSlice.reducer

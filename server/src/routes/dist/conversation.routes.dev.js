@@ -18,6 +18,8 @@ var routes = _express["default"].Router(); // CREATE CONVERSATION!
 
 routes.post('/create-conversation', _userMiddleware.authProtection, _conversationController.createConversation); // FETCHING ROUTES
 
-routes.get('/fetch-all', _userMiddleware.authProtection, _conversationController.fetchAllConversations);
+routes.get('/fetch-all', _userMiddleware.authProtection, _conversationController.fetchAllConversations); // FETCHING ALL USER FRIENDS!
+
+routes.get('fetch-all-friends-conversation', _userMiddleware.authProtection, _conversationController.fetchAllUserConversationsFriends);
 var _default = routes;
 exports["default"] = _default;

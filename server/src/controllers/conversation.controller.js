@@ -100,3 +100,36 @@ export const fetchAllConversations = async (req, res) => {
       .json({ error: true, message: 'Conversations fetching failed' })
   }
 }
+
+// FETCH USERS INVOLVED IN SINGLE CHAT WITH REQUESTED USERS
+export const fetchAllUserConversationsFriends = async (req, res) => {
+  try {
+    // FIND ALL CONVERSATIONS WHERE THE REQUESTING USER ID IS INCLUDED!!
+    const conversations = await Conversation.find({
+      users: { $in: [req.user._id] },
+      group: false
+    })
+      .select('users')
+      .populate('users')
+
+    // FROM ALL CONVERSATION GET OTHER USERS IN AN ARRAY CONTAINING USERS OBJECT!
+    const friends = conversations.map(conversation => { 
+      return conversation.users.filter(
+        user => user._id.toString() !== req.user._id.toString()
+      )
+    })
+
+    // RETURN A SUCCESSFUL RESPONSE WITH A STATUS OF 200 OK AND THE FETCHED FRIENDS!!
+    res.status(200).json({
+      success: true,
+      message: 'Friends fetched successfully',
+      friends: friends
+    })
+  } catch (error) {
+    // LOG AND HANDLE ERROR IF FETCHING FAILS!!
+    console.log('Fetching Friends Error: ', error.message)
+
+    // RETURN AN ERROR RESPONSE WITH A STATUS OF 504 GATEWAY TIMEOUT!!
+    res.status(504).json({ error: true, message: 'Friends fetching failed' })
+  }
+}
