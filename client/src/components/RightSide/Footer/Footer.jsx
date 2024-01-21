@@ -15,6 +15,7 @@ import {
 } from '../../../redux/chatSlice'
 import { findOtherUsers } from '../../../utils/otherUsers'
 import BlockedUserDisplay from './components/BlockedUserDisplay'
+import { userDetails } from '../../../utils/getUserDetails'
 
 const Footer = () => {
   const { sendMessages, updateMessage } = useMessages()
@@ -57,7 +58,9 @@ const Footer = () => {
 
   // CHECKING FOR THE BLOCKED USERS!
   if (
-    JSON.parse(localStorage.getItem('userData@**@user'))?.blockedList?.length > 0
+    JSON.parse(localStorage.getItem('userData@**@user'))?.blockedList?.length >
+      0 ||
+    findOtherUsers(activeChatInfo?.users)[0]?.blockedList.length > 0
   ) {
     // FINDING OTHER USERS!
     const users = findOtherUsers(activeChatInfo?.users)
@@ -67,15 +70,25 @@ const Footer = () => {
       localStorage.getItem('userData@**@user')
     )?.blockedList
 
-    // CHECKING IF THE OTHER USER IS IN THE BLOCKED LIST!
-    const isBlocked = blockedList?.includes(users[0]?._id)
+    // IN MY BLOCKED LIST ( CURRENTLY LOGGED USER! )
+    const isIncludedInMyBlockedList = blockedList?.includes(users[0]?._id)
+    // IN OTHERS BLOCKED LIST ( WHOSE CHAT WE ARE VIEWING )!
+    const isIncludedInOthersBlockedList = users[0]?.blockedList.includes(
+      userDetails.id
+    )
+
+    // CHECKING IF THE OTHER USER IS BLOCKED FROM ANY SIDE!
+    const isBlocked = isIncludedInMyBlockedList || isIncludedInOthersBlockedList
 
     // DISPLAY BLOCKAGE MESSAGE!
     if (isBlocked) {
-      return <BlockedUserDisplay />
+      return (
+        <BlockedUserDisplay
+          blockedByMe={isIncludedInMyBlockedList ? true : false}
+        />
+      )
     }
   }
-  
 
   return (
     <div className=' mb-4 mx-5 flex gap-3'>

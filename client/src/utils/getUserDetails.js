@@ -8,7 +8,10 @@ export const userDetails = {
     JSON.parse(localStorage.getItem('userData@**@user'))?.about ||
     'I am a software developer from New York who is passionate about creating innovative solutions.',
   blockedList:
-    JSON.parse(localStorage.getItem('userData@**@user'))?.blockedList || []
+    JSON.parse(localStorage.getItem('userData@**@user'))?.blockedList || [],
+  id: 
+  JSON.parse(localStorage.getItem('userData@**@user'))?.id || '',
+
 }
 
 export const getWholeUserDetails = JSON.parse(
