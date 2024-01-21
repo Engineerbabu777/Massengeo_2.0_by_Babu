@@ -4,7 +4,7 @@ import useUser from '../../../hooks/useUser'
 import { useSelector } from 'react-redux'
 
 const BlockedUsers = () => {
-  const { fetchedAllBlockedUsers } = useUser()
+  const { fetchedAllBlockedUsers,updateBlockUnBlockUsers } = useUser()
   const blockedUsers = useSelector(state => state.user.blockedUsers)
 
   useEffect(() => {
@@ -30,6 +30,7 @@ const BlockedUsers = () => {
                 <SingleComponent
                   username={user.username}
                   avatar={user?.avatar}
+                  onClick={() => updateBlockUnBlockUsers(user._id,'unblock')}
                 />
               </>
             ))}

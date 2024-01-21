@@ -6,6 +6,10 @@ import {
   fetchingConversationsFailed,
   fetchingConversationsSuccess
 } from '../redux/chatSlice'
+import {
+  fetchingUserFriends,
+  fetchingUserFriendsSuccess
+} from '../redux/userSlice'
 
 export default function useConversation () {
   const [creatingConversation, setCreatingConversation] = useState(false)
@@ -99,10 +103,47 @@ export default function useConversation () {
       dispatch(fetchingConversationsFailed())
     }
   }
+
+  // FETCH ALL FRIENDS OF USER!
+  const fetchFriendsOfUserAsPerConversations = async () => {
+    try {
+      dispatch(fetchingUserFriends())
+      // MAKE A REQUEST!
+      const response = await fetch(
+        // API ENDPOINT FOR FETCHING A CONVERSATION
+        'http://localhost:4444/api/v1/conversation/fetch-all-friends-conversation',
+        {
+          // HTTP METHOD: GET
+          method: 'GET',
+          // HEADERS FOR THE REQUEST
+          headers: {
+            'Content-Type': 'application/json',
+            // AUTHORIZATION HEADER WITH THE USER'S TOKEN OBTAINED FROM LOCAL STORAGE
+            authorization: JSON.parse(localStorage.getItem('userData@**@user'))
+              ?.token
+          }
+        }
+      ).then(resp => resp.json())
+
+      // CHECK IF THE RESPONSE CONTAINS AN ERROR
+      if (response?.error) throw new Error(response?.error?.message)
+
+      // LOG THE RESPONSE AND DISPLAY A SUCCESS TOAST
+      console.log({ response: response.friends })
+      dispatch(fetchingUserFriendsSuccess(response.friends))
+      toast.success(response?.message)
+    } catch (error) {
+      // LOG THE ERROR AND DISPLAY AN ERROR TOAST
+      console.log({ error: error.message })
+      toast.error(error?.message)
+      // dispatch(fetchingConversationsFailed())
+    }
+  }
   return {
     createConversation,
     creatingConversation,
     fetchConversations,
-    fetchingConversations
+    fetchingConversations,
+    fetchFriendsOfUserAsPerConversations
   }
 }

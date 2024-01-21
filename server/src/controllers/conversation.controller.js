@@ -110,7 +110,10 @@ export const fetchAllUserConversationsFriends = async (req, res) => {
       group: false
     })
       .select('users')
-      .populate('users')
+      .populate({
+        path:'users',
+        select: 'username avatar'
+      })
 
     // FROM ALL CONVERSATION GET OTHER USERS IN AN ARRAY CONTAINING USERS OBJECT!
     const friends = conversations.map(conversation => { 
@@ -123,7 +126,7 @@ export const fetchAllUserConversationsFriends = async (req, res) => {
     res.status(200).json({
       success: true,
       message: 'Friends fetched successfully',
-      friends: friends
+      friends: friends.flat()
     })
   } catch (error) {
     // LOG AND HANDLE ERROR IF FETCHING FAILS!!

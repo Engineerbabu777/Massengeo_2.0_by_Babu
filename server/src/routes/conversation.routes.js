@@ -16,7 +16,7 @@ routes.get('/fetch-all', authProtection, fetchAllConversations)
 
 // FETCHING ALL USER FRIENDS!
 routes.get(
-  'fetch-all-friends-conversation',
+  '/fetch-all-friends-conversation',
   authProtection,
   fetchAllUserConversationsFriends
 )

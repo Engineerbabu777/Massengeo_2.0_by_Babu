@@ -182,7 +182,10 @@ var fetchAllUserConversationsFriends = function fetchAllUserConversationsFriends
               $in: [req.user._id]
             },
             group: false
-          }).select('users').populate('users'));
+          }).select('users').populate({
+            path: 'users',
+            select: 'username avatar'
+          }));
 
         case 3:
           conversations = _context3.sent;
@@ -196,7 +199,7 @@ var fetchAllUserConversationsFriends = function fetchAllUserConversationsFriends
           res.status(200).json({
             success: true,
             message: 'Friends fetched successfully',
-            friends: friends
+            friends: friends.flat()
           });
           _context3.next = 12;
           break;
