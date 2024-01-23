@@ -159,7 +159,11 @@ const chatSlice = createSlice({
         state.activeUserMessages = [
           ...state.activeUserMessages.map(m => {
             if (m._id === actions.payload._id) {
-              return { ...m, message: actions.payload.message }
+              return {
+                ...m,
+                deleteForMe: actions.payload.deleteForMe,
+                deleteForEveryOne: actions.payload.deleteForEveryOne
+              }
             } else {
               return m
             }
