@@ -7,8 +7,6 @@ export const createConversation = async (req, res) => {
     // EXTRACT USER IDS FROM REQUEST BODY (FOR NOW, SUPPORTING ONLY SINGLE CONVERSATION!)
     const { userIds, group } = req.body
 
-    console.log(userIds)
-
     // USER ID OF THE REQUESTING USER WHO IS CREATING THE CONVERSATION
     const requestedUserID = req.user._id
 
@@ -40,15 +38,22 @@ export const createConversation = async (req, res) => {
       })
     } else {
       // SINGLE CONVERSATION!!
-      await Conversation.create({
+      const newConversation = await Conversation.create({
         users: [requestedUserID, userIds]
       })
-    }
 
-    // RETURN A SUCCESSFUL RESPONSE WITH A STATUS OF 201 CREATED
-    res
-      .status(201)
-      .json({ success: true, message: 'Conversation created successfully' })
+      // RETURN A SUCCESSFUL RESPONSE WITH A STATUS OF 201 CREATED
+      return res.status(201).json({
+        success: true,
+        message: 'Conversation created successfully',
+        newConversation: await Conversation.findById(newConversation._id)
+          .populate('lastMessage unreadCount')
+          .populate({
+            path: 'users',
+            select: 'email avatar username about blockedList'
+          })
+      })
+    }
   } catch (error) {
     // LOG AND HANDLE ERROR IF CREATION FAILS
     console.log('Creating Conversation Error: ', error.message)
@@ -111,12 +116,12 @@ export const fetchAllUserConversationsFriends = async (req, res) => {
     })
       .select('users')
       .populate({
-        path:'users',
+        path: 'users',
         select: 'username avatar'
       })
 
     // FROM ALL CONVERSATION GET OTHER USERS IN AN ARRAY CONTAINING USERS OBJECT!
-    const friends = conversations.map(conversation => { 
+    const friends = conversations.map(conversation => {
       return conversation.users.filter(
         user => user._id.toString() !== req.user._id.toString()
       )

@@ -4,12 +4,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   fetchingConversations,
   fetchingConversationsFailed,
-  fetchingConversationsSuccess
+  fetchingConversationsSuccess,
+  updateConversationsWithNewConversation
 } from '../redux/chatSlice'
 import {
   fetchingUserFriends,
   fetchingUserFriendsSuccess
 } from '../redux/userSlice'
+import { socket } from '../components/RightSide/Messages/Messages'
 
 export default function useConversation () {
   const [creatingConversation, setCreatingConversation] = useState(false)
@@ -57,6 +59,9 @@ export default function useConversation () {
       // CHECK IF THE RESPONSE CONTAINS AN ERROR
       if (response?.error) throw new Error(response?.error?.message)
 
+      // AS THE CONVERSATION IS CREATED SO NOW ADD IT TO OUR AS WELL TO THE OTHER END!
+      socket.emit('create_conversation', response?.newConversation) // TO OTHER END!
+      updateConversationsWithNewConversation(response.newConversation) // TO MYSELF!
       // LOG THE RESPONSE AND DISPLAY A SUCCESS TOAST
       console.log({ response })
       setCreatingConversation(false)

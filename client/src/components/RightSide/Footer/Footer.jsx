@@ -60,7 +60,7 @@ const Footer = () => {
   if (
     JSON.parse(localStorage.getItem('userData@**@user'))?.blockedList?.length >
       0 ||
-    findOtherUsers(activeChatInfo?.users)[0]?.blockedList.length > 0
+    findOtherUsers(activeChatInfo?.users)[0]?.blockedList?.length > 0
   ) {
     // FINDING OTHER USERS!
     const users = findOtherUsers(activeChatInfo?.users)

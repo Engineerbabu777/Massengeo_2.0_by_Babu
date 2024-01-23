@@ -54,6 +54,11 @@ socket.on('connection', client => {
     })
   })
 
+  // UPDATE CONVERSATION ON REALTIME!
+  client.on('create_conversation', data => {
+    socket.emit('update-created-conversation', {data,clientId:client.id})
+  })
+
   // UPDATE THE REALTIME MESSAGE SENT/RECEIVED!!
   client.on('message-sent', data => {
     console.log(data)

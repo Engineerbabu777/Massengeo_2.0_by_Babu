@@ -16,7 +16,8 @@ export default function SingleChatOption ({
   conversation,
   createdAt,
   users,
-  unreadCount
+  unreadCount,
+  isOnline = false
 }) {
   // const isUnread = chat?.unread > 0 ? true : false;
   // const isActive = chat?.active ? true : false;
@@ -172,15 +173,24 @@ export default function SingleChatOption ({
             {/* ELSE LAST MESSAGE TIME!*/}
             {formatTimeAgo(createdAt)}
           </p>
-          {unreadCount > 0 && (
-            <p
-              className={`text-gray-400 font-semibold ml-auto mr-2 text-white bg-[#F05454] w-6 h-6 rounded-full flex items-center justify-center group-hover:bg-white !text-black ${
-                isActive ? 'bg-white !text-black ' : ''
-              }`}
-            >
-              {unreadCount}
-            </p>
-          )}
+          <div className='flex items-center gap-1 '>
+            {isOnline && (
+              <span className='text-green-500 text-sm font-semibold font-monospace ml-auto group-hover:hidden '>
+                Online
+              </span>
+            )}
+            <>
+              {unreadCount > 0 && (
+                <p
+                  className={` text-gray-400 font-semibold ml-auto mr-2 text-white bg-[#F05454] w-4 h-4 rounded-full flex items-center justify-center group-hover:bg-white !text-black text-xs ${
+                    isActive ? 'bg-white !text-black ' : ''
+                  }`}
+                >
+                  {unreadCount}
+                </p>
+              )}
+            </>
+          </div>
         </section>
       </div>
     </>

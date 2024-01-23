@@ -7,6 +7,7 @@ import toast from 'react-hot-toast'
 import {
   updateAllUnreadAsRead,
   updateConversationsOnRealtime,
+  updateConversationsWithNewConversation,
   updateMessageIsRead,
   updateMessagesOnRealtime,
   updateMessagesWithDeletedOne,
@@ -25,6 +26,8 @@ import { FaShieldCat, FaUserPen } from 'react-icons/fa6'
 import { MdBlockFlipped, MdPrivacyTip } from 'react-icons/md'
 import SingleSettingsOption from './components/Settings/components/SingleOption'
 import { updateActiveSettingState } from '../../redux/settingSlice'
+import { userDetails } from '../../utils/getUserDetails'
+import { findMySelf } from '../../utils/otherUsers'
 
 export default function MiddleSideBar () {
   const sidebarState = useSelector(state => state.sidebar.active)
@@ -53,6 +56,17 @@ export default function MiddleSideBar () {
         }
       }
     )
+
+    // UPDATE CONVERSATIONS ON REALTIME!!
+    socket.on('update-created-conversation', ({ clientId, data }) => {
+      if (clientId !== socket.id) {
+        if (userDetails.id === findMySelf(data.users)[0]?._id) {
+          toast.success('Needs to update now!')
+
+          dispatch(updateConversationsWithNewConversation(data))
+        }
+      }
+    })
 
     // ON RECEIVED OF NEW MESSAGE!
     socket.on('message-received', ({ data, clientId }) => {

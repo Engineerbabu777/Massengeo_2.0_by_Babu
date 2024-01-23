@@ -150,8 +150,8 @@ const chatSlice = createSlice({
           })
         ]
     },
-     // UPDATE MESSAGES WITH DELETED MESSAGE AS WELL!
-     updateMessagesWithDeletedOne: (state, actions) => {
+    // UPDATE MESSAGES WITH DELETED MESSAGE AS WELL!
+    updateMessagesWithDeletedOne: (state, actions) => {
       if (
         window?.location?.pathname?.split('/')[1] ===
         actions?.payload?.conversationId
@@ -165,6 +165,10 @@ const chatSlice = createSlice({
             }
           })
         ]
+    },
+    // ADD NEW CONVERSATION TO CONVERSATIONS ARRAY THAT SHOULD BE ON THE TOP!!!
+    updateConversationsWithNewConversation: (state, actions) => {
+      state.conversations = [actions.payload, ...state.conversations]
     }
   }
 })
@@ -189,7 +193,8 @@ export const {
   updateEditedMode,
   updateEditMessageId,
   updateMessagesWithEditedMessage,
-  updateMessagesWithDeletedOne
+  updateMessagesWithDeletedOne,
+  updateConversationsWithNewConversation
 } = chatSlice.actions
 
 export const chatReducer = chatSlice.reducer

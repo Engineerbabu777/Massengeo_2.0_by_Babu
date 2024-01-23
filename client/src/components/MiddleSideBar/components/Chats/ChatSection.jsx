@@ -12,6 +12,7 @@ function ChatSection ({}) {
   const [selectedSlide, setSelectedSlide] = useState(Options[0])
   const { fetchConversations } = useConversation()
   const conversations = useSelector(state => state.chat.conversations)
+  const onlineUsers = useSelector(state => state.chat.allOnlineUsers)
 
   // const chatState =
   //   selectedSlide === 'all'
@@ -50,7 +51,8 @@ function ChatSection ({}) {
           const time =
             conversation?.lastMessage?.createdAt || conversation?.createdAt
 
-            console.log({conversation});
+          const isOnline = onlineUsers.includes(users[0]?._id)
+
           return (
             <>
               <SingleChatOption
@@ -59,6 +61,7 @@ function ChatSection ({}) {
                 conversation={conversation}
                 createdAt={time}
                 unreadCount={unreadCount}
+                isOnline={conversation.group ? false : isOnline}
               />
             </>
           )
