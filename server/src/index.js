@@ -126,7 +126,15 @@ socket.on('connection', client => {
       userId: userId
     }
     // AS WE HAVE ADDED NEW USER IS BEEN TYPING NOW WE WILL TRIGGER AN EVENT!
-    client.emit('update-users-typing', { userTypingWithMessages })
+    socket.emit('update-users-typing', { userTypingWithMessages })
+  })
+
+  // FOR USER STOPS TYPING!
+  client.on('user-stopped-typing', () => {
+    // WHEN GOT DATA WIL: DO SOME AFTER TASKS!
+    delete userTypingWithMessages[client.id]
+    // AS WE HAVE ADDED NEW USER IS BEEN TYPING NOW WE WILL TRIGGER AN EVENT!
+    socket.emit('update-users-typing', { userTypingWithMessages })
   })
 
   // ON USER DISCONNECTED!
@@ -139,6 +147,14 @@ socket.on('connection', client => {
       onlineUsers,
       clientId: client.id,
       offline: true
+    })
+
+    // FOR USER STOPS TYPING!
+    client.on('user-stopped-typing', () => {
+      // WHEN GOT DATA WIL: DO SOME AFTER TASKS!
+      delete userTypingWithMessages[client.id]
+      // AS WE HAVE ADDED NEW USER IS BEEN TYPING NOW WE WILL TRIGGER AN EVENT!
+      socket.emit('update-users-typing', { userTypingWithMessages })
     })
   })
 })

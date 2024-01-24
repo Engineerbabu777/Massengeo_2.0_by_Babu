@@ -93,12 +93,20 @@ const Footer = () => {
 
   const handleChangeInput = event => {
     setInput(event.target.value)
+    let timeout
+    clearTimeout(timeout)
     // FOR NOW WE WILL ONLY CREATE FOR SINGLE CHAT!
     socket.emit('user-is-typing', {
       chatId: activeChatInfo._id,
       userId: findOtherUsers(activeChatInfo.users)[0]._id,
-      message:event.target.value
+      message: event.target.value
     })
+
+    timeout = setTimeout(() => {
+      // REMOVE THAT CHATTING!
+      socket.emit('user-stopped-typing',(socket.id))
+      console.log('this user has stopped typing...')
+    }, 3000)
   }
 
   return (

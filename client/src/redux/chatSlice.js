@@ -13,7 +13,7 @@ const chatSlice = createSlice({
     footerInput: '',
     inputUpdateState: false,
     messageId: null,
-    userTyping:[], 
+    userTyping: []
   },
   reducers: {
     // Update the currently opened chat
@@ -174,6 +174,11 @@ const chatSlice = createSlice({
     // ADD NEW CONVERSATION TO CONVERSATIONS ARRAY THAT SHOULD BE ON THE TOP!!!
     updateConversationsWithNewConversation: (state, actions) => {
       state.conversations = [actions.payload, ...state.conversations]
+    },
+    //UPDATE USER TYPING!
+    updateUsersTyping: (state, actions) => {
+      state.userTyping = Object.values(actions.payload)
+      console.log(Object.values(actions.payload))
     }
   }
 })
@@ -199,7 +204,8 @@ export const {
   updateEditMessageId,
   updateMessagesWithEditedMessage,
   updateMessagesWithDeletedOne,
-  updateConversationsWithNewConversation
+  updateConversationsWithNewConversation,
+  updateUsersTyping
 } = chatSlice.actions
 
 export const chatReducer = chatSlice.reducer

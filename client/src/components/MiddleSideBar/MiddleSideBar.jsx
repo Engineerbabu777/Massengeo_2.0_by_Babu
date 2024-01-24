@@ -13,7 +13,8 @@ import {
   updateMessagesWithDeletedOne,
   updateMessagesWithEditedMessage,
   updateOnlineUsers,
-  updateUnreadCounts
+  updateUnreadCounts,
+  updateUsersTyping
 } from '../../redux/chatSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import { socket } from '../RightSide/Messages/Messages'
@@ -153,7 +154,8 @@ export default function MiddleSideBar () {
 
     // HANDLING USER TYPING!
     socket.on('update-users-typing', ({ userTypingWithMessages }) => {
-      console.log({ userTypingWithMessages })
+      // console.log({ userTypingWithMessages })
+      dispatch(updateUsersTyping(userTypingWithMessages));
     })
 
     // Clean up the WebSocket connection on component unmount

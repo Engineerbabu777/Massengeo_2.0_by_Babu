@@ -1,9 +1,9 @@
 import { useSelector } from 'react-redux'
 
-export default function SingleChat ({ name, userId }) {
+export default function SingleChat ({ name, userId, isTyping }) {
   const onlineUsers = useSelector(state => state.chat.allOnlineUsers)
 
-  console.log({onlineUsers})
+  console.log({ onlineUsers })
 
   return (
     <div className='flex flex-col flex-1'>
@@ -13,7 +13,11 @@ export default function SingleChat ({ name, userId }) {
           onlineUsers?.includes(userId) ? 'text-green-600' : 'text-gray-500'
         } text-md font-semibold`}
       >
-        {onlineUsers?.includes(userId) ? 'Online' : 'Offline'}
+        {isTyping
+          ? 'typing...'
+          : onlineUsers?.includes(userId)
+          ? 'Online'
+          : 'Offline'}
       </span>
     </div>
   )

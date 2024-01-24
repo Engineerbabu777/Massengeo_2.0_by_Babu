@@ -1,3 +1,4 @@
+import { userDetails } from '../../../utils/getUserDetails'
 import { findOtherUsers } from '../../../utils/otherUsers'
 import Avatar from './components/Avatar'
 import ChatInfo from './components/ChatInfo'
@@ -10,6 +11,21 @@ export default function Header ({ openSideModal, open }) {
   const conversationInfo = useSelector(
     state => state.chat.activeConversationInfo
   )
+  const typingUsers = useSelector(state => state.chat.userTyping)
+
+  const isTyping =
+    typingUsers?.filter(d => {
+      if (
+        d.conversationId === conversationInfo?._id &&
+        d.userId !== userDetails.id
+      ) {
+        return d
+      } else {
+        return null
+      }
+    }).length > 0
+
+    console.log(isTyping)
 
   return (
     <div className='border-b-2 border-gray-700 px-5 py-3 flex items-center'>
@@ -32,6 +48,7 @@ export default function Header ({ openSideModal, open }) {
         <SingleChat
           name={findOtherUsers(conversationInfo?.users)[0].username}
           userId={findOtherUsers(conversationInfo?.users)[0]._id}
+          isTyping={isTyping}
         />
       )}
 
