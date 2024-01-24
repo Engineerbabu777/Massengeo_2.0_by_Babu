@@ -12,7 +12,8 @@ const chatSlice = createSlice({
     allOnlineUsers: [], // List of all online users
     footerInput: '',
     inputUpdateState: false,
-    messageId: null
+    messageId: null,
+    userTyping:[], 
   },
   reducers: {
     // Update the currently opened chat

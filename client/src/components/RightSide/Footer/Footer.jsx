@@ -16,6 +16,7 @@ import {
 import { findOtherUsers } from '../../../utils/otherUsers'
 import BlockedUserDisplay from './components/BlockedUserDisplay'
 import { userDetails } from '../../../utils/getUserDetails'
+import { socket } from '../Messages/Messages'
 
 const Footer = () => {
   const { sendMessages, updateMessage } = useMessages()
@@ -90,6 +91,16 @@ const Footer = () => {
     }
   }
 
+  const handleChangeInput = event => {
+    setInput(event.target.value)
+    // FOR NOW WE WILL ONLY CREATE FOR SINGLE CHAT!
+    socket.emit('user-is-typing', {
+      chatId: activeChatInfo._id,
+      userId: findOtherUsers(activeChatInfo.users)[0]._id,
+      message:event.target.value
+    })
+  }
+
   return (
     <div className=' mb-4 mx-5 flex gap-3'>
       <section className='flex border-2 border-gray-800 rounded-lg p-3 flex-1'>
@@ -102,7 +113,7 @@ const Footer = () => {
           placeholder='Type a message...'
           className='flex-1 px-2 py-1 bg-inherit border-none outline-none text-white font-semibold text-lg'
           value={input}
-          onChange={e => setInput(e.target.value)}
+          onChange={handleChangeInput}
         />
 
         {/* EMOJI ICON */}

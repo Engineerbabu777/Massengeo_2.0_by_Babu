@@ -151,6 +151,11 @@ export default function MiddleSideBar () {
       )
     )
 
+    // HANDLING USER TYPING!
+    socket.on('update-users-typing', ({ userTypingWithMessages }) => {
+      console.log({ userTypingWithMessages })
+    })
+
     // Clean up the WebSocket connection on component unmount
     return () => {
       socket.emit('disconnect', {

@@ -40,6 +40,15 @@ app.use('/api/v1/messages', messagesRoutes)
 // ONLINE USERS IDS!
 export var onlineUsers = {}
 
+// MANAGING USER TYPING WITH MESSAGES!
+export var userTypingWithMessages = {
+  // socketID:{
+  // chatID: some id!
+  // message: some id!
+  // userID: some id whose is typing!
+  // }
+}
+
 // ON SOCKET CONNECTION!!
 socket.on('connection', client => {
   // WHEN USER COMES ACTIVE/ONLINE!
@@ -56,7 +65,7 @@ socket.on('connection', client => {
 
   // UPDATE CONVERSATION ON REALTIME!
   client.on('create_conversation', data => {
-    socket.emit('update-created-conversation', {data,clientId:client.id})
+    socket.emit('update-created-conversation', { data, clientId: client.id })
   })
 
   // UPDATE THE REALTIME MESSAGE SENT/RECEIVED!!
@@ -106,6 +115,18 @@ socket.on('connection', client => {
   // MARK ALL UNREAD AS READ!
   client.on('marked-all-unread-as-read', data => {
     socket.emit('update-as-read', { ...data, clientId: client.id })
+  })
+
+  // FOR USER STARTS TYPING!
+  client.on('user-is-typing', ({ chatId, userId, message }) => {
+    // WHEN GOT DATA WIL: DO SOME AFTER TASKS!
+    userTypingWithMessages[client.id] = {
+      chatId: chatId,
+      message: message,
+      userId: userId
+    }
+    // AS WE HAVE ADDED NEW USER IS BEEN TYPING NOW WE WILL TRIGGER AN EVENT!
+    client.emit('update-users-typing', { userTypingWithMessages })
   })
 
   // ON USER DISCONNECTED!
