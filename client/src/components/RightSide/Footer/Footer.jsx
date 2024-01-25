@@ -17,6 +17,7 @@ import { findOtherUsers } from '../../../utils/otherUsers'
 import BlockedUserDisplay from './components/BlockedUserDisplay'
 import { userDetails } from '../../../utils/getUserDetails'
 import { socket } from '../Messages/Messages'
+import { fileIconOptions } from '../../../constants'
 
 const Footer = () => {
   const { sendMessages, updateMessage } = useMessages()
@@ -27,6 +28,7 @@ const Footer = () => {
   const messageId = useSelector(state => state.chat.messageId)
   const activeChatInfo = useSelector(state => state.chat.activeConversationInfo)
   const [input, setInput] = useState('')
+  const [open, setOpen] = useState(false)
   const dispatch = useDispatch()
 
   // console.log((JSON.parse(localStorage.getItem('userData@**@user'))).blockedList);
@@ -104,16 +106,31 @@ const Footer = () => {
 
     timeout = setTimeout(() => {
       // REMOVE THAT CHATTING!
-      socket.emit('user-stopped-typing',(socket.id))
+      socket.emit('user-stopped-typing', socket.id)
       console.log('this user has stopped typing...')
     }, 3000)
   }
 
   return (
     <div className=' mb-4 mx-5 flex gap-3'>
-      <section className='flex border-2 border-gray-800 rounded-lg p-3 flex-1'>
+      <section className='flex border-2 border-gray-800 rounded-lg p-3 flex-1 relative'>
+        {open && (
+          <div className='border-2 border-white rounded-md z-[9999] gap-2 flex flex-col w-[150px] bg-[#0c0415] absolute bottom-12 left-0'>
+            {fileIconOptions.map(({ name, Icon }) => (
+              <p className='text-gray-400 font-semibold flex gap-2 p-2 hover:text-white cursor-pointer'>
+                {/* ICON! */}
+                <Icon className='w-6 h-6' />
+                {/* TEXT! */}
+                {name}
+              </p>
+            ))}
+          </div>
+        )}
         {/* FILE ICON */}
-        <MdAttachFile className='text-gray-500 w-8 h-8 cursor-pointer' />
+        <MdAttachFile
+          className='text-gray-500 w-8 h-8 cursor-pointer'
+          onClick={() => setOpen(!open)}
+        />
 
         {/* INPUT */}
         <input

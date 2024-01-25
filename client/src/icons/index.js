@@ -16,8 +16,15 @@ import { IoIosSend } from 'react-icons/io'
 import { IoCheckmarkDoneSharp } from "react-icons/io5";
 import { GoSearch } from "react-icons/go";
 import { MdKeyboardArrowDown } from "react-icons/md";
+import { FaFileVideo } from "react-icons/fa";
+import { FaRegImages } from "react-icons/fa";
+import { IoDocumentAttach } from "react-icons/io5";
+
 export {
   CgLogOff,
+  IoDocumentAttach,
+  FaRegImages,
+  FaFileVideo,
   MdOutlineMessage,
   IoCheckmarkDoneSharp,
   IoLogoMastodon,

@@ -94,7 +94,11 @@ const chatSlice = createSlice({
         })
         // ALSO NEEDS TO UPDATE TH CONVERSATIONS LAST MESSAGE!
         state.conversations = state.conversations.map(c => {
-          if (c._id === actions.payload.conversationId) {
+          // CHECKING IF CONVERSATION IDS ARE EQUAL AS WELL CHECKING IF LAST MESSAGE ALREADY DOESN'T INCLUDES THE SAME USER ID INT IT!
+          if (
+            c._id === actions.payload.conversationId &&
+            !c.lastMessage.seenBy.includes(actions.payload.userIdToAdd)
+          ) {
             return {
               ...c,
               lastMessage: {
