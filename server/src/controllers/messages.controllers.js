@@ -68,12 +68,12 @@ export const sendMessage = async (req, res) => {
     res.status(201).json({
       success: true,
       message: 'MESSAGE SENT SUCCESSFULLY!',
-      updatedConversation: await Conversation.findById(conversationId).populate(
-        'users unreadCount'
-      ).populate({
-        path:'lastMessage',
-        populate:'senderId',
-      }),
+      updatedConversation: await Conversation.findById(conversationId)
+        .populate('users unreadCount')
+        .populate({
+          path: 'lastMessage',
+          populate: 'senderId'
+        }),
       newMessage: await Message.findById(newMessage._id)
         .populate('senderId')
         .exec()

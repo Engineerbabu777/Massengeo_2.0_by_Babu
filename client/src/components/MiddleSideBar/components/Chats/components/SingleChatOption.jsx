@@ -13,6 +13,7 @@ import { MdDoNotDisturb } from 'react-icons/md'
 import Avatar from '../../../../RightSide/Header/components/Avatar'
 import { IoCheckmarkDoneSharp, IoCheckmarkSharp } from 'react-icons/io5'
 import { isMessageReadByOrNot } from '../../../../../utils/getIsMessageReadOrNot'
+import { userDetails } from '../../../../../utils/getUserDetails'
 
 export default function SingleChatOption ({
   conversation,
@@ -29,6 +30,17 @@ export default function SingleChatOption ({
   const openedChatUsers = useSelector(
     state => state.chat.activeConversationInfo?.users
   )
+
+  // GETTING TYPING USERS DATA FROM STORE!
+  const typingUsers = useSelector(state => state.chat.userTyping)
+
+  // GETTING IF USER FROM CURRENT ACTIVE ID IS BEEN TYPING WILL GIVE USE TRUE OR FALSE!
+  const isTyping =
+    typingUsers?.filter(
+      d => d.chatId === conversation?._id && d.userId !== userDetails.id
+    ).length > 0
+
+  // CHECKING FOR THE USERS TYPING STATUS!
 
   // CHECKING IS MESSAGE SENT BY ME OTHERS!
   const isSentByMe =
@@ -123,80 +135,86 @@ export default function SingleChatOption ({
               isActive ? 'text-white' : ''
             }`}
           >
-            {isGrouped ? (
+            {isTyping ? (
+              <span>typing...</span>
+            ) : (
               <>
-                {' '}
-                {/*WILL CHECK IT LATER!*/}
-                {/* <span className='font-bold text-gray-300'>
+                {isGrouped ? (
+                  <>
+                    {' '}
+                    {/*WILL CHECK IT LATER!*/}
+                    {/* <span className='font-bold text-gray-300'>
                   {chat?.message?.name}
                 </span>
                 : {chat?.message?.message} */}
-              </>
-            ) : (
-              <>
-                {' '}
-                {isSentByMe &&
-                  (!deleteForMe || deleteForEveryOne) && // !false || true
-                  (deleteForMe || !deleteForEveryOne) && ( // false || !true
-                    <span>
-                      {/* FOR NOT DELIVERY OF MESSAGES! */}
-                      <IoCheckmarkDoneSharp
-                        className={` ${
-                          conversation?.lastMessage?.isGroupMessage
-                            ? 'hidden'
-                            : ''
-                        } ${
-                          conversation?.lastMessage?.deleteForMe ||
-                          conversation?.lastMessage?.deleteForEveryOne
-                            ? 'hidden'
-                            : ''
-                        } ${
-                          conversation?.lastMessage?.delivered
-                            ? isRead
-                              ? 'text-green-500'
-                              : 'text-gray-300'
-                            : 'hidden'
-                        } w-5 h-5`}
-                      />
-                      {/* SINGLE TICK FOR NET DELIVERY OF MESSAGE! */}
-                      <IoCheckmarkSharp
-                        className={`
-          ${conversation?.lastMessage?.isGroupMessage ? 'hidden' : ''} ${
-                          conversation?.lastMessage?.deleteForMe ||
-                          conversation?.lastMessage?.deleteForEveryOne
-                            ? 'hidden'
-                            : ''
-                        } ${
-                          conversation?.lastMessage?.delivered
-                            ? isRead
-                              ? 'hidden'
-                              : 'hidden'
-                            : 'text-gray-300'
-                        } w-5 h-5
-          `}
-                      />
-                    </span>
-                  )}
-                {/* OTHER USER CAN SEE THE MESSAGE IF ITS JUST DELETED FOR ME! */}
-                {conversation?.lastMessage?.message &&
-                  deleteForMe &&
-                  !deleteForEveryOne &&
-                  !isSentByMe && <>{conversation?.lastMessage?.message}</>}
-                {/* IF DELETED FOR ALL! */}
-                {conversation?.lastMessage?.message &&
-                  (deleteForEveryOne || (deleteForMe && isSentByMe)) && (
-                    <span className='text-gray-500 flex gap-2 items-center text-sm'>
-                      <MdDoNotDisturb className='h-4 w-4' />
-                      message was deleted
-                    </span>
-                  )}
-                {/* IF LAST MESSAGE HAS TO BE DISPLAY! */}
-                {!deleteForMe && !deleteForEveryOne && (
+                  </>
+                ) : (
                   <>
-                    {conversation?.lastMessage?.message ? (
-                      <>{conversation?.lastMessage?.message}</>
-                    ) : (
-                      'start a conversation'
+                    {' '}
+                    {isSentByMe &&
+                      (!deleteForMe || deleteForEveryOne) && // !false || true
+                      (deleteForMe || !deleteForEveryOne) && ( // false || !true
+                        <span>
+                          {/* FOR NOT DELIVERY OF MESSAGES! */}
+                          <IoCheckmarkDoneSharp
+                            className={` ${
+                              conversation?.lastMessage?.isGroupMessage
+                                ? 'hidden'
+                                : ''
+                            } ${
+                              conversation?.lastMessage?.deleteForMe ||
+                              conversation?.lastMessage?.deleteForEveryOne
+                                ? 'hidden'
+                                : ''
+                            } ${
+                              conversation?.lastMessage?.delivered
+                                ? isRead
+                                  ? 'text-green-500'
+                                  : 'text-gray-300'
+                                : 'hidden'
+                            } w-5 h-5`}
+                          />
+                          {/* SINGLE TICK FOR NET DELIVERY OF MESSAGE! */}
+                          <IoCheckmarkSharp
+                            className={`
+          ${conversation?.lastMessage?.isGroupMessage ? 'hidden' : ''} ${
+                              conversation?.lastMessage?.deleteForMe ||
+                              conversation?.lastMessage?.deleteForEveryOne
+                                ? 'hidden'
+                                : ''
+                            } ${
+                              conversation?.lastMessage?.delivered
+                                ? isRead
+                                  ? 'hidden'
+                                  : 'hidden'
+                                : 'text-gray-300'
+                            } w-5 h-5
+          `}
+                          />
+                        </span>
+                      )}
+                    {/* OTHER USER CAN SEE THE MESSAGE IF ITS JUST DELETED FOR ME! */}
+                    {conversation?.lastMessage?.message &&
+                      deleteForMe &&
+                      !deleteForEveryOne &&
+                      !isSentByMe && <>{conversation?.lastMessage?.message}</>}
+                    {/* IF DELETED FOR ALL! */}
+                    {conversation?.lastMessage?.message &&
+                      (deleteForEveryOne || (deleteForMe && isSentByMe)) && (
+                        <span className='text-gray-500 flex gap-2 items-center text-sm'>
+                          <MdDoNotDisturb className='h-4 w-4' />
+                          message was deleted
+                        </span>
+                      )}
+                    {/* IF LAST MESSAGE HAS TO BE DISPLAY! */}
+                    {!deleteForMe && !deleteForEveryOne && (
+                      <>
+                        {conversation?.lastMessage?.message ? (
+                          <>{conversation?.lastMessage?.message}</>
+                        ) : (
+                          <span>start a conversation</span>
+                        )}
+                      </>
                     )}
                   </>
                 )}
