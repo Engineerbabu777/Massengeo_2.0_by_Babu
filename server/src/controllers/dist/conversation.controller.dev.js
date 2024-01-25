@@ -144,7 +144,10 @@ var fetchAllConversations = function fetchAllConversations(req, res) {
             users: {
               $in: [req.user._id]
             }
-          }).populate('users lastMessage unreadCount').sort({
+          }).populate('users unreadCount').populate({
+            path: 'lastMessage',
+            populate: 'senderId'
+          }).sort({
             updatedAt: -1
           }));
 

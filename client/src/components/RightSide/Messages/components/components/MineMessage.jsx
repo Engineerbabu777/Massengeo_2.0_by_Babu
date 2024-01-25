@@ -90,6 +90,7 @@ const MineMessage = ({ message, isRead }) => {
           {/* DISPLAY SENDER'S USERNAME AND TIME SINCE THE MESSAGE WAS CREATED */}
           {me?.username} {formatTimeAgo(message?.createdAt)}
           {/* CHECKMARK ICON INDICATING WHETHER THE MESSAGE HAS BEEN READ */}
+          {/* DOUBLE TICK FOR MESSAGE DELIVERY AS WELL SEEN OR NOT SEEN! */}
           <IoCheckmarkDoneSharp
             className={`${message.isGroupMessage ? 'hidden' : ''} ${
               message?.deleteForMe || message?.deleteForEveryOne ? 'hidden' : ''
@@ -101,6 +102,7 @@ const MineMessage = ({ message, isRead }) => {
                 : 'hidden'
             } w-6 h-6`}
           />
+          {/* SINGLE TICK FOR NET DELIVERY OF MESSAGE! */}
           <IoCheckmarkSharp
             className={`
           ${message.isGroupMessage ? 'hidden' : ''} ${

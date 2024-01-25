@@ -11,6 +11,8 @@ import { socket } from '../../../../RightSide/Messages/Messages'
 import { findOtherUsers } from '../../../../../utils/otherUsers'
 import { MdDoNotDisturb } from 'react-icons/md'
 import Avatar from '../../../../RightSide/Header/components/Avatar'
+import { IoCheckmarkDoneSharp, IoCheckmarkSharp } from 'react-icons/io5'
+import { isMessageReadByOrNot } from '../../../../../utils/getIsMessageReadOrNot'
 
 export default function SingleChatOption ({
   conversation,
@@ -30,7 +32,7 @@ export default function SingleChatOption ({
 
   // CHECKING IS MESSAGE SENT BY ME OTHERS!
   const isSentByMe =
-    conversation?.lastMessage?.senderId ===
+    conversation?.lastMessage?.senderId?._id ===
     JSON.parse(localStorage.getItem('userData@**@user'))?.id
 
   const deleteForMe = conversation?.lastMessage?.deleteForMe
@@ -41,6 +43,9 @@ export default function SingleChatOption ({
   const otherUser = findOtherUsers(conversation?.users)
 
   console.log(conversation)
+
+  // IS MESSAGE READ BY OTHER!
+  const isRead = isMessageReadByOrNot(conversation?.lastMessage?.seenBy)
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -114,7 +119,7 @@ export default function SingleChatOption ({
               : findOtherUsers(conversation.users)[0]?.username}
           </p>
           <p
-            className={`text-gray-400 font-semibold group-hover:text-white tracking-wider line-clamp-1 ${
+            className={`text-gray-400 flex gap-1 items-center font-semibold group-hover:text-white tracking-wider line-clamp-1 ${
               isActive ? 'text-white' : ''
             }`}
           >
@@ -132,8 +137,46 @@ export default function SingleChatOption ({
                 {' '}
                 {isSentByMe &&
                   (!deleteForMe || deleteForEveryOne) && // !false || true
-                  (deleteForMe || !deleteForEveryOne) && // false || !true
-                  'me: '}
+                  (deleteForMe || !deleteForEveryOne) && ( // false || !true
+                    <span>
+                      {/* FOR NOT DELIVERY OF MESSAGES! */}
+                      <IoCheckmarkDoneSharp
+                        className={` ${
+                          conversation?.lastMessage?.isGroupMessage
+                            ? 'hidden'
+                            : ''
+                        } ${
+                          conversation?.lastMessage?.deleteForMe ||
+                          conversation?.lastMessage?.deleteForEveryOne
+                            ? 'hidden'
+                            : ''
+                        } ${
+                          conversation?.lastMessage?.delivered
+                            ? isRead
+                              ? 'text-green-500'
+                              : 'text-gray-300'
+                            : 'hidden'
+                        } w-5 h-5`}
+                      />
+                      {/* SINGLE TICK FOR NET DELIVERY OF MESSAGE! */}
+                      <IoCheckmarkSharp
+                        className={`
+          ${conversation?.lastMessage?.isGroupMessage ? 'hidden' : ''} ${
+                          conversation?.lastMessage?.deleteForMe ||
+                          conversation?.lastMessage?.deleteForEveryOne
+                            ? 'hidden'
+                            : ''
+                        } ${
+                          conversation?.lastMessage?.delivered
+                            ? isRead
+                              ? 'hidden'
+                              : 'hidden'
+                            : 'text-gray-300'
+                        } w-5 h-5
+          `}
+                      />
+                    </span>
+                  )}
                 {/* OTHER USER CAN SEE THE MESSAGE IF ITS JUST DELETED FOR ME! */}
                 {conversation?.lastMessage?.message &&
                   deleteForMe &&

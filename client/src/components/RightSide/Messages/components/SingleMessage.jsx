@@ -12,7 +12,7 @@ const SingleMessage = ({ message }) => {
     JSON.parse(localStorage.getItem('userData@**@user')).id
 
   // IS MESSAGE READ BY OTHER!
-  const isRead = isMessageReadByOrNot(message?.seenBy, )
+  const isRead = isMessageReadByOrNot(message?.seenBy)
 
   
 

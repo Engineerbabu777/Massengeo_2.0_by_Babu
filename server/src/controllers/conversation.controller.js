@@ -86,7 +86,11 @@ export const fetchAllConversations = async (req, res) => {
     const conversations = await Conversation.find({
       users: { $in: [req.user._id] }
     })
-      .populate('users lastMessage unreadCount')
+      .populate('users unreadCount')
+      .populate({
+        path: 'lastMessage',
+        populate: 'senderId'
+      })
       .sort({ updatedAt: -1 })
 
     // RETURN A SUCCESSFUL RESPONSE WITH A STATUS OF 200 OK AND THE FETCHED CONVERSATIONS!!
