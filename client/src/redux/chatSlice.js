@@ -92,6 +92,20 @@ const chatSlice = createSlice({
           }
           return m
         })
+        // ALSO NEEDS TO UPDATE TH CONVERSATIONS LAST MESSAGE!
+        state.conversations = state.conversations.map(c => {
+          if (c._id === actions.payload.conversationId) {
+            return {
+              ...c,
+              lastMessage: {
+                ...c.lastMessage,
+                seenBy: [...c.lastMessage.seenBy, actions.payload.userIdToAdd]
+              }
+            }
+          } else {
+            return c
+          }
+        })
       }
     },
     // Update all unread messages as read

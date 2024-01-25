@@ -128,6 +128,7 @@ export default function MiddleSideBar () {
               _id: newMessage._id,
               userIdToAdd
             })
+            // ALSO NEED TO UPDATE THE LAST MESSAGE IN THE CONVERSATION AS WELL!
           )
         }
       }
@@ -153,9 +154,9 @@ export default function MiddleSideBar () {
     )
 
     // HANDLING USER TYPING!
-    socket.on('update-users-typing', ({ userTypingWithMessages,clientId }) => {
+    socket.on('update-users-typing', ({ userTypingWithMessages, clientId }) => {
       if (clientId !== socket.id) {
-      dispatch(updateUsersTyping(userTypingWithMessages));
+        dispatch(updateUsersTyping(userTypingWithMessages))
       }
     })
 
