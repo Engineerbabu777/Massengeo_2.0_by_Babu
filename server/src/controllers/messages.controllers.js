@@ -15,12 +15,15 @@ export const sendMessage = async (req, res) => {
       ? true
       : false
 
+      console.log(messageType)
+
     // CREATE A NEW MESSAGE DOCUMENT IN THE MESSAGE COLLECTION
     const newMessage = await Message.create({
       message,
       senderId: user._id,
       conversationId,
       messageType,
+      image: messageType === 'image' ? message : null, // FOR NOW ONLY HANDLING SINGLE IMAGE!!
       seenBy: [req.user._id], // MEANS THE SENDER HAS SEEN THE MESSAGE(BUT OTHERS NOT!)!
       delivered: isDelivered,
       receiverId: receiverId, // ARRAY OF RECEIVER IDS!

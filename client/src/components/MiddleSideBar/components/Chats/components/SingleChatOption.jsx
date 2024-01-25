@@ -210,7 +210,16 @@ export default function SingleChatOption ({
                     {!deleteForMe && !deleteForEveryOne && (
                       <>
                         {conversation?.lastMessage?.message ? (
-                          <>{conversation?.lastMessage?.message}</>
+                          <>
+                            {/* IF MESSAGE TYPE IS TEXT! */}
+                            {conversation.lastMessage.messageType === 'text' &&
+                              conversation?.lastMessage?.message}
+                            {/* IF MESSAGE TYPE IS IMAGE! */}
+                            {conversation.lastMessage.messageType ===
+                              'image' && (
+                             <>An image...</>
+                            )}
+                          </>
                         ) : (
                           <span>start a conversation</span>
                         )}

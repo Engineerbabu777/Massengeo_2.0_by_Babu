@@ -33,6 +33,9 @@ var messageSchema = new _mongoose["default"].Schema({
     type: _mongoose["default"].Schema.Types.ObjectId,
     ref: 'conversation'
   },
+  image: {
+    type: String
+  },
   // IS THE MESSAGE IS EDITED!
   isEdited: {
     type: Boolean,

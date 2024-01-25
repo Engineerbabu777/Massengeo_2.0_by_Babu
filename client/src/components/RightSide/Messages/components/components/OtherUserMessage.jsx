@@ -15,13 +15,30 @@ const OtherUserMessage = ({ message }) => {
             message.deleteForEveryOne ? 'italic' : null
           } `}
         >
-          {message?.deleteForEveryOne ? (
-            <p className='text-gray-800 flex gap-2 items-center'>
-              <MdDoNotDisturb className='h-6 w-6' />
-              this message was deleted{' '}
-            </p>
-          ) : (
-            message?.message
+          {message?.messageType === 'text' && (
+            <>
+              {message?.deleteForEveryOne ? (
+                <p className='text-gray-800 flex gap-2 items-center'>
+                  <MdDoNotDisturb className='h-6 w-6' />
+                  this message was deleted{' '}
+                </p>
+              ) : (
+                message?.message
+              )}
+            </>
+          )}
+          {/* FOR DISPLAYING IMAGES! */}
+          {message?.messageType === 'image' && (
+            <>
+              {message?.deleteForEveryOne ? (
+                <p className='text-gray-800 flex gap-2 items-center'>
+                  <MdDoNotDisturb className='h-6 w-6' />
+                  this message was deleted{' '}
+                </p>
+              ) : (
+                <img className='' src={message?.message} alt={'alt-img-text'} />
+              )}
+            </>
           )}
         </div>
         {/* TIME! */}

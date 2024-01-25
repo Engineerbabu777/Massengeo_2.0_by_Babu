@@ -64,7 +64,9 @@ const MineMessage = ({ message, isRead }) => {
       <div className='w-full flex flex-col'>
         {/* MESSAGE BUBBLE WITH BACKGROUND COLOR, ROUNDED CORNERS, AND STYLING */}
         <div
-          className={`bg-[#F05454] rounded-l-xl  rounded-tr-xl px-8 py-4 text-white text-xl cursor-pointer ${
+          className={`${
+            message?.messageType === 'image' ? 'bg-transparent border-2 border-white' : 'bg-[#F05454]'
+          } rounded-l-xl  rounded-tr-xl px-8 py-4 text-white text-xl cursor-pointer ${
             message?.deleteForMe || message.deleteForEveryOne ? 'italic' : null
           }`}
           onClick={() => {
@@ -74,13 +76,30 @@ const MineMessage = ({ message, isRead }) => {
           }}
         >
           {/* DISPLAY THE MESSAGE TEXT */}
-          {message?.deleteForMe || message.deleteForEveryOne ? (
-            <p className='text-gray-800 flex gap-2 items-center'>
-              <MdDoNotDisturb className='h-6 w-6' />
-              you deleted this message{' '}
-            </p>
-          ) : (
-            message.message
+          {message?.messageType === 'text' && (
+            <>
+              {message?.deleteForMe || message?.deleteForEveryOne ? (
+                <p className='text-gray-800 flex gap-2 items-center'>
+                  <MdDoNotDisturb className='h-6 w-6' />
+                  you deleted this message{' '}
+                </p>
+              ) : (
+                message.message
+              )}
+            </>
+          )}
+          {/* FOR DISPLAYING IMAGES! */}
+          {message?.messageType === 'image' && (
+            <>
+              {message?.deleteForMe || message?.deleteForEveryOne ? (
+                <p className='text-gray-800 flex gap-2 items-center'>
+                  <MdDoNotDisturb className='h-6 w-6' />
+                  you deleted this message{' '}
+                </p>
+              ) : (
+                <img className='' src={message?.message} alt={'alt-img-text'} />
+              )}
+            </>
           )}
         </div>
 

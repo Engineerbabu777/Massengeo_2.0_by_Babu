@@ -16,6 +16,7 @@ const messageSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'conversation'
     },
+    image:{type:String},
     // IS THE MESSAGE IS EDITED!
     isEdited: { type: Boolean, default: false },
     // CHECK THE DELIVERY STATUS OF MESSAGE!

@@ -18,6 +18,8 @@ import BlockedUserDisplay from './components/BlockedUserDisplay'
 import { userDetails } from '../../../utils/getUserDetails'
 import { socket } from '../Messages/Messages'
 import { fileIconOptions } from '../../../constants'
+import { MdClose } from 'react-icons/md'
+import { uploadImageToCloudinary } from '../../../utils/uploadImageToCloudinary'
 
 const Footer = () => {
   const { sendMessages, updateMessage } = useMessages()
@@ -27,6 +29,7 @@ const Footer = () => {
   const editMode = useSelector(state => state.chat.inputUpdateState)
   const messageId = useSelector(state => state.chat.messageId)
   const activeChatInfo = useSelector(state => state.chat.activeConversationInfo)
+  const [sendingImage, setSendingImage] = useState('')
   const [input, setInput] = useState('')
   const [open, setOpen] = useState(false)
   const dispatch = useDispatch()
@@ -42,6 +45,12 @@ const Footer = () => {
   }, [inputValueEdit])
 
   const handleMessages = () => {
+    // FOR NOW WE WILL ONLY SEND JUST IMAGES WITHOUT TEXTS!
+    if (sendingImage && sendingImage) {
+      // SETTING MESSAGE TYPE TO BE IN THE FORM IMAGE!
+      sendMessages('image', sendingImage, conversationId)
+      setSendingImage('')
+    }
     if (input && conversationId && !editMode) {
       sendMessages(messageType, input, conversationId)
       setInput('')
@@ -111,18 +120,52 @@ const Footer = () => {
     }, 3000)
   }
 
+  // HANDLING IMAGE CHANGE IN INPUT !!
+  const onChangeInput = async event => {
+    if (event?.target?.files) {
+      const response = await uploadImageToCloudinary(event)
+      setSendingImage(response?.secure_url)
+      setOpen(!open)
+    }
+  }
+
   return (
-    <div className=' mb-4 mx-5 flex gap-3'>
+    <div className=' mb-4 mx-5 flex gap-3 relative'>
+      {/* FOR DISPLAYING IMAGES! */}
+      {sendingImage && (
+        <section className='border-2 border-white rounded-md flex bg-[#0c0415] items-center p-1 gap-1 flex-wrap absolute bottom-24 w-full'>
+          {/* EACH IMAGE BOX! */}
+
+          <div className='w-32 h-full relative '>
+            <div className=' cursor-pointer w-6 h-6 bg-[#F05454] rounded-full flex items-center justify-center absolute top-2 right-0'>
+              <MdClose
+                className='w-4 h-4 text-white'
+                onClick={() => setSendingImage('')}
+              />
+            </div>
+            <img
+              src={sendingImage}
+              alt={'imag-alt'}
+              className='w-40 h-40 rounded-md object-contain'
+            />
+          </div>
+        </section>
+      )}
+
       <section className='flex border-2 border-gray-800 rounded-lg p-3 flex-1 relative'>
         {open && (
           <div className='border-2 border-white rounded-md z-[9999] gap-2 flex flex-col w-[150px] bg-[#0c0415] absolute bottom-12 left-0'>
             {fileIconOptions.map(({ name, Icon }) => (
-              <p className='text-gray-400 font-semibold flex gap-2 p-2 hover:text-white cursor-pointer'>
+              <label
+                onChange={onChangeInput}
+                className='text-gray-400 font-semibold flex gap-2 p-2 hover:text-white cursor-pointer'
+              >
+                {name === 'Image' && <input className='hidden' type='file' />}
                 {/* ICON! */}
                 <Icon className='w-6 h-6' />
                 {/* TEXT! */}
                 {name}
-              </p>
+              </label>
             ))}
           </div>
         )}
