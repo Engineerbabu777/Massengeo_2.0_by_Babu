@@ -98,7 +98,7 @@ const Footer = () => {
     // FOR NOW WE WILL ONLY CREATE FOR SINGLE CHAT!
     socket.emit('user-is-typing', {
       chatId: activeChatInfo._id,
-      userId: findOtherUsers(activeChatInfo.users)[0]._id,
+      userId: userDetails.id,
       message: event.target.value
     })
 

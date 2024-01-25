@@ -11,21 +11,14 @@ export default function Header ({ openSideModal, open }) {
   const conversationInfo = useSelector(
     state => state.chat.activeConversationInfo
   )
+  // GETTING TYPING USERS DATA FROM STORE!
   const typingUsers = useSelector(state => state.chat.userTyping)
 
+  // GETTING IF USER FROM CURRENT ACTIVE ID IS BEEN TYPING WILL GIVE USE TRUE OR FALSE!
   const isTyping =
-    typingUsers?.filter(d => {
-      if (
-        d.conversationId === conversationInfo?._id &&
-        d.userId !== userDetails.id
-      ) {
-        return d
-      } else {
-        return null
-      }
-    }).length > 0
-
-    console.log(isTyping)
+    typingUsers?.filter(
+      d => d.chatId === conversationInfo?._id && d.userId !== userDetails.id
+    ).length > 0
 
   return (
     <div className='border-b-2 border-gray-700 px-5 py-3 flex items-center'>

@@ -178,7 +178,6 @@ const chatSlice = createSlice({
     //UPDATE USER TYPING!
     updateUsersTyping: (state, actions) => {
       state.userTyping = Object.values(actions.payload)
-      console.log(Object.values(actions.payload))
     }
   }
 })
