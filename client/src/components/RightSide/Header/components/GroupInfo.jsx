@@ -1,13 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { findMySelf, findOtherUsers } from '../../../../utils/otherUsers'
 import Avatar from './Avatar'
 import { userDetails } from '../../../../utils/getUserDetails'
+import GroupModalSettings from './GroupSettingsModal'
 
 const GroupInfo = ({ activeChat }) => {
   const [showFullUsers, setShowFullUsers] = React.useState(false)
 
+  const [openSettings, setOpenSettings] = useState(false)
+
   return (
     <>
+      <GroupModalSettings
+        open={openSettings}
+        handleClose={() => setOpenSettings(false)}
+      />
       <div className='flex flex-col w-full border-b-2 border-gray-500 p-4 items-center'>
         {/* IMAGE FOR SINGLE CHAT NOW!! */}
         <div className='flex items-center justify-center'>
@@ -27,7 +34,10 @@ const GroupInfo = ({ activeChat }) => {
         {/* EDIT GROUP BUTTON! */}
         {/* WILL BE SHOWN ONLY TO THE GROUP ADMINS! */}
         {userDetails.id === activeChat.groupAdmins[0]._id && (
-          <button className='w-[100%] items-center justify-center rounded-md bg-green-500 text-white font-bold p-2 mt-6 hover:bg-green-700'>
+          <button
+            onClick={() => setOpenSettings(!openSettings)}
+            className='w-[100%] items-center justify-center rounded-md bg-green-500 text-white font-bold p-2 mt-6 hover:bg-green-700'
+          >
             Edit Group
           </button>
         )}
