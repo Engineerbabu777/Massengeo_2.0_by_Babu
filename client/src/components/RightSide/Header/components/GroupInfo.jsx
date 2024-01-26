@@ -1,13 +1,14 @@
 import React from 'react'
 import { findMySelf, findOtherUsers } from '../../../../utils/otherUsers'
 import Avatar from './Avatar'
+import { userDetails } from '../../../../utils/getUserDetails'
 
 const GroupInfo = ({ activeChat }) => {
   const [showFullUsers, setShowFullUsers] = React.useState(false)
 
   return (
     <>
-      <div className='flex flex-col w-full border-b-2 border-gray-500 p-4'>
+      <div className='flex flex-col w-full border-b-2 border-gray-500 p-4 items-center'>
         {/* IMAGE FOR SINGLE CHAT NOW!! */}
         <div className='flex items-center justify-center'>
           <Avatar src={activeChat?.avatar} info />
@@ -22,6 +23,14 @@ const GroupInfo = ({ activeChat }) => {
         <p className='text-center mt-4 text-xl font-normal text-neutral-300'>
           <span>{activeChat?.users?.length} group members</span>
         </p>
+
+        {/* EDIT GROUP BUTTON! */}
+        {/* WILL BE SHOWN ONLY TO THE GROUP ADMINS! */}
+        {userDetails.id === activeChat.groupAdmins[0]._id && (
+          <button className='w-[100%] items-center justify-center rounded-md bg-green-500 text-white font-bold p-2 mt-6 hover:bg-green-700'>
+            Edit Group
+          </button>
+        )}
       </div>
 
       {/* ABOUT!! */}

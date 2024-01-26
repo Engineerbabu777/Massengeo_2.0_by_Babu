@@ -191,7 +191,8 @@ export default function SingleChatOption ({
                         (!deleteForMe || deleteForEveryOne) && // !false || true
                         (deleteForMe || !deleteForEveryOne) && ( // false || !true
                           <span>
-                            {conversation?.lastMessage?.senderId?.username}{":"}
+                            {conversation?.lastMessage?.senderId?.username}
+                            {conversation?.lastMessage?.message && ':'}
                           </span>
                         )}
                       {/* OTHER USER CAN SEE THE MESSAGE IF ITS JUST DELETED FOR ME! */}
