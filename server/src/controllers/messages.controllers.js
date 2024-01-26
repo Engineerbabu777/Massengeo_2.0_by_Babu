@@ -67,6 +67,57 @@ export const sendMessage = async (req, res) => {
         .exec()
     }
 
+    // IF THE RECEIVER ID IS MORE THAN ONE THEN THIS MEANS THATS RHE MESSAGE FROM THE GROUP CONVERSATION!
+    if (receiverId.length > 1) {
+      // AS RECEIVER IDS ARE OF MORE THAN ONE LENGTH SO WE HAVE TO LOOP THROUGH IT!
+      let allPromises = [];
+      for (let i = 0; i < receiverId.length; i++) {
+        const unreadCountForThisConversation = await UnreadCount.findOneAndUpdate(
+          {
+            userId: receiverId[i],
+            conversationId: conversationId
+          },
+          {
+            count: conversation?.unreadCount?.count
+              ? conversation.unreadCount.count + 1
+              : 1
+          },
+          {
+            upsert: true,
+            new: true
+          }
+        )
+        allPromises.push(unreadCountForThisConversation);
+      }
+
+      const allUnReads = await Promise.all(allPromises);
+
+      console.log(allUnReads)
+      
+
+      let allConversationPromises = [];
+      for (let i = 0; i < receiverId.length; i++) {
+      // UPDATE THE LAST_MESSAGE FIELD IN THE CORRESPONDING CONVERSATION DOCUMENT
+      const conversation = await Conversation.findByIdAndUpdate(
+        conversationId,
+        {
+          lastMessage: newMessage,
+          unreadCount: allUnReads[i]._id
+        },
+        {
+          new: true // RETURNS NEW DOC!
+        }
+      )
+        .populate('users lastMessage unreadCount')
+        .exec();
+
+        allConversationPromises.push(conversation);
+      }
+
+      await Promise.all(allConversationPromises)
+      
+    }
+
     // SEND A SUCCESS RESPONSE
     res.status(201).json({
       success: true,

@@ -34,7 +34,8 @@ export const createConversation = async (req, res) => {
       // GROUP CONVERSATION!!
       await Conversation.create({
         users: [...userIds, requestedUserID],
-        group: true
+        group: true,
+        groupAdmins: [requestedUserID],
       })
     } else {
       // SINGLE CONVERSATION!!
@@ -47,7 +48,7 @@ export const createConversation = async (req, res) => {
         success: true,
         message: 'Conversation created successfully',
         newConversation: await Conversation.findById(newConversation._id)
-          .populate('lastMessage unreadCount')
+          .populate('lastMessage unreadCount groupAdmins')
           .populate({
             path: 'users',
             select: 'email avatar username about blockedList'
@@ -86,7 +87,7 @@ export const fetchAllConversations = async (req, res) => {
     const conversations = await Conversation.find({
       users: { $in: [req.user._id] }
     })
-      .populate('users unreadCount')
+      .populate('users unreadCount groupAdmins')
       .populate({
         path: 'lastMessage',
         populate: 'senderId'

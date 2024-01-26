@@ -61,7 +61,8 @@ var createConversation = function createConversation(req, res) {
           _context.next = 11;
           return regeneratorRuntime.awrap(_conversationModel.Conversation.create({
             users: [].concat(_toConsumableArray(userIds), [requestedUserID]),
-            group: true
+            group: true,
+            groupAdmins: [requestedUserID]
           }));
 
         case 11:
@@ -78,7 +79,7 @@ var createConversation = function createConversation(req, res) {
           newConversation = _context.sent;
           _context.t0 = res.status(201);
           _context.next = 19;
-          return regeneratorRuntime.awrap(_conversationModel.Conversation.findById(newConversation._id).populate('lastMessage unreadCount').populate({
+          return regeneratorRuntime.awrap(_conversationModel.Conversation.findById(newConversation._id).populate('lastMessage unreadCount groupAdmins').populate({
             path: 'users',
             select: 'email avatar username about blockedList'
           }));
@@ -144,7 +145,7 @@ var fetchAllConversations = function fetchAllConversations(req, res) {
             users: {
               $in: [req.user._id]
             }
-          }).populate('users unreadCount').populate({
+          }).populate('users unreadCount groupAdmins').populate({
             path: 'lastMessage',
             populate: 'senderId'
           }).sort({

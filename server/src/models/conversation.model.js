@@ -13,17 +13,23 @@ const conversationSchema = new mongoose.Schema(
       type: String,
       default:
         'A' +
-        Math.floor(Math.random() * 3+3) +
+        Math.floor(Math.random() * 3 + 3) +
         'B' +
-        Math.floor(Math.random() * 3+6) +
+        Math.floor(Math.random() * 3 + 6) +
         'Z' +
-        Math.floor(Math.random() * 12-4) +
+        Math.floor(Math.random() * 12 - 4) +
         'Y'
     },
     avatar: {
       type: String,
       default:
-        'https://icons.veryicon.com/png/o/education-technology/cloud-platform-1/group-icon.png'
+        'https://res.cloudinary.com/djo2k58eq/image/upload/v1706265217/new-data/rmdodqssscry9ohnecvf.png'
+    },
+    groupAdmins: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }],
+    groupType: {
+      type: String,
+      default: 'public',
+      enum: ['public', 'private', 'restricted']
     }
   },
   {

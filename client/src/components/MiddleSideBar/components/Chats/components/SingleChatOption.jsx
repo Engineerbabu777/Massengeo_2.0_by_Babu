@@ -141,12 +141,92 @@ export default function SingleChatOption ({
               <>
                 {isGrouped ? (
                   <>
-                    {' '}
-                    {/*WILL CHECK IT LATER!*/}
-                    {/* <span className='font-bold text-gray-300'>
-                  {chat?.message?.name}
-                </span>
-                : {chat?.message?.message} */}
+                    <>
+                      {' '}
+                      {/* IF THE MESSAGE IS SENT BY ME! */}
+                      {isSentByMe &&
+                        (!deleteForMe || deleteForEveryOne) && // !false || true
+                        (deleteForMe || !deleteForEveryOne) && ( // false || !true
+                          <span>
+                            {/* FOR NOT DELIVERY OF MESSAGES! */}
+                            <IoCheckmarkDoneSharp
+                              className={` ${
+                                conversation?.lastMessage?.isGroupMessage
+                                  ? 'hidden'
+                                  : ''
+                              } ${
+                                conversation?.lastMessage?.deleteForMe ||
+                                conversation?.lastMessage?.deleteForEveryOne
+                                  ? 'hidden'
+                                  : ''
+                              } ${
+                                conversation?.lastMessage?.delivered
+                                  ? isRead
+                                    ? 'text-green-500'
+                                    : 'text-gray-300'
+                                  : 'hidden'
+                              } w-5 h-5`}
+                            />
+                            {/* SINGLE TICK FOR NET DELIVERY OF MESSAGE! */}
+                            <IoCheckmarkSharp
+                              className={`
+          ${conversation?.lastMessage?.isGroupMessage ? 'hidden' : ''} ${
+                                conversation?.lastMessage?.deleteForMe ||
+                                conversation?.lastMessage?.deleteForEveryOne
+                                  ? 'hidden'
+                                  : ''
+                              } ${
+                                conversation?.lastMessage?.delivered
+                                  ? isRead
+                                    ? 'hidden'
+                                    : 'hidden'
+                                  : 'text-gray-300'
+                              } w-5 h-5
+          `}
+                            />
+                          </span>
+                        )}
+                      {/* IF THE MESSAGE IS SENT BY OTHERS! */}
+                      {!isSentByMe &&
+                        (!deleteForMe || deleteForEveryOne) && // !false || true
+                        (deleteForMe || !deleteForEveryOne) && ( // false || !true
+                          <span>
+                            {conversation?.lastMessage?.senderId?.username}{":"}
+                          </span>
+                        )}
+                      {/* OTHER USER CAN SEE THE MESSAGE IF ITS JUST DELETED FOR ME! */}
+                      {conversation?.lastMessage?.message &&
+                        deleteForMe &&
+                        !deleteForEveryOne &&
+                        !isSentByMe && (
+                          <>{conversation?.lastMessage?.message}</>
+                        )}
+                      {/* IF DELETED FOR ALL! */}
+                      {conversation?.lastMessage?.message &&
+                        (deleteForEveryOne || (deleteForMe && isSentByMe)) && (
+                          <span className='text-gray-500 flex gap-2 items-center text-sm'>
+                            <MdDoNotDisturb className='h-4 w-4' />
+                            message was deleted
+                          </span>
+                        )}
+                      {/* IF LAST MESSAGE HAS TO BE DISPLAY! */}
+                      {!deleteForMe && !deleteForEveryOne && (
+                        <>
+                          {conversation?.lastMessage?.message ? (
+                            <>
+                              {/* IF MESSAGE TYPE IS TEXT! */}
+                              {conversation.lastMessage.messageType ===
+                                'text' && conversation?.lastMessage?.message}
+                              {/* IF MESSAGE TYPE IS IMAGE! */}
+                              {conversation.lastMessage.messageType ===
+                                'image' && <>An image...</>}
+                            </>
+                          ) : (
+                            <span>start a conversation</span>
+                          )}
+                        </>
+                      )}
+                    </>
                   </>
                 ) : (
                   <>
@@ -216,9 +296,7 @@ export default function SingleChatOption ({
                               conversation?.lastMessage?.message}
                             {/* IF MESSAGE TYPE IS IMAGE! */}
                             {conversation.lastMessage.messageType ===
-                              'image' && (
-                             <>An image...</>
-                            )}
+                              'image' && <>An image...</>}
                           </>
                         ) : (
                           <span>start a conversation</span>

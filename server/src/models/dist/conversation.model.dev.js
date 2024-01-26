@@ -35,7 +35,16 @@ var conversationSchema = new _mongoose["default"].Schema({
   },
   avatar: {
     type: String,
-    "default": 'https://icons.veryicon.com/png/o/education-technology/cloud-platform-1/group-icon.png'
+    "default": 'https://res.cloudinary.com/djo2k58eq/image/upload/v1706265217/new-data/rmdodqssscry9ohnecvf.png'
+  },
+  groupAdmins: [{
+    type: _mongoose["default"].Schema.Types.ObjectId,
+    ref: 'user'
+  }],
+  groupType: {
+    type: String,
+    "default": 'public',
+    "enum": ['public', 'private', 'restricted']
   }
 }, {
   timestamps: true
