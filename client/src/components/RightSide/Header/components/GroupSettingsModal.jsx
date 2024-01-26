@@ -2,6 +2,7 @@ import { MdClose, MdEdit } from 'react-icons/md'
 import { userDetails } from '../../../../utils/getUserDetails'
 import { uploadImageToCloudinary } from '../../../../utils/uploadImageToCloudinary'
 import { useSelector } from 'react-redux'
+import { findMySelf, findOtherUsers } from '../../../../utils/otherUsers'
 
 export default function GroupModalSettings ({ open, handleClose }) {
   const activeChat = useSelector(state => state.chat.activeConversationInfo)
@@ -37,7 +38,7 @@ export default function GroupModalSettings ({ open, handleClose }) {
             </header>
 
             {/* IMAGE SETTINGS! */}
-            <section className='flex items-center flex-col p-2'>
+            <section className='flex items-center flex-col p-2 '>
               <div className='rounded-full w-[200px] h-[200px] relative border-2'>
                 <img
                   src={activeChat.avatar}
@@ -56,8 +57,9 @@ export default function GroupModalSettings ({ open, handleClose }) {
                 </label>
               </div>
 
-              <div className=''>
-                <div className='flex flex-col gap-1'>
+              <div className='w-full flex flex-col gap-3'>
+                {/* GROUP NAME SETTINGS! */}
+                <div className='flex flex-col gap-1 w-full'>
                   <label className='text-gray-500 text-2xl font-bold'>
                     Group Name:
                   </label>
@@ -65,14 +67,55 @@ export default function GroupModalSettings ({ open, handleClose }) {
                     onChange={onChangeInputHandler}
                     value={activeChat.groupName}
                     placeholder='Enter group name....'
-                    className='flex-1 px-4 py-2 bg-inherit rounded-md outline-none text-white font-semibold text-xl border-2 border-gray-700 w-[450px]'
+                    className='flex-1 px-4 py-2 bg-inherit rounded-md outline-none text-white font-semibold text-xl border-2 border-gray-700 grow-1'
                     name='groupName'
                     type='text'
                   />
                 </div>
-                {/* GROUP NAME SETTINGS! */}
 
                 {/* GROUP MEMBERS SETTINGS! */}
+                <span className='text-gray-500 text-2xl'>Group Members</span>
+                <section className='grid grid-cols-2 gap-2 '>
+                  {findMySelf(activeChat?.users).map(u => (
+                    <div
+                      className={`py-1 flex items-center justify-between gap-2 bg-slate-800/50 border-gray-700 border p-1
+                `}
+                    >
+                      <img
+                        src={u.avatar}
+                        alt='alt-text'
+                        className='overflow-hidden w-16 h-16 rounded-full object-cover'
+                      />
+                      <p className='font-bold text-white text-xl grow line-clamp-1 max-w-[50%]'>
+                        You
+                      </p>
+                      <button className='bg-[#F05454] hover:opacity-50 rounded-md p-1 text-white cursor-pointer font-normal text-lg'>
+                        remove
+                      </button>
+                    </div>
+                  ))}
+
+                  {findOtherUsers(activeChat?.users)?.map((u, i) => (
+                    <>
+                      <div
+                        className={`py-1 flex items-center justify-between gap-2 bg-slate-800/50 border-gray-700 border p-1
+                `}
+                      >
+                        <img
+                          src={u.avatar}
+                          alt='alt-text'
+                          className='overflow-hidden w-16 h-16 rounded-full object-cover'
+                        />
+                        <p className='font-bold text-white text-xl grow line-clamp-1 max-w-[50%]'>
+                          {u.username}
+                        </p>
+                        <button className='bg-[#F05454] hover:opacity-50 rounded-md p-1 text-white cursor-pointer font-normal text-lg'>
+                          remove
+                        </button>
+                      </div>
+                    </>
+                  ))}
+                </section>
 
                 {/* GROUP ABOUT! */}
 
