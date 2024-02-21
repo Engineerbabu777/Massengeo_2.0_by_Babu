@@ -21,7 +21,6 @@ export default function useMessages () {
   const activeConversationInfo = useSelector(
     state => state.chat.activeConversationInfo
   )
-  const isEditedMode = useSelector(state => state.chat.inputUpdateState)
 
   const sendMessages = async (messageType, message, conversationId) => {
     // FOR NOW!

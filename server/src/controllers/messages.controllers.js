@@ -1,3 +1,4 @@
+import { findImageMessage } from '../helper/utils.js'
 import { onlineUsers } from '../index.js'
 import { Conversation } from '../models/conversation.model.js'
 import { Message } from '../models/message.model.js'
@@ -15,15 +16,17 @@ export const sendMessage = async (req, res) => {
       ? true
       : false
 
-      console.log(messageType)
+    console.log(messageType)
+
+    
 
     // CREATE A NEW MESSAGE DOCUMENT IN THE MESSAGE COLLECTION
     const newMessage = await Message.create({
-      message,
+      message: message.text || null,
       senderId: user._id,
       conversationId,
       messageType,
-      image: messageType === 'image' ? message : null, // FOR NOW ONLY HANDLING SINGLE IMAGE!!
+      image: findImageMessage(messageType, message), // RETURNS ITS VALUE!
       seenBy: [req.user._id], // MEANS THE SENDER HAS SEEN THE MESSAGE(BUT OTHERS NOT!)!
       delivered: isDelivered,
       receiverId: receiverId, // ARRAY OF RECEIVER IDS!
@@ -70,52 +73,51 @@ export const sendMessage = async (req, res) => {
     // IF THE RECEIVER ID IS MORE THAN ONE THEN THIS MEANS THATS RHE MESSAGE FROM THE GROUP CONVERSATION!
     if (receiverId.length > 1) {
       // AS RECEIVER IDS ARE OF MORE THAN ONE LENGTH SO WE HAVE TO LOOP THROUGH IT!
-      let allPromises = [];
+      let allPromises = []
       for (let i = 0; i < receiverId.length; i++) {
-        const unreadCountForThisConversation = await UnreadCount.findOneAndUpdate(
-          {
-            userId: receiverId[i],
-            conversationId: conversationId
-          },
-          {
-            count: conversation?.unreadCount?.count
-              ? conversation.unreadCount.count + 1
-              : 1
-          },
-          {
-            upsert: true,
-            new: true
-          }
-        )
-        allPromises.push(unreadCountForThisConversation);
+        const unreadCountForThisConversation =
+          await UnreadCount.findOneAndUpdate(
+            {
+              userId: receiverId[i],
+              conversationId: conversationId
+            },
+            {
+              count: conversation?.unreadCount?.count
+                ? conversation.unreadCount.count + 1
+                : 1
+            },
+            {
+              upsert: true,
+              new: true
+            }
+          )
+        allPromises.push(unreadCountForThisConversation)
       }
 
-      const allUnReads = await Promise.all(allPromises);
+      const allUnReads = await Promise.all(allPromises)
 
       console.log(allUnReads)
-      
 
-      let allConversationPromises = [];
+      let allConversationPromises = []
       for (let i = 0; i < receiverId.length; i++) {
-      // UPDATE THE LAST_MESSAGE FIELD IN THE CORRESPONDING CONVERSATION DOCUMENT
-      const conversation = await Conversation.findByIdAndUpdate(
-        conversationId,
-        {
-          lastMessage: newMessage,
-          unreadCount: allUnReads[i]._id
-        },
-        {
-          new: true // RETURNS NEW DOC!
-        }
-      )
-        .populate('users lastMessage unreadCount')
-        .exec();
+        // UPDATE THE LAST_MESSAGE FIELD IN THE CORRESPONDING CONVERSATION DOCUMENT
+        const conversation = await Conversation.findByIdAndUpdate(
+          conversationId,
+          {
+            lastMessage: newMessage,
+            unreadCount: allUnReads[i]._id
+          },
+          {
+            new: true // RETURNS NEW DOC!
+          }
+        )
+          .populate('users lastMessage unreadCount')
+          .exec()
 
-        allConversationPromises.push(conversation);
+        allConversationPromises.push(conversation)
       }
 
       await Promise.all(allConversationPromises)
-      
     }
 
     // SEND A SUCCESS RESPONSE

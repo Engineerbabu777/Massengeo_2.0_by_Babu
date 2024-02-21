@@ -45,26 +45,30 @@ const Footer = () => {
   }, [inputValueEdit])
 
   const handleMessages = () => {
-    // FOR NOW WE WILL ONLY SEND JUST IMAGES WITHOUT TEXTS!
-    if (sendingImage && sendingImage) {
+    // IF USER WANTS TO SEND IMAGE AND TEXT TOGETHER!
+    if(!editMode && sendingImage && input){
+      const message = {image:sendingImage,text:input}
+      sendMessages('image-text',message,conversationId)
+    }
+    // IF USER WANTS TO SEND IMAGE!
+    else if(!editMode && sendingImage && conversationId) {
+      const message = {image:sendingImage}
       // SETTING MESSAGE TYPE TO BE IN THE FORM IMAGE!
-      sendMessages('image', sendingImage, conversationId)
+      sendMessages('image', message, conversationId)
       setSendingImage('')
     }
-    if (input && conversationId && !editMode) {
-      sendMessages(messageType, input, conversationId)
+    // USER WANTS TO SEND ONLY TEXT!
+    else if (!editMode && input && conversationId && !editMode) {
+      const message = {text:input}
+      sendMessages(messageType, message, conversationId)
       setInput('')
-
-      return
     }
-
-    if (input && conversationId && editMode && messageId) {
+    // IF THE MESSAGE IS ON EDIT MODE!
+    else if (input && conversationId && editMode && messageId) {
       updateMessage(messageType, input, messageId, conversationId)
       dispatch(updateEditedMode(false))
       dispatch(updateEditMessageId(null))
       setInput('')
-
-      return
     }
   }
 
