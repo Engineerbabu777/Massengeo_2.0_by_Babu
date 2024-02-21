@@ -34,7 +34,6 @@ const Footer = () => {
   const [open, setOpen] = useState(false)
   const dispatch = useDispatch()
 
-  // console.log((JSON.parse(localStorage.getItem('userData@**@user'))).blockedList);
 
   useEffect(() => {
     if (inputValueEdit) {
@@ -49,6 +48,8 @@ const Footer = () => {
     if(!editMode && sendingImage && input){
       const message = {image:sendingImage,text:input}
       sendMessages('image-text',message,conversationId)
+      setSendingImage('')
+      setInput('')
     }
     // IF USER WANTS TO SEND IMAGE!
     else if(!editMode && sendingImage && conversationId) {

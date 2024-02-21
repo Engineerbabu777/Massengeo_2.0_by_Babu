@@ -3,18 +3,42 @@ import { userDetails } from '../../../../utils/getUserDetails'
 import { uploadImageToCloudinary } from '../../../../utils/uploadImageToCloudinary'
 import { useSelector } from 'react-redux'
 import { findMySelf, findOtherUsers } from '../../../../utils/otherUsers'
+import { useState } from 'react'
+import { FaCheck } from "react-icons/fa";
 
 export default function GroupModalSettings ({ open, handleClose }) {
   const activeChat = useSelector(state => state.chat.activeConversationInfo)
+
+  const [newImage, setNewImage] = useState({
+    isNew:false,
+    value:""
+  });
+  const [groupName, setGroupName] = useState({
+    isNew:false,
+    value:""
+  });
   // UPLOAD IMAGE HANDLER!
   const onChangeImageHandler = async event => {
     const data = await uploadImageToCloudinary(event)
     // UPDATE THE AVATAR IN ACTIVE CHAT INFO!!
+    setNewImage({
+      isNew:true,
+      value:data.secure_url
+    })
   }
 
+  // INPUT HANDLER!
   const onChangeInputHandler = e => {
     // UPDATE THE NAME IN ACTIVE CHAT INFO!!
+    setGroupName({
+      isNew:true,
+      value:e.target.value
+    })
   }
+
+  // UPDATE HANDLER!
+
+
 
   return (
     <>
@@ -41,13 +65,14 @@ export default function GroupModalSettings ({ open, handleClose }) {
             <section className='flex items-center flex-col p-2 '>
               <div className='rounded-full w-[200px] h-[200px] relative border-2'>
                 <img
-                  src={activeChat.avatar}
+                  src={newImage.value || activeChat.avatar}
                   alt='alt-text'
                   className='overflow-hidden w-full h-full rounded-full object-cover'
                 />
 
                 <label className='bg-[#007700] flex items-center justify-center w-12 h-12 rounded-full cursor-pointer absolute right-5 bottom-1 '>
-                  <MdEdit className='w-8 h-8 text-white' />
+                 {!newImage?.isNew && <MdEdit className='w-8 h-8 text-white' />}
+                 {newImage?.isNew && <FaCheck className='w-8 h-8 text-white' />}
                   <input
                     type='file'
                     className='hidden'
@@ -59,7 +84,7 @@ export default function GroupModalSettings ({ open, handleClose }) {
 
               <div className='w-full flex flex-col gap-3'>
                 {/* GROUP NAME SETTINGS! */}
-                <div className='flex flex-col gap-1 w-full'>
+                <div className='flex flex-col gap-1 w-full relative'>
                   <label className='text-gray-500 text-2xl font-bold'>
                     Group Name:
                   </label>
@@ -71,6 +96,7 @@ export default function GroupModalSettings ({ open, handleClose }) {
                     name='groupName'
                     type='text'
                   />
+                 {groupName?.isNew && <FaCheck className='w-8 h-8 text-blue-500 absolute right-1 cursor-pointer' />}
                 </div>
 
                 {/* GROUP MEMBERS SETTINGS! */}
@@ -90,7 +116,7 @@ export default function GroupModalSettings ({ open, handleClose }) {
                         You
                       </p>
                       <button className='bg-[#F05454] hover:opacity-50 rounded-md p-1 text-white cursor-pointer font-normal text-lg'>
-                        remove
+                        kick out
                       </button>
                     </div>
                   ))}
@@ -110,7 +136,7 @@ export default function GroupModalSettings ({ open, handleClose }) {
                           {u.username}
                         </p>
                         <button className='bg-[#F05454] hover:opacity-50 rounded-md p-1 text-white cursor-pointer font-normal text-lg'>
-                          remove
+                          kick out
                         </button>
                       </div>
                     </>

@@ -8,7 +8,7 @@ const messageSchema = new mongoose.Schema(
     // MESSAGE BODY WHATEVER IT IS!
     message: { type: String, required: true },
     // MESSAGE TYPE WHATEVER (TEXT, IMAGE, FILE)!
-    messageType: { type: String, enum: ['text', 'image', 'file'] },
+    messageType: { type: String, enum: ['text', 'image', 'file','image-text'] },
     // SEEN USER IDS!
     seenBy: [String],
     // CONVERSATION ID!

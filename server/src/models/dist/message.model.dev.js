@@ -24,7 +24,7 @@ var messageSchema = new _mongoose["default"].Schema({
   // MESSAGE TYPE WHATEVER (TEXT, IMAGE, FILE)!
   messageType: {
     type: String,
-    "enum": ['text', 'image', 'file']
+    "enum": ['text', 'image', 'file', 'image-text']
   },
   // SEEN USER IDS!
   seenBy: [String],

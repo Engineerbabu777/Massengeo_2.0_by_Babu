@@ -30,7 +30,7 @@ const MineMessage = ({ message, isRead }) => {
   return (
     // SECTION CONTAINING THE MESSAGE AND AVATAR, ALIGNED TO THE RIGHT
     <section className='flex ml-auto max-w-[75%] gap-2 group'>
-      {/* DISPLAY MENU! */}
+      {/* DISPLAY MENU!(WILL MOVE TO ANOTHER FILE LATER!) */}
       {showMenu && (
         <div className='bg-black border-2 border-white rounded-md absolute  z-[9999] flex flex-col gap-2 right-[10%] '>
           <p className='text-center font-bold text-white mt-2'>Message Info</p>
@@ -65,8 +65,8 @@ const MineMessage = ({ message, isRead }) => {
         {/* MESSAGE BUBBLE WITH BACKGROUND COLOR, ROUNDED CORNERS, AND STYLING */}
         <div
           className={`${
-            message?.messageType === 'image' ? 'bg-transparent border-2 border-white' : 'bg-[#F05454]'
-          } rounded-l-xl  rounded-tr-xl px-8 py-4 text-white text-xl cursor-pointer ${
+            message?.messageType === 'image' ? 'bg-transparent border-2 border-white' : message?.messageType === 'text' ? 'bg-[#F05454]' : "bg-transparent border-2 border-white !p-2"
+          } rounded-l-xl  rounded-tr-xl px-8 py-4 text-white text-xl cursor-pointer relative overflow-hidden ${
             message?.deleteForMe || message.deleteForEveryOne ? 'italic' : null
           }`}
           onClick={() => {
@@ -97,10 +97,25 @@ const MineMessage = ({ message, isRead }) => {
                   you deleted this message{' '}
                 </p>
               ) : (
-                <img className='' src={message?.message} alt={'alt-img-text'} />
+                <img className='' src={message?.image} alt={'alt-img-text'} />
               )}
             </>
           )}
+          {/* FOR DISPLAYING IMAGE AND TEXT TOGETHER! */}
+          {message?.messageType === 'image-text' && (<>
+            {message?.deleteForMe || message?.deleteForEveryOne ? (
+                <p className='text-gray-800 flex gap-2 items-center'>
+                  <MdDoNotDisturb className='h-6 w-6' />
+                  you deleted this message{' '}
+                </p>
+              ) : (<>
+                <img className='' src={message?.image} alt={'alt-img-text'} />
+                <p className='text-white bg-[#F05454] items-center absolute bottom-0 left-0 right-0 p-4'>
+                  {message.message}
+                </p>           
+            </>
+              )}
+          </>)}
         </div>
 
         {/* TIME AND READ STATUS OF THE MESSAGE */}

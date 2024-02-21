@@ -22,7 +22,7 @@ export const sendMessage = async (req, res) => {
 
     // CREATE A NEW MESSAGE DOCUMENT IN THE MESSAGE COLLECTION
     const newMessage = await Message.create({
-      message: message.text || null,
+      message: message.text || "default",
       senderId: user._id,
       conversationId,
       messageType,
