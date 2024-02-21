@@ -4,26 +4,28 @@ import { uploadImageToCloudinary } from '../../../../utils/uploadImageToCloudina
 import { useSelector } from 'react-redux'
 import { findMySelf, findOtherUsers } from '../../../../utils/otherUsers'
 import { useState } from 'react'
-import { FaCheck } from "react-icons/fa";
+import { FaCheck } from 'react-icons/fa'
+import useGroup from '../../../../hooks/useGroup'
 
 export default function GroupModalSettings ({ open, handleClose }) {
   const activeChat = useSelector(state => state.chat.activeConversationInfo)
+  const { removeGroupMember, updateGroupData } = useGroup()
 
   const [newImage, setNewImage] = useState({
-    isNew:false,
-    value:""
-  });
+    isNew: false,
+    value: ''
+  })
   const [groupName, setGroupName] = useState({
-    isNew:false,
-    value:""
-  });
+    isNew: false,
+    value: ''
+  })
   // UPLOAD IMAGE HANDLER!
   const onChangeImageHandler = async event => {
     const data = await uploadImageToCloudinary(event)
     // UPDATE THE AVATAR IN ACTIVE CHAT INFO!!
     setNewImage({
-      isNew:true,
-      value:data.secure_url
+      isNew: true,
+      value: data.secure_url
     })
   }
 
@@ -31,14 +33,15 @@ export default function GroupModalSettings ({ open, handleClose }) {
   const onChangeInputHandler = e => {
     // UPDATE THE NAME IN ACTIVE CHAT INFO!!
     setGroupName({
-      isNew:true,
-      value:e.target.value
+      isNew: true,
+      value: e.target.value
     })
   }
 
   // UPDATE HANDLER!
-
-
+  const updateHandler = async (data, id, type) => {
+    await updateGroupData(data, id, type)
+  }
 
   return (
     <>
@@ -71,8 +74,17 @@ export default function GroupModalSettings ({ open, handleClose }) {
                 />
 
                 <label className='bg-[#007700] flex items-center justify-center w-12 h-12 rounded-full cursor-pointer absolute right-5 bottom-1 '>
-                 {!newImage?.isNew && <MdEdit className='w-8 h-8 text-white' />}
-                 {newImage?.isNew && <FaCheck className='w-8 h-8 text-white' />}
+                  {!newImage?.isNew && (
+                    <MdEdit className='w-8 h-8 text-white' />
+                  )}
+                  {newImage?.isNew && (
+                    <FaCheck
+                      className='w-8 h-8 text-white'
+                      onClick={() =>
+                        updateHandler(newImage, activeChat._id, 'image')
+                      }
+                    />
+                  )}
                   <input
                     type='file'
                     className='hidden'
@@ -96,7 +108,14 @@ export default function GroupModalSettings ({ open, handleClose }) {
                     name='groupName'
                     type='text'
                   />
-                 {groupName?.isNew && <FaCheck className='w-8 h-8 text-blue-500 absolute right-1 cursor-pointer' />}
+                  {groupName?.isNew && (
+                    <FaCheck
+                      onClick={() =>
+                        updateHandler(groupName, activeChat._id, 'name')
+                      }
+                      className='w-8 h-8 text-blue-500 absolute right-1 cursor-pointer'
+                    />
+                  )}
                 </div>
 
                 {/* GROUP MEMBERS SETTINGS! */}
@@ -144,8 +163,6 @@ export default function GroupModalSettings ({ open, handleClose }) {
                 </section>
 
                 {/* GROUP ABOUT! */}
-
-                {/* HANDLE SUBMIT BTN! */}
               </div>
             </section>
           </section>
