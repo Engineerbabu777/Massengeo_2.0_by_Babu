@@ -3,11 +3,13 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.fetchAllUserConversationsFriends = exports.fetchAllConversations = exports.createConversation = void 0;
+exports.groupConversationUpdate = exports.fetchAllUserConversationsFriends = exports.fetchAllConversations = exports.createConversation = void 0;
 
 var _conversationModel = require("../models/conversation.model.js");
 
 var _messageModel = require("../models/message.model.js");
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
@@ -237,6 +239,77 @@ var fetchAllUserConversationsFriends = function fetchAllUserConversationsFriends
       }
     }
   }, null, null, [[0, 8]]);
-};
+}; // UPDATE GROUP CONVERSATION!
+
 
 exports.fetchAllUserConversationsFriends = fetchAllUserConversationsFriends;
+
+var groupConversationUpdate = function groupConversationUpdate(req, res) {
+  var user, userId, data, conversation, group;
+  return regeneratorRuntime.async(function groupConversationUpdate$(_context4) {
+    while (1) {
+      switch (_context4.prev = _context4.next) {
+        case 0:
+          _context4.prev = 0;
+          // GET THE ID OF USER!
+          user = req.user;
+          userId = user._id; // REQUEST BODY!
+
+          data = req.body;
+          console.log({
+            data: data,
+            userId: userId
+          }); // CHECK IF THE USER IS THE ADMIN OF THE GROUP!
+
+          _context4.next = 7;
+          return regeneratorRuntime.awrap(_conversationModel.Conversation.findById(data.groupId));
+
+        case 7:
+          conversation = _context4.sent;
+
+          if (conversation.groupAdmins.includes(userId)) {
+            _context4.next = 10;
+            break;
+          }
+
+          return _context4.abrupt("return", res.status(401).json({
+            error: true,
+            message: 'You are not the admin of this group!'
+          }));
+
+        case 10:
+          _context4.next = 12;
+          return regeneratorRuntime.awrap(_conversationModel.Conversation.findByIdAndUpdate(data.groupId, _defineProperty({}, data.updateType, data.updateValue), {
+            "new": true
+          }));
+
+        case 12:
+          group = _context4.sent;
+          // RETURN SUCCESS RESPONSE!
+          res.status(200).json({
+            message: "Updated Success",
+            success: true,
+            data: group
+          });
+          _context4.next = 20;
+          break;
+
+        case 16:
+          _context4.prev = 16;
+          _context4.t0 = _context4["catch"](0);
+          console.log('Group Update Error:', _context4.t0.message);
+          res.status(200).json({
+            message: "Group update failed!",
+            error: true
+          });
+
+        case 20:
+        case "end":
+          return _context4.stop();
+      }
+    }
+  }, null, null, [[0, 16]]);
+}; // REMOVE USERS FROM THE CONVERSATIONS!
+
+
+exports.groupConversationUpdate = groupConversationUpdate;

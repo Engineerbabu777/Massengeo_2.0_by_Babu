@@ -35,7 +35,7 @@ export const createConversation = async (req, res) => {
       await Conversation.create({
         users: [...userIds, requestedUserID],
         group: true,
-        groupAdmins: [requestedUserID],
+        groupAdmins: [requestedUserID]
       })
     } else {
       // SINGLE CONVERSATION!!
@@ -146,3 +146,58 @@ export const fetchAllUserConversationsFriends = async (req, res) => {
     res.status(504).json({ error: true, message: 'Friends fetching failed' })
   }
 }
+
+// UPDATE GROUP CONVERSATION!
+export const groupConversationUpdate = async (req, res) => {
+  try {
+    // GET THE ID OF USER!
+    const user = req.user
+    const userId = user._id
+
+    // REQUEST BODY!
+    const data = req.body
+
+    console.log({ data, userId })
+
+    // CHECK IF THE USER IS THE ADMIN OF THE GROUP!
+    const conversation = await Conversation.findById(data.groupId)
+
+    // IF THE REQUESTED USER IS NOT ADMIN!
+    if (!conversation?.groupAdmins?.includes(userId)) {
+      return res.status(401).json({
+        error: true,
+        message: 'You are not the admin of this group!'
+      })
+    }
+
+    // ELSE IT MEANS HE IS THE ADMIN OF THE GROUP!
+    // LETS CHANGE THE GROUP DETAILS!
+    const group = await Conversation.findByIdAndUpdate(
+      data.groupId,
+      {
+        [data.updateType]: data.updateValue
+      },
+      {
+        new: true
+      }
+    ).populate('groupAdmins').populate({
+        path: 'users',
+        select: 'username avatar'
+      })
+
+    // RETURN SUCCESS RESPONSE!
+    res.status(200).json({
+      message: 'Updated Success',
+      success: true,
+      data: group
+    })
+  } catch (error) {
+    console.log('Group Update Error:', error.message)
+    res.status(200).json({
+      message: 'Group update failed!',
+      error: true
+    })
+  }
+}
+
+// REMOVE USERS FROM THE CONVERSATIONS!

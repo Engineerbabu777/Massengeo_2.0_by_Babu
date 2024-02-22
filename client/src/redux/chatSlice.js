@@ -196,7 +196,17 @@ const chatSlice = createSlice({
     //UPDATE USER TYPING!
     updateUsersTyping: (state, actions) => {
       state.userTyping = Object.values(actions.payload)
-    }
+    },
+    updateConversationInfo:(state,actions) => {
+      state.activeConversationInfo = actions.payload;
+      state.conversations = state.conversations.map(c => {
+        if(c._id === actions.payload._id){
+          return actions.payload
+        }else{
+          return c
+        }
+      })
+    },
   }
 })
 
@@ -222,7 +232,8 @@ export const {
   updateMessagesWithEditedMessage,
   updateMessagesWithDeletedOne,
   updateConversationsWithNewConversation,
-  updateUsersTyping
+  updateUsersTyping,
+  updateConversationInfo
 } = chatSlice.actions
 
 export const chatReducer = chatSlice.reducer

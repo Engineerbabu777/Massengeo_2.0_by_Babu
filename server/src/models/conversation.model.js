@@ -30,7 +30,8 @@ const conversationSchema = new mongoose.Schema(
       type: String,
       default: 'public',
       enum: ['public', 'private', 'restricted']
-    }
+    },
+    about:String
   },
   {
     timestamps: true

@@ -10,6 +10,7 @@ import { Server } from 'socket.io'
 import { createServer } from 'http'
 import { Message } from './models/message.model.js'
 import { UnreadCount } from './models/unreadCount.model.js'
+
 // USING ENV FILE!
 dotenv.config()
 
@@ -32,7 +33,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cors())
 
-// USER ROUTES!!
+// ROUTES!!
 app.use('/api/v1/user', userRoutes)
 app.use('/api/v1/conversation', conversationRoutes)
 app.use('/api/v1/messages', messagesRoutes)

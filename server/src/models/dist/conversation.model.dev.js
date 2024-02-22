@@ -45,7 +45,8 @@ var conversationSchema = new _mongoose["default"].Schema({
     type: String,
     "default": 'public',
     "enum": ['public', 'private', 'restricted']
-  }
+  },
+  about: String
 }, {
   timestamps: true
 }); // CONVERSATION!

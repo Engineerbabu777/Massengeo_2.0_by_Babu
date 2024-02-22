@@ -2,7 +2,8 @@ import express from 'express'
 import {
   createConversation,
   fetchAllConversations,
-  fetchAllUserConversationsFriends
+  fetchAllUserConversationsFriends,
+  groupConversationUpdate
 } from '../controllers/conversation.controller.js'
 import { authProtection } from '../middlewares/user.middleware.js'
 
@@ -20,5 +21,15 @@ routes.get(
   authProtection,
   fetchAllUserConversationsFriends
 )
+
+// UPDATING GROUP/GROUP CONVERSATIONS NAMES!
+routes.put(
+  '/update-group',
+  authProtection,
+  groupConversationUpdate
+)
+
+// KICK OUT USERS FROM CONVERSATION!
+
 
 export default routes

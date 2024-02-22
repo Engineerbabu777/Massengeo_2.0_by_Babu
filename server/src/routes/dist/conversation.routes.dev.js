@@ -20,6 +20,9 @@ routes.post('/create-conversation', _userMiddleware.authProtection, _conversatio
 
 routes.get('/fetch-all', _userMiddleware.authProtection, _conversationController.fetchAllConversations); // FETCHING ALL USER FRIENDS!
 
-routes.get('/fetch-all-friends-conversation', _userMiddleware.authProtection, _conversationController.fetchAllUserConversationsFriends);
+routes.get('/fetch-all-friends-conversation', _userMiddleware.authProtection, _conversationController.fetchAllUserConversationsFriends); // UPDATING GROUP/GROUP CONVERSATIONS NAMES!
+
+routes.put('/update-group', _userMiddleware.authProtection, _conversationController.groupConversationUpdate); // KICK OUT USERS FROM CONVERSATION!
+
 var _default = routes;
 exports["default"] = _default;
