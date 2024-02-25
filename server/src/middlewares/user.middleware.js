@@ -9,7 +9,7 @@ export const authProtection = async (req, res, next) => {
   // GETTING AUTH TOKEN FROM HEADERS!
   const token = req?.headers?.authorization //Bearer token
   // IF TOKEN IS NULL RETURN 401 AUTH ERROR!
-  if (token === 'null') {
+  if (token === null || !token || token === '') {
     return res.status(401).json({ msg: 'No token, authorization denied' })
   }
 

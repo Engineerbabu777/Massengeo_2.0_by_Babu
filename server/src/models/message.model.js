@@ -27,7 +27,8 @@ const messageSchema = new mongoose.Schema(
     isGroupMessage: Boolean,
     // MESSAGE DELETED OPTIONS!
     deleteForMe: { type: Boolean, default: false },
-    deleteForEveryOne: { type: Boolean, default: false }
+    deleteForEveryOne: { type: Boolean, default: false },
+    message_accessed_by: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }],
   },
   {
     timestamps: true

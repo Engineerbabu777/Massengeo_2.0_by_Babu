@@ -201,3 +201,19 @@ export const groupConversationUpdate = async (req, res) => {
 }
 
 // REMOVE USERS FROM THE CONVERSATIONS!
+export const memberRemovalOrLeave = async(req,res) => {
+  try {
+
+    const user = req.user;
+    const {userId, groupId:conversationId} = req.body;
+
+    // REMOVE HIM FROM GROUP!
+    // REMOVE HIM FROM RECEIVER IDS!
+    // ADD HIM TO PREVIOUS MEMBERS!
+    // ADD PREVIOUS CONVERSATION STATUS FOR THE USER WHO LEAVED!
+    
+    
+  } catch (error) {
+    console.log("Member deletion Error: ",error)
+  }
+}

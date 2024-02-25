@@ -12,6 +12,8 @@ import { useSelector } from 'react-redux'
 import SettingsPage from './pages/SettingsPage'
 import NotificationsPage from './pages/NotificationsPage'
 import FriendsPage from './pages/FriendsPage'
+
+
 //NOTE - THIS COMPONENT WILL CHECK WHETHER USER IS LOGGED OR NOT!
 const PrivateRoute = ({ element }) => {
   //REVIEW - CHECKING IF USER IS LOGGED!!

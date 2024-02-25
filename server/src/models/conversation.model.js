@@ -31,7 +31,15 @@ const conversationSchema = new mongoose.Schema(
       default: 'public',
       enum: ['public', 'private', 'restricted']
     },
-    about:String
+    about:String,
+    ChatStatusForPreviousMembers:[{
+      userId:{type:mongoose.Schema.Types.ObjectId,ref:'user'}, // THOSE WHO LEAVED THE GROUP OR REMOVED FROM THE GROUP!
+      groupName:String,
+      avatar:String,
+      about:String,
+      groupMembers:[{type:mongoose.Schema.Types.ObjectId,ref:'user'}], // ARRAY OF THOSE WHO WHERE PARTICIPANTS THAT TIME!!
+    }],
+    leavedUsers:[{type:mongoose.Schema.Types.ObjectId,ref:'user'}], // ARRAY OF THOSE NO LONGER PARTICIPANTS!
   },
   {
     timestamps: true

@@ -61,7 +61,11 @@ var messageSchema = new _mongoose["default"].Schema({
   deleteForEveryOne: {
     type: Boolean,
     "default": false
-  }
+  },
+  message_accessed_by: [{
+    type: _mongoose["default"].Schema.Types.ObjectId,
+    ref: 'user'
+  }]
 }, {
   timestamps: true
 }); // EXPORTING MESSAGE!

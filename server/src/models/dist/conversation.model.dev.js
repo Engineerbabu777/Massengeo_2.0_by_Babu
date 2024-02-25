@@ -46,7 +46,27 @@ var conversationSchema = new _mongoose["default"].Schema({
     "default": 'public',
     "enum": ['public', 'private', 'restricted']
   },
-  about: String
+  about: String,
+  ChatStatusForPreviousMembers: [{
+    userId: {
+      type: _mongoose["default"].Schema.Types.ObjectId,
+      ref: 'user'
+    },
+    // THOSE WHO LEAVED THE GROUP OR REMOVED FROM THE GROUP!
+    groupName: String,
+    avatar: String,
+    about: String,
+    groupMembers: [{
+      type: _mongoose["default"].Schema.Types.ObjectId,
+      ref: 'user'
+    }] // ARRAY OF THOSE WHO WHERE PARTICIPANTS THAT TIME!!
+
+  }],
+  leavedUsers: [{
+    type: _mongoose["default"].Schema.Types.ObjectId,
+    ref: 'user'
+  }] // ARRAY OF THOSE NO LONGER PARTICIPANTS!
+
 }, {
   timestamps: true
 }); // CONVERSATION!

@@ -13,16 +13,16 @@ var _userMiddleware = require("../middlewares/user.middleware.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var routes = _express["default"].Router(); // CREATE CONVERSATION!
+var routes = _express["default"].Router(); // POST ROUTES!
 
 
 routes.post('/create-conversation', _userMiddleware.authProtection, _conversationController.createConversation); // FETCHING ROUTES
 
-routes.get('/fetch-all', _userMiddleware.authProtection, _conversationController.fetchAllConversations); // FETCHING ALL USER FRIENDS!
+routes.get('/fetch-all', _userMiddleware.authProtection, _conversationController.fetchAllConversations);
+routes.get('/fetch-all-friends-conversation', _userMiddleware.authProtection, _conversationController.fetchAllUserConversationsFriends); // PUT ROUTES!
 
-routes.get('/fetch-all-friends-conversation', _userMiddleware.authProtection, _conversationController.fetchAllUserConversationsFriends); // UPDATING GROUP/GROUP CONVERSATIONS NAMES!
+routes.put('/update-group', _userMiddleware.authProtection, _conversationController.groupConversationUpdate); // DELETE ROUTES!
 
-routes.put('/update-group', _userMiddleware.authProtection, _conversationController.groupConversationUpdate); // KICK OUT USERS FROM CONVERSATION!
-
+routes["delete"]('/delete-group-member', _userMiddleware.authProtection, _conversationController.memberRemovalOrLeave);
 var _default = routes;
 exports["default"] = _default;

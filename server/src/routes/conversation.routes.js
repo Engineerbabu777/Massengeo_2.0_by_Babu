@@ -3,33 +3,28 @@ import {
   createConversation,
   fetchAllConversations,
   fetchAllUserConversationsFriends,
-  groupConversationUpdate
+  groupConversationUpdate,
+  memberRemovalOrLeave
 } from '../controllers/conversation.controller.js'
 import { authProtection } from '../middlewares/user.middleware.js'
 
 const routes = express.Router()
 
-// CREATE CONVERSATION!
+// POST ROUTES!
 routes.post('/create-conversation', authProtection, createConversation)
 
 // FETCHING ROUTES
 routes.get('/fetch-all', authProtection, fetchAllConversations)
-
-// FETCHING ALL USER FRIENDS!
 routes.get(
   '/fetch-all-friends-conversation',
   authProtection,
   fetchAllUserConversationsFriends
 )
 
-// UPDATING GROUP/GROUP CONVERSATIONS NAMES!
-routes.put(
-  '/update-group',
-  authProtection,
-  groupConversationUpdate
-)
+// PUT ROUTES!
+routes.put('/update-group', authProtection, groupConversationUpdate)
 
-// KICK OUT USERS FROM CONVERSATION!
-
+// DELETE ROUTES!
+routes.delete('/delete-group-member', authProtection, memberRemovalOrLeave)
 
 export default routes

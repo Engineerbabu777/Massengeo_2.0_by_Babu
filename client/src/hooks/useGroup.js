@@ -42,10 +42,38 @@ export default function useGroup () {
   }
 
   // REMOVE GROUP MEMBERS!
-  const removeGroupMember = async (userId, groupId) => {
+  const removeGroupMember = async (userId, groupId,handleClose) => {
+  
     try {
-        // REMOVE USER FROM THE RECEIVER IDS ARRAY!
-    } catch (error) {}
+      const response = await fetch(
+        'http://localhost:4444/api/v1/conversation/delete-group-member',
+        {
+          method: 'DELETE',
+          headers: {
+            'content-Type': 'application/json',
+            authorization: localStorage.getItem('token')
+          },
+          body: JSON.stringify({
+            userId,
+            groupId,
+          })
+        }
+      ).then(resp => resp.json())
+
+      console.log(response)
+      if (response?.error) throw new Error(response?.message)
+      // CLOSE THE MODAL FIRST!
+      // handleClose();
+      // UPDATE NEW DATA IN STATE!
+      // dispatch(updateConversationInfo(response.data));
+      // TRIGGER NEW SOCKET EVENT FOR REALTIME UPDATES!
+      // LATER!
+      // console.log({ response })
+      toast.success('group updated!')
+    } catch (error) {
+      console.log('Group User Removal/Leave Error: ', error)
+      toast.error('Can\'t update group, try later.')
+    }
   }
 
   return {

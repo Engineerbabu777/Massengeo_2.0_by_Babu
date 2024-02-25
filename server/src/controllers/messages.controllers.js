@@ -18,11 +18,9 @@ export const sendMessage = async (req, res) => {
 
     console.log(messageType)
 
-    
-
     // CREATE A NEW MESSAGE DOCUMENT IN THE MESSAGE COLLECTION
     const newMessage = await Message.create({
-      message: message.text || "default",
+      message: message.text || 'default',
       senderId: user._id,
       conversationId,
       messageType,
@@ -30,7 +28,8 @@ export const sendMessage = async (req, res) => {
       seenBy: [req.user._id], // MEANS THE SENDER HAS SEEN THE MESSAGE(BUT OTHERS NOT!)!
       delivered: isDelivered,
       receiverId: receiverId, // ARRAY OF RECEIVER IDS!
-      isGroupMessage: receiverId.length > 1 ? true : false
+      isGroupMessage: receiverId.length > 1 ? true : false,
+      message_accessed_by: receiverId, // ARRAY OF ACCESSED USERS!
     })
 
     const conversation = await Conversation.findById(conversationId).populate(
@@ -161,8 +160,11 @@ export const fetchAllMessages = async (req, res) => {
       }
     )
 
-    // FETCH ALL MESSAGES ASSOCIATED WITH THE SPECIFIED CONVERSATION_ID
-    const messages = await Message.find({ conversationId }).populate('senderId')
+    // FETCH ALL MESSAGES ASSOCIATED WITH THE SPECIFIED CONVERSATION_ID AS WELL THAT CAN BE ACCESSED BY THE USER!
+    const messages = await Message.find({
+      conversationId,
+      message_accessed_by: { $in: user.id }
+    }).populate('senderId')
 
     // SEND A SUCCESS RESPONSE WITH THE FETCHED MESSAGES
     res.status(200).json({ success: true, messages: messages })
