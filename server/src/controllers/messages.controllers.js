@@ -29,7 +29,7 @@ export const sendMessage = async (req, res) => {
       delivered: isDelivered,
       receiverId: receiverId, // ARRAY OF RECEIVER IDS!
       isGroupMessage: receiverId.length > 1 ? true : false,
-      message_accessed_by: receiverId, // ARRAY OF ACCESSED USERS!
+      message_accessed_by: [...receiverId,req.user._id], // ARRAY OF ACCESSED USERS!
     })
 
     const conversation = await Conversation.findById(conversationId).populate(
@@ -163,7 +163,7 @@ export const fetchAllMessages = async (req, res) => {
     // FETCH ALL MESSAGES ASSOCIATED WITH THE SPECIFIED CONVERSATION_ID AS WELL THAT CAN BE ACCESSED BY THE USER!
     const messages = await Message.find({
       conversationId,
-      message_accessed_by: { $in: user.id }
+      message_accessed_by: { $in: user._id }
     }).populate('senderId')
 
     // SEND A SUCCESS RESPONSE WITH THE FETCHED MESSAGES

@@ -177,7 +177,7 @@ export default function GroupModalSettings ({ open, handleClose }) {
                         <p className='font-bold text-white text-xl grow line-clamp-1 max-w-[50%]'>
                           {u.username}
                         </p>
-                        <button onClick={() => {}} className='bg-[#F05454] hover:opacity-50 rounded-md p-1 text-white cursor-pointer font-normal text-lg'>
+                        <button onClick={() => {removeGroupMember(u._id,activeChat._id,handleClose)}} className='bg-[#F05454] hover:opacity-50 rounded-md p-1 text-white cursor-pointer font-normal text-lg'>
                           kick out
                         </button>
                       </div>

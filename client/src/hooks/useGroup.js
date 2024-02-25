@@ -65,7 +65,7 @@ export default function useGroup () {
       // CLOSE THE MODAL FIRST!
       // handleClose();
       // UPDATE NEW DATA IN STATE!
-      // dispatch(updateConversationInfo(response.data));
+      dispatch(updateConversationInfo(response.data));
       // TRIGGER NEW SOCKET EVENT FOR REALTIME UPDATES!
       // LATER!
       // console.log({ response })

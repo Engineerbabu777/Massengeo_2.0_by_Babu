@@ -180,7 +180,9 @@ export const groupConversationUpdate = async (req, res) => {
       {
         new: true
       }
-    ).populate('groupAdmins').populate({
+    )
+      .populate('groupAdmins leavedUsers')
+      .populate({
         path: 'users',
         select: 'username avatar'
       })
@@ -201,19 +203,63 @@ export const groupConversationUpdate = async (req, res) => {
 }
 
 // REMOVE USERS FROM THE CONVERSATIONS!
-export const memberRemovalOrLeave = async(req,res) => {
+export const memberRemovalOrLeave = async (req, res) => {
   try {
+    const user = req.user
+    const { userId, groupId: conversationId } = req.body
 
-    const user = req.user;
-    const {userId, groupId:conversationId} = req.body;
+    const conversation = await Conversation.findById(conversationId)
 
-    // REMOVE HIM FROM GROUP!
-    // REMOVE HIM FROM RECEIVER IDS!
-    // ADD HIM TO PREVIOUS MEMBERS!
-    // ADD PREVIOUS CONVERSATION STATUS FOR THE USER WHO LEAVED!
+    // TODO: CHECK IF THE USER IS THE MEMBER OF THE GROUP && USER IS NOT ALREADY PRESENT IN THESE FIELDS WHERE WE ARE ADDING HIM!
+
+    await Conversation.findByIdAndUpdate(conversationId, {
+      // THIS WILL REMOVE THIS USER FROM THE USERS ARRAY!
+      $pull: {
+        users: userId
+      }
+    })
     
-    
+    await Conversation.findByIdAndUpdate(conversationId, {
+      // THIS WILL UPDATE CHAT STATUS FOR THAT USER!
+      $push: {
+        ChatStatusForPreviousMembers: {
+          userId: userId,
+          groupName: conversation.groupName,
+          avatar: conversation.avatar,
+          status: conversation.avatar,
+          groupMembers: conversation.users
+        }
+      }
+    })
+
+    await Conversation.findByIdAndUpdate(
+      conversationId,
+      {
+        // ADD REMOVED USER TO LEAVED USERS!
+        $push: {
+          leavedUsers: userId
+        }
+      },
+      { new: true }
+    )
+
+    // GET FRESH DATA!
+    const conversationData = await Conversation.findById(conversationId)
+      .populate('groupAdmins leavedUsers')
+      .populate({
+        path: 'users',
+        select: 'username avatar'
+      })
+
+    res.status(200).json({
+      success: true,
+      data: conversationData
+    })
   } catch (error) {
-    console.log("Member deletion Error: ",error)
+    console.log('Member deletion Error: ', error)
+    res.status(200).json({
+      error: true,
+      message: error.message
+    })
   }
 }
