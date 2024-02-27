@@ -29,6 +29,12 @@ const messageSchema = new mongoose.Schema(
     deleteForMe: { type: Boolean, default: false },
     deleteForEveryOne: { type: Boolean, default: false },
     message_accessed_by: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }],
+    // REMOVAL MESSAGE / LEAVE MESSAGE,
+    isLeaveOrRemoval:{type:Boolean,default:false},
+    leaveOrRemovalData:{
+      userId:{ type: mongoose.Schema.Types.ObjectId, ref: 'user' },
+      removalType: String
+    }
   },
   {
     timestamps: true

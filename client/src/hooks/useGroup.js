@@ -42,7 +42,7 @@ export default function useGroup () {
   }
 
   // REMOVE GROUP MEMBERS!
-  const removeGroupMember = async (userId, groupId,handleClose) => {
+  const removeGroupMember = async (userId, groupId,handleClose,removeType) => {
   
     try {
       const response = await fetch(
@@ -56,6 +56,7 @@ export default function useGroup () {
           body: JSON.stringify({
             userId,
             groupId,
+            removeType,
           })
         }
       ).then(resp => resp.json())
@@ -66,6 +67,7 @@ export default function useGroup () {
       // handleClose();
       // UPDATE NEW DATA IN STATE!
       dispatch(updateConversationInfo(response.data));
+      // TODO: REALTIME EVENT GENERATES!
       // TRIGGER NEW SOCKET EVENT FOR REALTIME UPDATES!
       // LATER!
       // console.log({ response })

@@ -143,8 +143,8 @@ export default function SingleChatOption ({
                   <>
                     <>
                       {' '}
-                      {/* IF THE MESSAGE IS SENT BY ME! */}
-                      {isSentByMe &&
+                      {/* IF THE MESSAGE IS SENT BY ME && MESSAGE IS NOT ABOUT LEAVED USERS! */}
+                      {isSentByMe && !conversation.lastMessage.isLeaveOrRemoval &&
                         (!deleteForMe || deleteForEveryOne) && // !false || true
                         (deleteForMe || !deleteForEveryOne) && ( // false || !true
                           <span>
@@ -187,7 +187,7 @@ export default function SingleChatOption ({
                           </span>
                         )}
                       {/* IF THE MESSAGE IS SENT BY OTHERS! */}
-                      {!isSentByMe &&
+                      {!isSentByMe && !conversation.lastMessage.isLeaveOrRemoval &&
                         (!deleteForMe || deleteForEveryOne) && // !false || true
                         (deleteForMe || !deleteForEveryOne) && ( // false || !true
                           <span>
@@ -215,12 +215,18 @@ export default function SingleChatOption ({
                         <>
                           {conversation?.lastMessage?.message ? (
                             <>
+                              {conversation.lastMessage.isLeaveOrRemoval ? <span className="text-slate-500">
+                                {conversation.lastMessage.leaveOrRemovalData.userId.username.toUpperCase() + " " + conversation.lastMessage.message }
+                              </span>:<>
                               {/* IF MESSAGE TYPE IS TEXT! */}
                               {conversation.lastMessage.messageType ===
                                 'text' && conversation?.lastMessage?.message}
                               {/* IF MESSAGE TYPE IS IMAGE! */}
                               {conversation.lastMessage.messageType ===
                                 'image' && <>An image...</>}
+                              {/* IF MESSAGE IS TYPE OF IMAGE AND TEXT! */}
+                              {conversation.lastMessage.messageType === 'image-text' && ('Text && Image')}
+                              </>}
                             </>
                           ) : (
                             <span>start a conversation</span>

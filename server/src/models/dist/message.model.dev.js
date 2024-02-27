@@ -65,7 +65,19 @@ var messageSchema = new _mongoose["default"].Schema({
   message_accessed_by: [{
     type: _mongoose["default"].Schema.Types.ObjectId,
     ref: 'user'
-  }]
+  }],
+  // REMOVAL MESSAGE / LEAVE MESSAGE,
+  isLeaveOrRemoval: {
+    type: Boolean,
+    "default": false
+  },
+  leaveOrRemovalData: {
+    userId: {
+      type: _mongoose["default"].Schema.Types.ObjectId,
+      ref: 'user'
+    },
+    removalType: String
+  }
 }, {
   timestamps: true
 }); // EXPORTING MESSAGE!

@@ -85,12 +85,20 @@ export const fetchAllConversations = async (req, res) => {
 
     // RETRIEVE ALL CONVERSATIONS FROM THE DATABASE WHERE THE REQUESTING USER ID IS INCLUDED!!
     const conversations = await Conversation.find({
-      users: { $in: [req.user._id] }
+      $or: [
+        { users: { $in: [req.user._id] } },
+        // OR!
+        { leavedUsers: { $in: [req.user._id] } }
+      ]
     })
       .populate('users unreadCount groupAdmins')
       .populate({
         path: 'lastMessage',
-        populate: 'senderId'
+        populate: {
+          path: 'leaveOrRemovalData.userId',
+          model: 'user',
+          select: 'avatar username email'
+        }
       })
       .sort({ updatedAt: -1 })
 
@@ -206,7 +214,7 @@ export const groupConversationUpdate = async (req, res) => {
 export const memberRemovalOrLeave = async (req, res) => {
   try {
     const user = req.user
-    const { userId, groupId: conversationId } = req.body
+    const { userId, groupId: conversationId, removeType } = req.body
 
     const conversation = await Conversation.findById(conversationId)
 
@@ -218,7 +226,7 @@ export const memberRemovalOrLeave = async (req, res) => {
         users: userId
       }
     })
-    
+
     await Conversation.findByIdAndUpdate(conversationId, {
       // THIS WILL UPDATE CHAT STATUS FOR THAT USER!
       $push: {
@@ -243,9 +251,41 @@ export const memberRemovalOrLeave = async (req, res) => {
       { new: true }
     )
 
+    // CREATE NEW MESSAGE!
+    const message = await Message.create({
+      conversationId: conversationId,
+      isLeaveOrRemoval: true,
+      leaveOrRemovalData: {
+        userId: userId,
+        removalType: removeType
+      },
+      message: `${
+        removeType === 'remove-by-admin'
+          ? 'removed by admin(🔐)'
+          : 'leave the group'
+      }`
+    })
+
+    // UPDATE THE LAST MESSAGE THAT SOME USER IS LEAVED!
+    await Conversation.findByIdAndUpdate(
+      conversationId,
+      {
+        lastMessage: message._id
+      },
+      { new: true }
+    )
+
     // GET FRESH DATA!
     const conversationData = await Conversation.findById(conversationId)
       .populate('groupAdmins leavedUsers')
+      .populate({
+        path: 'lastMessage',
+        populate: {
+          path: 'leaveOrRemovalData.userId',
+          model: 'user',
+          select: 'avatar username email'
+        }
+      })
       .populate({
         path: 'users',
         select: 'username avatar'
