@@ -165,6 +165,7 @@ export const fetchAllMessages = async (req, res) => {
       conversationId,
       message_accessed_by: { $in: user._id }
     }).populate('senderId')
+    .populate({path:'leaveOrRemovalData.userId',model:'user',select:'username avatar email'})
 
     // SEND A SUCCESS RESPONSE WITH THE FETCHED MESSAGES
     res.status(200).json({ success: true, messages: messages })

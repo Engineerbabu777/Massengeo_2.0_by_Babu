@@ -95,7 +95,7 @@ export const fetchAllConversations = async (req, res) => {
       .populate({
         path: 'lastMessage',
         populate: {
-          path: 'leaveOrRemovalData.userId',
+          path: 'leaveOrRemovalData.userId senderId',
           model: 'user',
           select: 'avatar username email'
         }
@@ -259,6 +259,7 @@ export const memberRemovalOrLeave = async (req, res) => {
         userId: userId,
         removalType: removeType
       },
+      message_accessed_by:[...conversation.users],
       message: `${
         removeType === 'remove-by-admin'
           ? 'removed by admin(🔐)'
