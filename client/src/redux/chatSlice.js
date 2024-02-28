@@ -73,7 +73,10 @@ const chatSlice = createSlice({
     updateMessagesOnRealtime: (state, actions) => {
       if (
         window?.location?.pathname?.split('/')[1] ===
-        actions.payload.conversationId
+          actions.payload.conversationId &&
+        !state.activeConversationInfo.leavedUsers.includes(
+          JSON.parse(localStorage.getItem('userData@**@user')).id
+        )
       )
         state.activeUserMessages = [
           ...state.activeUserMessages,
@@ -197,16 +200,16 @@ const chatSlice = createSlice({
     updateUsersTyping: (state, actions) => {
       state.userTyping = Object.values(actions.payload)
     },
-    updateConversationInfo:(state,actions) => {
-      state.activeConversationInfo = actions.payload;
+    updateConversationInfo: (state, actions) => {
+      state.activeConversationInfo = actions.payload
       state.conversations = state.conversations.map(c => {
-        if(c._id === actions.payload._id){
+        if (c._id === actions.payload._id) {
           return actions.payload
-        }else{
+        } else {
           return c
         }
       })
-    },
+    }
   }
 })
 

@@ -220,6 +220,31 @@ export const memberRemovalOrLeave = async (req, res) => {
 
     // TODO: CHECK IF THE USER IS THE MEMBER OF THE GROUP && USER IS NOT ALREADY PRESENT IN THESE FIELDS WHERE WE ARE ADDING HIM!
 
+     // CREATE NEW MESSAGE!
+     const message = await Message.create({
+      conversationId: conversationId,
+      isLeaveOrRemoval: true,
+      leaveOrRemovalData: {
+        userId: userId,
+        removalType: removeType
+      },
+      message_accessed_by:[...conversation.users],
+      message: `${
+        removeType === 'remove-by-admin'
+          ? 'removed by admin(🔐)'
+          : 'leave the group'
+      }`
+    })
+
+    // UPDATE THE LAST MESSAGE THAT SOME USER IS LEAVED!
+    await Conversation.findByIdAndUpdate(
+      conversationId,
+      {
+        lastMessage: message._id
+      },
+      { new: true }
+    )
+    
     await Conversation.findByIdAndUpdate(conversationId, {
       // THIS WILL REMOVE THIS USER FROM THE USERS ARRAY!
       $pull: {
@@ -251,30 +276,7 @@ export const memberRemovalOrLeave = async (req, res) => {
       { new: true }
     )
 
-    // CREATE NEW MESSAGE!
-    const message = await Message.create({
-      conversationId: conversationId,
-      isLeaveOrRemoval: true,
-      leaveOrRemovalData: {
-        userId: userId,
-        removalType: removeType
-      },
-      message_accessed_by:[...conversation.users],
-      message: `${
-        removeType === 'remove-by-admin'
-          ? 'removed by admin(🔐)'
-          : 'leave the group'
-      }`
-    })
-
-    // UPDATE THE LAST MESSAGE THAT SOME USER IS LEAVED!
-    await Conversation.findByIdAndUpdate(
-      conversationId,
-      {
-        lastMessage: message._id
-      },
-      { new: true }
-    )
+   
 
     // GET FRESH DATA!
     const conversationData = await Conversation.findById(conversationId)

@@ -20,6 +20,7 @@ import { socket } from '../Messages/Messages'
 import { fileIconOptions } from '../../../constants'
 import { MdClose } from 'react-icons/md'
 import { uploadImageToCloudinary } from '../../../utils/uploadImageToCloudinary'
+import NoLongerExistInGroup from './components/NoLongerExitInGroup'
 
 const Footer = () => {
   const { sendMessages, updateMessage } = useMessages()
@@ -105,6 +106,11 @@ const Footer = () => {
         />
       )
     }
+  }
+
+  // CHECKING FOR THE NO LONGER EXISTENCE OF USER IN GROUP!
+  if(activeChatInfo.leavedUsers.includes(JSON.parse(localStorage.getItem('userData@**@user')).id)){
+    return <NoLongerExistInGroup />
   }
 
   const handleChangeInput = event => {

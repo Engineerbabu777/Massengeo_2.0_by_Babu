@@ -23,7 +23,7 @@ const SingleMessage = ({ message }) => {
               {/* IF THIS IS NOT ME! */}
             {message.leaveOrRemovalData.userId._id !== userDetails.id && message.leaveOrRemovalData.userId.username.toUpperCase() + " has been " + message?.message}
             {/* IF THIS IS ME! */}
-            {message.leaveOrRemovalData.userId._id === userDetails.id && " You are no longer member of the conversation😢!"}
+            {message.leaveOrRemovalData.userId._id === userDetails.id && "You are no longer member of the conversation😢!"}
             </p>
           </div>
         </>
