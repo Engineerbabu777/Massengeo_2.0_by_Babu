@@ -135,7 +135,10 @@ export default function SingleChatOption ({
               isActive ? 'text-white' : ''
             }`}
           >
-            {isTyping ? (
+            {/* IF I AM NO LONGER THE MEMBER OF THE GROUP! */}
+            {conversation.leavedUsers.includes(userDetails.id) ? <>
+            <span className="text-amber-300 font-semibold italic">You are no longer participant!</span>
+            </>: isTyping ? (
               <span>typing...</span>
             ) : (
               <>

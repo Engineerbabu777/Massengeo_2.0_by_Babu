@@ -144,6 +144,15 @@ socket.on('connection', client => {
     })
   })
 
+  // !! GROUP REALTIME UPDATE !!!
+  client.on('update-group-data', ({ conversationData }) => {
+    // EMITTING EVENT TO UPDATE DATA ON REALTIME!
+    socket.emit('update-group-data-now', {
+      conversationData,
+      clientId: client.id // PASSING THE CLIENT ID TO ACTIVE USERS!
+    })
+  })
+
   // ON USER DISCONNECTED!
   client.on('disconnect', data => {
     console.log('user disconnected')

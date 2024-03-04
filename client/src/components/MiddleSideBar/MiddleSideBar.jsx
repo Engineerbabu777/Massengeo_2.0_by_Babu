@@ -6,6 +6,7 @@ import SearchUsers from './components/SearchUsers/SearchUsers'
 import toast from 'react-hot-toast'
 import {
   updateAllUnreadAsRead,
+  updateConversationInfo,
   updateConversationsOnRealtime,
   updateConversationsWithNewConversation,
   updateMessageIsRead,
@@ -144,6 +145,17 @@ export default function MiddleSideBar () {
         }
       }
     })
+
+    // UPDATE GROUP DATA HERE BY DISPATCHING !
+    socket.on(
+      'update-group-data-now',
+      ({ clientId, conversationData }) => {
+        if (clientId !== socket.id) {
+          // DISPATCH AN EVENT FOR UPDATING GROUP CONVERSATION DATA!
+         dispatch(updateConversationInfo(conversationData));
+        }
+      }
+    )
 
     dispatch(
       updateSidebar(
