@@ -91,7 +91,7 @@ export const fetchAllConversations = async (req, res) => {
         { leavedUsers: { $in: [req.user._id] } }
       ]
     })
-      .populate('users unreadCount groupAdmins')
+      .populate('users unreadCount groupAdmins leavedUsers')
       .populate({
         path: 'lastMessage',
         populate: {
@@ -228,6 +228,8 @@ export const memberRemovalOrLeave = async (req, res) => {
         userId: userId,
         removalType: removeType
       },
+      receiverId:[...conversation.users],
+      seenBy:[req.user.id],
       message_accessed_by:[...conversation.users],
       message: `${
         removeType === 'remove-by-admin'
@@ -294,9 +296,14 @@ export const memberRemovalOrLeave = async (req, res) => {
         select: 'username avatar'
       })
 
+      // FETCHING BACK THE LAST MESSAGE()!
+      const lastMessage = await Message.findById(message._id).populate('senderId').populate({path:'leaveOrRemovalData.userId',model:'user',select:'username avatar email'})
+
     res.status(200).json({
       success: true,
-      data: conversationData
+      data: conversationData,
+      lastMessage
+
     })
   } catch (error) {
     console.log('Member deletion Error: ', error)

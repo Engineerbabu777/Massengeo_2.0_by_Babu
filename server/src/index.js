@@ -71,7 +71,7 @@ socket.on('connection', client => {
 
   // UPDATE THE REALTIME MESSAGE SENT/RECEIVED!!
   client.on('message-sent', data => {
-    console.log(data)
+    console.log({sendingData:data})
     socket.emit('message-received', { data, clientId: client.id })
   })
 

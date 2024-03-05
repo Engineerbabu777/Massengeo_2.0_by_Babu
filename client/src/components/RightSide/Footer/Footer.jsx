@@ -91,8 +91,8 @@ const Footer = () => {
     // IN MY BLOCKED LIST ( CURRENTLY LOGGED USER! )
     const isIncludedInMyBlockedList = blockedList?.includes(users[0]?._id)
     // IN OTHERS BLOCKED LIST ( WHOSE CHAT WE ARE VIEWING )!
-    const isIncludedInOthersBlockedList = users[0]?.blockedList.includes(
-      userDetails.id
+    const isIncludedInOthersBlockedList = users[0]?.blockedList?.includes(
+      userDetails?.id
     )
 
     // CHECKING IF THE OTHER USER IS BLOCKED FROM ANY SIDE!
@@ -108,10 +108,13 @@ const Footer = () => {
     }
   }
 
+  
+
   // CHECKING FOR THE NO LONGER EXISTENCE OF USER IN GROUP!
-  if(activeChatInfo.leavedUsers.includes(JSON.parse(localStorage.getItem('userData@**@user')).id)){
+  if(activeChatInfo.leavedUsers.map(u => u._id).includes(JSON.parse(localStorage.getItem('userData@**@user')).id)){
     return <NoLongerExistInGroup />
   }
+  
 
   const handleChangeInput = event => {
     setInput(event.target.value)

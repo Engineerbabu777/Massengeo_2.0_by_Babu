@@ -50,7 +50,7 @@ const chatSlice = createSlice({
     // Update conversation data in real-time
     updateConversationsOnRealtime: (state, actions) => {
       // FIND THE CONVERSATION ID AND REPLACE WITH NEW DATA
-      if (state.conversations.find(c => c._id === actions.payload._id)) {
+      if (state.conversations.find(c => c?._id === actions.payload?._id)) {
         /*
          COND:1-> FIRSTS CHECKING PATHNAME IS NOT EQUAL TO UPDATED CONVERSATION!!( OTHER WISE WE WILL CONSIDER USER IS ALREADY CHATTING WITH SAME USER)
          COND:2-> WE DON'T WANT TO SHOW MESSAGE TO OURSELVES SO WE CHECK THAT SENDER IS NO US!

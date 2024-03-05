@@ -1,6 +1,6 @@
 import toast from 'react-hot-toast'
 import { useSelector, useDispatch } from 'react-redux'
-import { updateConversationInfo } from '../redux/chatSlice'
+import { updateConversationInfo, updateMessagesOnRealtime } from '../redux/chatSlice'
 import { socket } from '../components/RightSide/Messages/Messages'
 
 export default function useGroup () {
@@ -71,10 +71,21 @@ export default function useGroup () {
       // UPDATE NEW DATA IN STATE!
       dispatch(updateConversationInfo(response.data))
 
-      // GENERATE REALTIME EVENT!
+      // GENERATE REALTIME EVENT FOR GROUP DATA UPDATATION!
       socket.emit('update-group-data', {
         conversationData: response.data, // CONVERSATION DATA1
       })
+
+      // GENERATING REALTIME EVENT FOR THAT NEW ONE MESSAGE EVENT!
+      dispatch(updateMessagesOnRealtime(response.lastMessage))
+
+      console.log({response})
+      socket.emit('message-sent', {
+        newMessage: response?.lastMessage,
+        updatedConversation: response?.conversationData,
+        conversationId: response?.conversationData?._id
+      })
+
       // console.log({ response })
       toast.success('group updated!')
     } catch (error) {

@@ -76,10 +76,10 @@ export default function MiddleSideBar () {
         // DISPATCH!
         dispatch(updateConversationsOnRealtime(data.updatedConversation))
         dispatch(updateMessagesOnRealtime(data.newMessage))
-
+console.log(data);
         if (
           window.location.pathname.split('/')[1] ===
-          data.updatedConversation._id
+          data?.updatedConversation?._id
         ) {
           socket.emit('message-read-by-user', {
             conversationId: data.updatedConversation._id,

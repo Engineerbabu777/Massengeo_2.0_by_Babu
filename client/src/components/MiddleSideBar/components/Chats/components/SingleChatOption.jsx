@@ -136,7 +136,7 @@ export default function SingleChatOption ({
             }`}
           >
             {/* IF I AM NO LONGER THE MEMBER OF THE GROUP! */}
-            {conversation.leavedUsers.includes(userDetails.id) ? <>
+            {conversation?.leavedUsers?.map(u => u._id).includes(JSON.parse(localStorage.getItem('userData@**@user')).id) ? <>
             <span className="text-amber-300 font-semibold italic">You are no longer participant!</span>
             </>: isTyping ? (
               <span>typing...</span>
@@ -147,7 +147,7 @@ export default function SingleChatOption ({
                     <>
                       {' '}
                       {/* IF THE MESSAGE IS SENT BY ME && MESSAGE IS NOT ABOUT LEAVED USERS! */}
-                      {isSentByMe && !conversation.lastMessage.isLeaveOrRemoval &&
+                      {isSentByMe && !conversation?.lastMessage?.isLeaveOrRemoval &&
                         (!deleteForMe || deleteForEveryOne) && // !false || true
                         (deleteForMe || !deleteForEveryOne) && ( // false || !true
                           <span>
@@ -190,7 +190,7 @@ export default function SingleChatOption ({
                           </span>
                         )}
                       {/* IF THE MESSAGE IS SENT BY OTHERS! */}
-                      {!isSentByMe && !conversation.lastMessage.isLeaveOrRemoval &&
+                      {!isSentByMe && !conversation?.lastMessage?.isLeaveOrRemoval &&
                         (!deleteForMe || deleteForEveryOne) && // !false || true
                         (deleteForMe || !deleteForEveryOne) && ( // false || !true
                           <span>
@@ -218,7 +218,7 @@ export default function SingleChatOption ({
                         <>
                           {conversation?.lastMessage?.message ? (
                             <>
-                              {conversation.lastMessage.isLeaveOrRemoval ? <span className="text-slate-500">
+                              {conversation?.lastMessage?.isLeaveOrRemoval ? <span className="text-slate-500">
                                 {conversation.lastMessage.leaveOrRemovalData.userId.username.toUpperCase() + " " + conversation.lastMessage.message }
                               </span>:<>
                               {/* IF MESSAGE TYPE IS TEXT! */}

@@ -2,7 +2,7 @@ import mongoose from 'mongoose'
 
 const unreadCountSchema = new mongoose.Schema({
   conversationId: { type: mongoose.Schema.Types.ObjectId, ref: 'conversation' },
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'user', unique: true },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
   count: { type: Number, default: 0 }
 })
 
