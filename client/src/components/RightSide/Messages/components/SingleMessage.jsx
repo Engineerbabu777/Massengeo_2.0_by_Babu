@@ -5,7 +5,7 @@ import { findOtherUsers } from '../../../../utils/otherUsers'
 import { isMessageReadByOrNot } from '../../../../utils/getIsMessageReadOrNot'
 import { userDetails } from '../../../../utils/getUserDetails'
 
-const SingleMessage = ({ message }) => {
+const SingleMessage = ({ message,isAdmin=false }) => {
   // GETTING CURRENT ACTIVE USER ID!
   const mine =
     message?.senderId?._id ===
@@ -31,11 +31,11 @@ const SingleMessage = ({ message }) => {
         <>
           {mine ? (
             <>
-              <MineMessage message={message} isRead={isRead} />
+              <MineMessage message={message} isRead={isRead} isAdmin={isAdmin} />
             </>
           ) : (
             <>
-              <OtherUserMessage message={message} />
+              <OtherUserMessage message={message} isAdmin={isAdmin}/>
             </>
           )}
         </>

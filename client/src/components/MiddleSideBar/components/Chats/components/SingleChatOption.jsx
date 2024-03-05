@@ -14,6 +14,7 @@ import Avatar from '../../../../RightSide/Header/components/Avatar'
 import { IoCheckmarkDoneSharp, IoCheckmarkSharp } from 'react-icons/io5'
 import { isMessageReadByOrNot } from '../../../../../utils/getIsMessageReadOrNot'
 import { userDetails } from '../../../../../utils/getUserDetails'
+import { FaImage } from "react-icons/fa";
 
 export default function SingleChatOption ({
   conversation,
@@ -226,9 +227,9 @@ export default function SingleChatOption ({
                                 'text' && conversation?.lastMessage?.message}
                               {/* IF MESSAGE TYPE IS IMAGE! */}
                               {conversation.lastMessage.messageType ===
-                                'image' && <>An image...</>}
+                                'image' && <FaImage className="w-6 h-6 text-blue-400"/>}
                               {/* IF MESSAGE IS TYPE OF IMAGE AND TEXT! */}
-                              {conversation.lastMessage.messageType === 'image-text' && ('Text && Image')}
+                              {conversation.lastMessage.messageType === 'image-text' && <><FaImage className="w-6 h-6 text-blue-400"/><span className="">{conversation.lastMessage.message}</span></>}
                               </>}
                             </>
                           ) : (
@@ -306,7 +307,7 @@ export default function SingleChatOption ({
                               conversation?.lastMessage?.message}
                             {/* IF MESSAGE TYPE IS IMAGE! */}
                             {conversation.lastMessage.messageType ===
-                              'image' && <>An image...</>}
+                              'image' && <><FaImage className="w-6 h-6 text-blue-400"/></>}
                           </>
                         ) : (
                           <span>start a conversation</span>

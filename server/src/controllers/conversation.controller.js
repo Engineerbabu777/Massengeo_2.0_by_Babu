@@ -284,7 +284,7 @@ export const memberRemovalOrLeave = async (req, res) => {
 
     // GET FRESH DATA!
     const conversationData = await Conversation.findById(conversationId)
-      .populate('groupAdmins leavedUsers')
+      .populate('groupAdmins leavedUsers unreadCount')
       .populate({
         path: 'lastMessage',
         populate: {

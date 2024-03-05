@@ -3,12 +3,13 @@ import Avatar from '../../../Header/components/Avatar'
 import { useSelector } from 'react-redux'
 import { formatTimeAgo } from '../../../../../utils/getLastMessageTime'
 import { MdDoNotDisturb } from 'react-icons/md'
+import { FaUserShield } from "react-icons/fa";
 
-const OtherUserMessage = ({ message }) => {
+const OtherUserMessage = ({ message,isAdmin=false }) => {
   return (
     <section className='flex max-w-[75%] gap-2'>
       {/* AVATAR! */}
-      <Avatar src={message?.senderId?.avatar} sm test />
+      <Avatar src={message?.senderId?.avatar} sm test isAdmin={isAdmin} />
       <div className=''>
         <div
           className={`bg-gray-400 relative rounded-r-xl mr-auto rounded-tl-xl px-8 py-4 text-white text-xl    ${
@@ -57,6 +58,7 @@ const OtherUserMessage = ({ message }) => {
         </div>
         {/* TIME! */}
         <span className='text-gray-400 font-semibold'>
+         {isAdmin && <FaUserShield className={`text-blue-600 w-4 h-4 ${isAdmin ? 'inline-flex mr-1':'hidden'}`}/>}
           {message?.senderId?.username} {formatTimeAgo(message?.createdAt)}
         </span>
       </div>

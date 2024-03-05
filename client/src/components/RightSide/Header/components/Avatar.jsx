@@ -5,7 +5,7 @@ export default function Avatar ({
   sm = false,
   userId,
   info = false,
-  xs = false
+  xs = false,
 }) {
   const onlineUsers = useSelector(state => state?.chat?.allOnlineUsers)
 
