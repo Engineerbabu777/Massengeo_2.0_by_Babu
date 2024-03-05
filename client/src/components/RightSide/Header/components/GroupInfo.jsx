@@ -3,11 +3,13 @@ import { findMySelf, findOtherUsers } from '../../../../utils/otherUsers'
 import Avatar from './Avatar'
 import { userDetails } from '../../../../utils/getUserDetails'
 import GroupModalSettings from './GroupSettingsModal'
+import useGroup from '../../../../hooks/useGroup'
 
 const GroupInfo = ({ activeChat }) => {
   const [showFullUsers, setShowFullUsers] = React.useState(false)
 
   const [openSettings, setOpenSettings] = useState(false)
+  const { removeGroupMember } = useGroup()
 
   return (
     <>
@@ -119,7 +121,17 @@ const GroupInfo = ({ activeChat }) => {
 
       <section className='w-full flex flex-col items-center justify-center'>
         {/* BLOCK THIS USER!! */}
-        <button className='w-[95%] items-center justify-center rounded-md bg-red-500 text-white font-bold p-2 mt-12 hover:bg-red-700'>
+        <button
+          onClick={() => {
+            removeGroupMember(
+              userDetails.id,
+              activeChat._id,
+              () => {},
+              'has-left-the-group'
+            )
+          }}
+          className='w-[95%] items-center justify-center rounded-md bg-red-500 text-white font-bold p-2 mt-12 hover:bg-red-700'
+        >
           leave this group
         </button>
 
