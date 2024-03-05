@@ -7,7 +7,7 @@ const conversationSchema = new mongoose.Schema(
     users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }],
     // LAST MESSAGE!
     lastMessage: { type: mongoose.Schema.Types.ObjectId, ref: 'message' },
-    unreadCount: { type: mongoose.Schema.Types.ObjectId, ref: 'unreadcount' },
+    unreadCount: [{ type: mongoose.Schema.Types.ObjectId, ref: 'unreadcount' }],
     group: { type: Boolean, default: false },
     groupName: {
       type: String,

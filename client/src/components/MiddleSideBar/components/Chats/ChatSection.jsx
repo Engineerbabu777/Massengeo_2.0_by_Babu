@@ -7,6 +7,7 @@ import useConversation from '../../../../hooks/useConversation'
 import { useSelector } from 'react-redux'
 import { findOtherUsers } from '../../../../utils/otherUsers'
 import { socket } from '../../../RightSide/Messages/Messages'
+import { userDetails } from '../../../../utils/getUserDetails'
 
 function ChatSection ({}) {
   const [selectedSlide, setSelectedSlide] = useState(Options[0])
@@ -43,11 +44,11 @@ function ChatSection ({}) {
       <div className='mt-8 flex flex-col h-[calc(100vh-270px)] gap-4 overflow-auto no-scrollbar pb-6'>
         {conversations?.map((conversation, ind) => {
           const users = findOtherUsers(conversation.users)
-          const unreadCount =
-            conversation?.unreadCount?.userId ===
-            JSON.parse(localStorage.getItem('userData@**@user'))?.id
-              ? conversation.unreadCount?.count
-              : 0
+          const unreadCount = conversation?.unreadCount.length>0 ? conversation?.unreadCount?.filter(uc => uc?.userId.toString() === userDetails.id)[0]?.count: 0
+
+
+          // console.log({unreadCount,direct:conversation?.unreadCount?.filter(uc => uc?.userId.toString() === userDetails.id)})
+         
           const time =
             conversation?.lastMessage?.createdAt || conversation?.createdAt
 

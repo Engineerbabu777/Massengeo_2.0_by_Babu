@@ -59,7 +59,7 @@ export const sendMessage = async (req, res) => {
         conversationId,
         {
           lastMessage: newMessage,
-          unreadCount: unreadCountForThisConversation._id
+          unreadCount: [unreadCountForThisConversation._id] // BECAUSE THIS WILL BE AN ARRAY!
         },
         {
           new: true // RETURNS NEW DOC!
@@ -73,6 +73,7 @@ export const sendMessage = async (req, res) => {
     if (receiverId.length > 1) {
       // AS RECEIVER IDS ARE OF MORE THAN ONE LENGTH SO WE HAVE TO LOOP THROUGH IT!
       let allPromises = []
+      let allUnreadIdsForThatConversation = []; 
       for (let i = 0; i < receiverId.length; i++) {
         const unreadCountForThisConversation =
           await UnreadCount.findOneAndUpdate(
@@ -81,8 +82,8 @@ export const sendMessage = async (req, res) => {
               conversationId: conversationId
             },
             {
-              count: conversation?.unreadCount?.count
-                ? conversation.unreadCount.count + 1
+              count: conversation?.unreadCount?.filter(uc => uc?.userId.toString() === receiverId[i]).length
+                ? conversation.unreadCount.filter(uc => uc?.userId.toString() === receiverId[i])[0].count + 1
                 : 1
             },
             {
@@ -95,28 +96,22 @@ export const sendMessage = async (req, res) => {
 
       const allUnReads = await Promise.all(allPromises)
 
-      console.log(allUnReads)
-
-      let allConversationPromises = []
-      for (let i = 0; i < receiverId.length; i++) {
-        // UPDATE THE LAST_MESSAGE FIELD IN THE CORRESPONDING CONVERSATION DOCUMENT
-        const conversation = await Conversation.findByIdAndUpdate(
-          conversationId,
-          {
-            lastMessage: newMessage,
-            unreadCount: allUnReads[i]._id
-          },
-          {
-            new: true // RETURNS NEW DOC!
-          }
-        )
-          .populate('users lastMessage unreadCount')
-          .exec()
-
-        allConversationPromises.push(conversation)
+      for (let i = 0; i < allUnReads.length; i++) {
+        allUnreadIdsForThatConversation.push(allUnReads[i]._id);
       }
 
-      await Promise.all(allConversationPromises)
+      await Conversation.findByIdAndUpdate(
+        conversationId,
+        {
+          lastMessage: newMessage,
+          unreadCount: allUnreadIdsForThatConversation // BECAUSE THIS WILL BE AN ARRAY!
+        },
+        {
+          new: true // RETURNS NEW DOC!
+        }
+      )
+        .populate('users lastMessage unreadCount')
+        .exec()
     }
 
     // SEND A SUCCESS RESPONSE

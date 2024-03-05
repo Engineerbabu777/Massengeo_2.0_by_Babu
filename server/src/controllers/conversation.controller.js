@@ -102,6 +102,8 @@ export const fetchAllConversations = async (req, res) => {
       })
       .sort({ updatedAt: -1 })
 
+      // const newData = conversations.map(c => c.unreadCount.filter((u) => u._id.toString() === req.user._id.toString()));
+
     // RETURN A SUCCESSFUL RESPONSE WITH A STATUS OF 200 OK AND THE FETCHED CONVERSATIONS!!
     res.status(200).json({
       success: true,

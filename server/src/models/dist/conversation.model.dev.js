@@ -21,10 +21,10 @@ var conversationSchema = new _mongoose["default"].Schema({
     type: _mongoose["default"].Schema.Types.ObjectId,
     ref: 'message'
   },
-  unreadCount: {
+  unreadCount: [{
     type: _mongoose["default"].Schema.Types.ObjectId,
     ref: 'unreadcount'
-  },
+  }],
   group: {
     type: Boolean,
     "default": false
