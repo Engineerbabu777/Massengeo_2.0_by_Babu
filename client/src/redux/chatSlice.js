@@ -74,7 +74,7 @@ const chatSlice = createSlice({
       if (
         window?.location?.pathname?.split('/')[1] ===
           actions.payload.conversationId &&
-        !state.activeConversationInfo.leavedUsers.includes(
+        !state.activeConversationInfo.leavedUsers.map(user => user._id).includes(
           JSON.parse(localStorage.getItem('userData@**@user')).id
         )
       )

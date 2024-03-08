@@ -119,7 +119,7 @@ export const sendMessage = async (req, res) => {
       success: true,
       message: 'MESSAGE SENT SUCCESSFULLY!',
       updatedConversation: await Conversation.findById(conversationId)
-        .populate('users unreadCount')
+        .populate('users unreadCount leavedUsers groupAdmins')
         .populate({
           path: 'lastMessage',
           populate: 'senderId'
