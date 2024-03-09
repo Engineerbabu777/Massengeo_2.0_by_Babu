@@ -1,17 +1,19 @@
 import { MdClose, MdDelete } from 'react-icons/md'
 import { IoMdColorPalette } from 'react-icons/io'
-import { MdOutlineBorderColor } from 'react-icons/md'
 import { IoIosSend } from 'react-icons/io'
 import { useState } from 'react'
 import { IoMdImages } from 'react-icons/io'
 import { uploadImageToCloudinary } from '../../../../utils/uploadImageToCloudinary'
 import { MdFormatColorText } from "react-icons/md";
+import useStories from '../../../../hooks/useStories'
+import toast from 'react-hot-toast';
 
 export default function AddStoryModal ({ open, handleClose }) {
   const [bgColor, setBgColor] = useState('#aaa6b2')
   const [textFont, setTextFont] = useState('Arial')
   const [statusImage, setStatusImage] = useState('')
   const [textColor, setTextColor] = useState('#FFFFFF')
+  const {createStories} = useStories();
 
   const getRandomColor = () => {
     const letters = '0123456789ABCDEF'
@@ -50,12 +52,30 @@ export default function AddStoryModal ({ open, handleClose }) {
     setStatusImage(image?.secure_url)
   }
 
-  console.log({ bgColor: `${bgColor}` })
+
+  const handleSubmit = () => {
+    if(statusImage){
+      // SEND IMAGE STORY!
+      createStories("image",statusImage)
+    }else{
+      const text = document.getElementById("storyText").innerText.trim();
+      if(text.length <0 || text.length > 100){
+        toast.error("invalid character length");
+        return;
+      }
+      // SEND TEXT STORY!
+      const data = {
+        backgroundColor:bgColor,
+        fontFamily:textFont,
+        text: text,
+      }
+      createStories("text",data)
+    }
+  }
 
   return (
     <>
       <div
-        // onClick={handleClose}
         className={`bg-black/50 fixed flex items-center justify-center left-0 z-[999] right-0 top-0 bottom-0 transition-all duration-500 backdrop-blur-sm ${
           open ? ' visible opacity-1 ' : ' hidden opacity-0 '
         }`}
@@ -134,7 +154,7 @@ export default function AddStoryModal ({ open, handleClose }) {
               {statusImage && <input type="text" placeholder='Type Caption For Your Story... ' className='flex-1 px-2 py-1.5 rounded-md border-none outline-none text-gray-300 font-semibold text-lg bg-black/30 mr-1'/>}
 
               {/* BUTTON! */}
-              <button className='flex items-center hover:bg-opacity-70 justify-center h-[40px] gap-1 px-2 rounded-md text-2xl  bg-[#F05454] text-white '>
+              <button onClick={handleSubmit} className='flex items-center hover:bg-opacity-70 justify-center h-[40px] gap-1 px-2 rounded-md text-2xl  bg-[#F05454] text-white '>
                 Send <IoIosSend className='w-6 h-6' />
               </button>
             </footer>

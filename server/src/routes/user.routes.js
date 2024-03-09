@@ -35,4 +35,6 @@ routes.get('/get-all-blocked-users', authProtection, getBlockedUsers)
 
 // USER VERIFY EMAIL!
 
+// CREATE STORIES!
+// routes.post("/create-story", )
 export default routes
