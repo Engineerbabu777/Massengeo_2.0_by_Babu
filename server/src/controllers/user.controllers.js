@@ -219,3 +219,10 @@ export const getBlockedUsers = async (req, res) => {
 
 // USER VERIFY EMAIL!
 // to be include
+
+// USER STORY CREATION!
+export const userStoryCreation = async(req,res) => {
+
+}
+
+// USER STORY REMOVAL!

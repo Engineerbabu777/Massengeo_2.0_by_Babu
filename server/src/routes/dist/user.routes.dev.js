@@ -31,6 +31,8 @@ routes.put('/block-unblock-user', _userMiddleware.authProtection, _userControlle
 routes.get('/get-all-blocked-users', _userMiddleware.authProtection, _userControllers.getBlockedUsers); // USER REFRESH/ACCESS!
 // USER FORGOT PASSWORD!!
 // USER VERIFY EMAIL!
+// CREATE STORIES!
 
+routes.post("/create-story", _userMiddleware.authProtection, _userControllers.userStoryCreation);
 var _default = routes;
 exports["default"] = _default;

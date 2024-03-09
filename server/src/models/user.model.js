@@ -11,7 +11,8 @@ const userSchema = new mongoose.Schema(
         'https://w7.pngwing.com/pngs/178/595/png-transparent-user-profile-computer-icons-login-user-avatars-thumbnail.png'
     },
     about: String,
-    blockedList: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }]
+    blockedList: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }],
+    stories: [{ type: mongoose.Schema.Types.ObjectId, ref: 'story' }],
   },
   {
     timestamps: true

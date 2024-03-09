@@ -24,6 +24,10 @@ var userSchema = new _mongoose["default"].Schema({
   blockedList: [{
     type: _mongoose["default"].Schema.Types.ObjectId,
     ref: 'user'
+  }],
+  stories: [{
+    type: _mongoose["default"].Schema.Types.ObjectId,
+    ref: 'story'
   }]
 }, {
   timestamps: true

@@ -6,7 +6,8 @@ import {
   getBlockedUsers,
   loginUser,
   registerUser,
-  updateUser
+  updateUser,
+  userStoryCreation
 } from '../controllers/user.controllers.js'
 import { authProtection } from '../middlewares/user.middleware.js'
 
@@ -36,5 +37,5 @@ routes.get('/get-all-blocked-users', authProtection, getBlockedUsers)
 // USER VERIFY EMAIL!
 
 // CREATE STORIES!
-// routes.post("/create-story", )
+routes.post("/create-story", authProtection, userStoryCreation)
 export default routes
