@@ -229,15 +229,17 @@ export const userStoryCreation = async(req,res) => {
     const user = req.user; 
     const body = req.body;
 
+    console.log({body});
+
     // CREATE A NEW STORY!
     const story = await Story.create({
       storyType: body.type,
       userId: user._id,
-      statusImage: body.type === "image" ? body.statusImage : null,
-      backgroundColor:  body.type === "image" ? body.statusImage : null,
-      fontFamily: body.type === "image" ? body.statusImage : null,
-      storyText:body.type === "image" ? body.statusImage : null,
-      textColor:body.type === "image" ? body.statusImage : null,
+      statusImage: body.type === "image" ? body.data : null,
+      backgroundColor:  body.type === "text" ? body.data.backgroundColor : null,
+      fontFamily: body.type === "text" ? body.data.fontFamily : null,
+      storyText:body.type === "text" ? body.data.storyText : null,
+      textColor:body.type === "text" ? body.data.textColor : null,
     });
 
     // UPDATE THE USER STORIES!

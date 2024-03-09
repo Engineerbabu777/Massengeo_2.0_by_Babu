@@ -15,6 +15,8 @@ const userSlice = createSlice({
     userFriends: [],
     fetchingUserFriends: false,
     alreadyFetchedUserFriends: false,
+    currentUser: null,
+    loadingCurrentUser:false,
   },
   reducers: {
     fetchedUsers: (state, action) => {
@@ -24,6 +26,14 @@ const userSlice = createSlice({
     fetchingUsers: state => {
       state.loadingUsers = true
     },
+    fetchingCurrentUser: (state,action) => {
+        state.loadingCurrentUser = true;
+    },
+    fetchingCurrentUserSuccess: (state,action) => {
+         state.currentUser = action.payload;
+         state.currentUser = false;
+    },
+    
     fetchingUsersSuccess: state => {
       state.loadingUsers = false
     },

@@ -295,6 +295,11 @@ export default function useUser () {
     }
   }
 
+  // FETCH CURRENT USER INFORMATION!
+  const fetchCurrentuUserData = async () => {
+
+  }
+
   return {
     userLogin,
     userLogout,
@@ -306,6 +311,7 @@ export default function useUser () {
     findUsers,
     updateUserData,
     updateBlockUnBlockUsers,
-    fetchedAllBlockedUsers
+    fetchedAllBlockedUsers,
+    fetchCurrentuUserData
   }
 }

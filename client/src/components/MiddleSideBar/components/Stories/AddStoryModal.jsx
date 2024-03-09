@@ -67,7 +67,8 @@ export default function AddStoryModal ({ open, handleClose }) {
       const data = {
         backgroundColor:bgColor,
         fontFamily:textFont,
-        text: text,
+        storyText: text,
+        textColor:textColor
       }
       createStories("text",data)
     }
