@@ -132,7 +132,11 @@ export const fetchAllUserConversationsFriends = async (req, res) => {
       .select('users')
       .populate({
         path: 'users',
-        select: 'username avatar'
+        select: 'username avatar stories blockedList',
+        populate:[
+          {path:"stories"},
+          {path:"blockedList"}
+        ]
       })
 
     // FROM ALL CONVERSATION GET OTHER USERS IN AN ARRAY CONTAINING USERS OBJECT!

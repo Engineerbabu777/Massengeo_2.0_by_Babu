@@ -7,7 +7,10 @@ const storySchema = new mongoose.Schema({
   fontFamily: String,
   textColor: String,
   storyType: String,
-  statusImage: String
+  statusImage: String,
+},{
+  timestamps:true,
+  expireAfterSeconds:8
 })
 
 export const Story = mongoose.model('story', storySchema)

@@ -6,6 +6,7 @@ import {
   getBlockedUsers,
   loginUser,
   registerUser,
+  storyDeletion,
   updateUser,
   userStoryCreation
 } from '../controllers/user.controllers.js'
@@ -38,4 +39,7 @@ routes.get('/get-all-blocked-users', authProtection, getBlockedUsers)
 
 // CREATE STORIES!
 routes.post("/create-story", authProtection, userStoryCreation)
+// DELETE STORIES!
+routes.delete("/delete-story", authProtection, storyDeletion)
+
 export default routes

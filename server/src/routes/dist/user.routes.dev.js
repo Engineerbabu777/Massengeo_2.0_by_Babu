@@ -33,6 +33,8 @@ routes.get('/get-all-blocked-users', _userMiddleware.authProtection, _userContro
 // USER VERIFY EMAIL!
 // CREATE STORIES!
 
-routes.post("/create-story", _userMiddleware.authProtection, _userControllers.userStoryCreation);
+routes.post("/create-story", _userMiddleware.authProtection, _userControllers.userStoryCreation); // DELETE STORIES!
+
+routes["delete"]("/delete-story", _userMiddleware.authProtection, _userControllers.storyDeletion);
 var _default = routes;
 exports["default"] = _default;

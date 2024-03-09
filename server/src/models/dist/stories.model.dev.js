@@ -20,6 +20,9 @@ var storySchema = new _mongoose["default"].Schema({
   textColor: String,
   storyType: String,
   statusImage: String
+}, {
+  timestamps: true,
+  expireAfterSeconds: 8
 });
 
 var Story = _mongoose["default"].model('story', storySchema);

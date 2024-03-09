@@ -1,6 +1,7 @@
 import { User } from '../models/user.model.js'
 import * as bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import { Story } from '../models/stories.model.js'
 
 // USER REGISTRATION!
 export const registerUser = async (req, res) => {
@@ -223,6 +224,45 @@ export const getBlockedUsers = async (req, res) => {
 // USER STORY CREATION!
 export const userStoryCreation = async(req,res) => {
 
+  try {
+    
+    const user = req.user; 
+    const body = req.body;
+
+    // CREATE A NEW STORY!
+    const story = await Story.create({
+      storyType: body.type,
+      userId: user._id,
+      statusImage: body.type === "image" ? body.statusImage : null,
+      backgroundColor:  body.type === "image" ? body.statusImage : null,
+      fontFamily: body.type === "image" ? body.statusImage : null,
+      storyText:body.type === "image" ? body.statusImage : null,
+      textColor:body.type === "image" ? body.statusImage : null,
+    });
+
+    // UPDATE THE USER STORIES!
+    const updatedUser = await User.findByIdAndUpdate(user._id, {
+      $push: {stories: story._id}  
+    },{
+      upsert:true,
+      new:true,
+    }).populate("stories blockedList")
+
+    Story.createIndexes()
+
+
+    res.status(200).json({success:true,message:"Success",updatedUser});
+  } catch (error) {
+    console.log({"error creating stories ":error})
+    res.status(501).json({error:true,"message":error.message});
+  }
 }
 
 // USER STORY REMOVAL!
+export const storyDeletion = async(req,res) => {
+  try {
+    
+  } catch (error) {
+    
+  }
+}

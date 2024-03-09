@@ -14,7 +14,7 @@ const userSlice = createSlice({
     alreadyFetchedBlockedUsers: false,
     userFriends: [],
     fetchingUserFriends: false,
-    alreadyFetchedUserFriends: false
+    alreadyFetchedUserFriends: false,
   },
   reducers: {
     fetchedUsers: (state, action) => {
