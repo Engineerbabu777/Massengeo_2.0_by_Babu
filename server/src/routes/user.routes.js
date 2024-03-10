@@ -1,9 +1,9 @@
 import express from 'express'
-import { User } from '../models/user.model.js'
 import {
   blockUnblockUser,
   getAllUsers,
   getBlockedUsers,
+  loadCurrentUser,
   loginUser,
   registerUser,
   storyDeletion,
@@ -41,5 +41,7 @@ routes.get('/get-all-blocked-users', authProtection, getBlockedUsers)
 routes.post("/create-story", authProtection, userStoryCreation)
 // DELETE STORIES!
 routes.delete("/delete-story", authProtection, storyDeletion)
+// CURRENT USER DETAILS!
+routes.get("/current-user", authProtection, loadCurrentUser);
 
 export default routes

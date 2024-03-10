@@ -99,7 +99,7 @@ export default function AddStoryModal ({ open, handleClose }) {
               <div
                 id='storyText'
                 contentEditable
-                className='w-full h-full outline-none text-center flex items-center justify-center text-2xl'
+                className='w-full h-full outline-none text-center flex items-center flex-col justify-center text-2xl'
                 style={{ fontFamily: textFont,color:textColor }}
               >
                 &nbsp;

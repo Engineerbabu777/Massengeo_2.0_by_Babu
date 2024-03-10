@@ -12,15 +12,28 @@ import { useSelector } from 'react-redux'
 import SettingsPage from './pages/SettingsPage'
 import NotificationsPage from './pages/NotificationsPage'
 import FriendsPage from './pages/FriendsPage'
-
+import useUser from './hooks/useUser'
 
 //NOTE - THIS COMPONENT WILL CHECK WHETHER USER IS LOGGED OR NOT!
 const PrivateRoute = ({ element }) => {
-  //REVIEW - CHECKING IF USER IS LOGGED!!
-  const userLogged = JSON.parse(localStorage.getItem('userData@**@user'))?.id
+  //REVIEW - CHECKING IF TOKEN IS AVAILABLE!!
+  const isTokenAvailable = localStorage.getItem('token') ? true : false
+
+  const { currentUser, loadingCurrentUser } = useSelector(state => state.user)
+  const { fetchCurrentUserData } = useUser()
+
+
+  // FETCH CURRENT USER DATA!
+  useEffect(() => {
+    fetchCurrentUserData();
+  }, [])
+
+  if (loadingCurrentUser && isTokenAvailable) {
+    return <div className="flex items-center justify-center text-3xl text-[#F05454] bg-[#123] h-screen w-screen">Loading Information</div>
+  }
 
   // IF USER IS LOGGED THEN PROCEED!!
-  if (userLogged) {
+  if (isTokenAvailable && currentUser?.email) {
     return (
       <>
         <LeftSideBar />
@@ -28,8 +41,10 @@ const PrivateRoute = ({ element }) => {
         {element}
       </>
     )
-  } else {
-    // Redirect to login if user is not logged in
+  }
+
+  // THAT MEANS USER IS NOT LOGGED IN!
+  if (!isTokenAvailable && !loadingCurrentUser && !currentUser?.email) {
     return <Navigate to='/login' />
   }
 }
@@ -39,7 +54,7 @@ function App () {
     <BrowserRouter>
       <div className='flex'>
         <Toaster />
-        <Suspense>
+        <Suspense fallback={"loading all data..."}>
           <Routes>
             {/* PROTECTED PAGES! */}
             <Route path='/' element={<PrivateRoute element={<NewChat />} />} />

@@ -31,7 +31,7 @@ const userSlice = createSlice({
     },
     fetchingCurrentUserSuccess: (state,action) => {
          state.currentUser = action.payload;
-         state.currentUser = false;
+         state.loadingCurrentUser = false;
     },
     
     fetchingUsersSuccess: state => {
@@ -74,7 +74,7 @@ const userSlice = createSlice({
       state.fetchingBlockedUsers = false
     },
     fetchingUserFriends: (state, action) => {
-      state.fetchingBlockedUsers = true
+      state.fetchingUserFriends = true
     },
     fetchingUserFriendsSuccess: (state, action) => {
       state.fetchingUserFriends = false
@@ -100,6 +100,8 @@ export const {
   fetchingBlockedUsers,
   fetchingUserFriendsError,
   fetchingUserFriendsSuccess,
-  fetchingUserFriends
+  fetchingUserFriends,
+  fetchingCurrentUser,
+  fetchingCurrentUserSuccess,
 } = userSlice.actions
 export const userReducer = userSlice.reducer

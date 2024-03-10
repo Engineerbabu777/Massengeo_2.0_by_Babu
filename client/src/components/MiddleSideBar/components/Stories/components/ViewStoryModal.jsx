@@ -8,6 +8,8 @@ export default function ViewStoryModal ({ open, handleClose, data,value=10 }) {
   const [textColor, setTextColor] = useState(data?.textColor)
   const [time, setTime] = useState(value);
   
+  console.log({data})
+  
   useEffect(() => {
     const timeout = setInterval(() => {
       setTime(prev => (prev > 0 ? prev - 1 : prev));

@@ -6,9 +6,9 @@ import EachFriend from './components/EachFriend'
 
 function StoriesParent () {
   const { fetchFriendsOfUserAsPerConversations } = useConversation()
-  const { fetchingUserFriends, userFriends } = useSelector(state => state.user)
+  const { fetchingUserFriends, userFriends,currentUser,fetchingCurrentUser } = useSelector(state => state.user)
 
-  console.log({ fetchingUserFriends, userFriends })
+  console.log({ fetchingUserFriends, userFriends,currentUser })
 
   const fetchUserFriends = async () => {
     await fetchFriendsOfUserAsPerConversations()
@@ -22,7 +22,7 @@ function StoriesParent () {
     <div className='mx-auto w-[95%] mt-10 flex gap-8 no-scrollbar overflow-auto'>
       {/* OPTION TO SHARE MY STORY! */}
       {/* ADD STORY! */}
-      <AddStory addStory />
+      <AddStory user={currentUser} />
 
       {/* MAPPING OVER THE STORIES OF FRIENDS!! */}
       {userFriends?.length > 0 && userFriends?.map(user => (

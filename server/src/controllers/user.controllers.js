@@ -268,3 +268,22 @@ export const storyDeletion = async(req,res) => {
     
   }
 }
+
+
+// FETCH USER DATA!
+export const loadCurrentUser = async(req,res) => {
+  try {
+    const user = req.user;
+
+
+    const userDetails = await User.findById(user.id).populate("blockedList stories")
+    console.log(userDetails);
+
+    res.status(200).json({user:userDetails,success:true});
+    
+  } catch (error) {
+    
+    console.log({"error loading user info ":error})
+    res.status(501).json({error:true,"message":error.message});
+  }
+}

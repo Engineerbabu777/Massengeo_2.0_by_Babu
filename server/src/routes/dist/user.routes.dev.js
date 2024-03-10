@@ -7,8 +7,6 @@ exports["default"] = void 0;
 
 var _express = _interopRequireDefault(require("express"));
 
-var _userModel = require("../models/user.model.js");
-
 var _userControllers = require("../controllers/user.controllers.js");
 
 var _userMiddleware = require("../middlewares/user.middleware.js");
@@ -35,6 +33,8 @@ routes.get('/get-all-blocked-users', _userMiddleware.authProtection, _userContro
 
 routes.post("/create-story", _userMiddleware.authProtection, _userControllers.userStoryCreation); // DELETE STORIES!
 
-routes["delete"]("/delete-story", _userMiddleware.authProtection, _userControllers.storyDeletion);
+routes["delete"]("/delete-story", _userMiddleware.authProtection, _userControllers.storyDeletion); // CURRENT USER DETAILS!
+
+routes.get("/current-user", _userMiddleware.authProtection, _userControllers.loadCurrentUser);
 var _default = routes;
 exports["default"] = _default;

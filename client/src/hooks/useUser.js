@@ -6,6 +6,8 @@ import {
   fetchedSearchUsers,
   fetchedUsers,
   fetchingBlockedUsers,
+  fetchingCurrentUser,
+  fetchingCurrentUserSuccess,
   fetchingSearchUsers,
   fetchingUsers,
   fetchingUsersSuccess,
@@ -284,7 +286,9 @@ export default function useUser () {
 
       if (data.success) {
         // SETTING STATE BACK TO DEFAULT!
-        dispatch(fetchedAllBlockedUsersSuccess(data.blockedListUsers.blockedList))
+        dispatch(
+          fetchedAllBlockedUsersSuccess(data.blockedListUsers.blockedList)
+        )
         toast.success('User blocked successfully!') // SHOWING THE TOAST ERROR!
       }
     } catch (error) {
@@ -296,8 +300,37 @@ export default function useUser () {
   }
 
   // FETCH CURRENT USER INFORMATION!
-  const fetchCurrentuUserData = async () => {
+  const fetchCurrentUserData = async () => {
+    try {
 
+      dispatch(fetchingCurrentUser());
+
+      console.log(1)
+
+      const response = await fetch(
+        'http://localhost:4444/api/v1/user/current-user',
+        {
+          method: 'GET',
+          headers: {
+            authorization: localStorage.getItem('token')
+          }
+        }
+      ).then(res => res.json())
+
+      console.log(2)
+
+      console.log({response})
+
+      if (response?.error) throw new Error(response.message)
+
+      console.log({response})
+
+      dispatch(fetchingCurrentUserSuccess(response.user));
+
+      // PASS DATA TO STATE!
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return {
@@ -312,6 +345,6 @@ export default function useUser () {
     updateUserData,
     updateBlockUnBlockUsers,
     fetchedAllBlockedUsers,
-    fetchCurrentuUserData
+    fetchCurrentUserData
   }
 }
