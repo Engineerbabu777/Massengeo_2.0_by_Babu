@@ -238,7 +238,7 @@ export const userStoryCreation = async(req,res) => {
       statusImage: body.type === "image" ? body.data : null,
       backgroundColor:  body.type === "text" ? body.data.backgroundColor : null,
       fontFamily: body.type === "text" ? body.data.fontFamily : null,
-      storyText:body.type === "text" ? body.data.storyText : null,
+      storyText:body.type === "text" ? body.data.storyText : body.data.text ? body.data.text : null,
       textColor:body.type === "text" ? body.data.textColor : null,
     });
 

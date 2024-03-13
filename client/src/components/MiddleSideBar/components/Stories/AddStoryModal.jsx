@@ -55,8 +55,9 @@ export default function AddStoryModal ({ open, handleClose }) {
 
   const handleSubmit = () => {
     if(statusImage){
+      const text = document.getElementById("caption").innerText.trim();
       // SEND IMAGE STORY!
-      createStories("image",statusImage)
+      createStories("image",{statusImage,text})
     }else{
       const text = document.getElementById("storyText").innerText.trim();
       if(text.length <0 || text.length > 100){
@@ -70,7 +71,7 @@ export default function AddStoryModal ({ open, handleClose }) {
         storyText: text,
         textColor:textColor
       }
-      createStories("text",data)
+      createStories("text",data,handleClose)
     }
   }
 
@@ -147,7 +148,7 @@ export default function AddStoryModal ({ open, handleClose }) {
                 </div>
                 <label className='h-10 w-10 rounded-full bg-white/50 hover:bg-white/70 cursor-pointer flex items-center justify-center '>
                   <IoMdImages className='w-8 h-8 text-[#F05454]' />
-                  <input type='file' className='hidden' onChange={getImage} />
+                  <input type='file' className='hidden' onChange={getImage} id={"caption"} />
                 </label>
               </section>}
 

@@ -5,10 +5,11 @@ import {
 import { userDetails } from '../utils/getUserDetails'
 import { useDispatch } from 'react-redux'
 import { socket } from '../components/RightSide/Messages/Messages'
+import toast from 'react-hot-toast';
 
 export default function useStories () {
   const dispatch = useDispatch()
-  const createStories = async (type, data) => {
+  const createStories = async (type, data,closeModal) => {
     // STORY DATA: { storyText: "story", fontFamily: "Helvetica", backgroundColor: "red", textColor: "white"};
     try {
       const response = await fetch(
@@ -40,6 +41,11 @@ export default function useStories () {
         updatedUser: response.updatedUser,
         _id: response?.updatedUser?._id
       })
+
+      if(response?.success){
+        toast.success("Stories updated successfully")
+      }
+      closeModal();
 
     } catch (error) {
       console.log({ error })

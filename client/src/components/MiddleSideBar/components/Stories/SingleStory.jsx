@@ -10,7 +10,7 @@ function SingleStory ({ user }) {
 
   return (
     <>
-    {viewStory &&  <ViewStoryModal handleClose={handleToggle} open={viewStory} data={user?.stories[0]}/>}
+    {viewStory &&  <ViewStoryModal handleClose={handleToggle} open={viewStory} data={user?.stories[0]} userData={user}/>}
       <div onClick={handleToggle} className='min-w-16 min-h-16 w-16 h-16 border-2 border-[#F05454] rounded-full bg-blue-600/40 overflow-hidden flex items-center justify-center cursor-pointer hover:border-green-500 duration-500 transition-all'>
         <img
         data-twe-lazy-load-init
