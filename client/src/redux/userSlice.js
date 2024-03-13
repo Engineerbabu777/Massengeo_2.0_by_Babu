@@ -16,7 +16,7 @@ const userSlice = createSlice({
     fetchingUserFriends: false,
     alreadyFetchedUserFriends: false,
     currentUser: null,
-    loadingCurrentUser:false,
+    loadingCurrentUser: false
   },
   reducers: {
     fetchedUsers: (state, action) => {
@@ -26,14 +26,14 @@ const userSlice = createSlice({
     fetchingUsers: state => {
       state.loadingUsers = true
     },
-    fetchingCurrentUser: (state,action) => {
-        state.loadingCurrentUser = true;
+    fetchingCurrentUser: (state, action) => {
+      state.loadingCurrentUser = true
     },
-    fetchingCurrentUserSuccess: (state,action) => {
-         state.currentUser = action.payload;
-         state.loadingCurrentUser = false;
+    fetchingCurrentUserSuccess: (state, action) => {
+      state.currentUser = action.payload
+      state.loadingCurrentUser = false
     },
-    
+
     fetchingUsersSuccess: state => {
       state.loadingUsers = false
     },
@@ -83,6 +83,16 @@ const userSlice = createSlice({
     },
     fetchingUserFriendsError: (state, action) => {
       state.fetchingUserFriends = false
+    },
+    updateUserStoriesInRealtime: (state, action) => {
+      // IF USER IS AVAILABLE IN ITS FRIEND LIST OBNLY THEN UPDATE IT!
+      state.userFriends = state.userFriends.map(user => {
+        if (user._id === action.payload._id) {
+          return action.payload.updatedUser
+        } else {
+          return user
+        }
+      })
     }
   }
 })
@@ -103,5 +113,6 @@ export const {
   fetchingUserFriends,
   fetchingCurrentUser,
   fetchingCurrentUserSuccess,
+  updateUserStoriesInRealtime
 } = userSlice.actions
 export const userReducer = userSlice.reducer

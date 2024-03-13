@@ -1,6 +1,13 @@
+import {
+  fetchingCurrentUserSuccess,
+  updateUserStoriesInRealtime
+} from '../redux/userSlice'
 import { userDetails } from '../utils/getUserDetails'
+import { useDispatch } from 'react-redux'
+import { socket } from '../components/RightSide/Messages/Messages'
 
 export default function useStories () {
+  const dispatch = useDispatch()
   const createStories = async (type, data) => {
     // STORY DATA: { storyText: "story", fontFamily: "Helvetica", backgroundColor: "red", textColor: "white"};
     try {
@@ -20,11 +27,20 @@ export default function useStories () {
 
       console.log({ response })
 
-      // !TODO:
-      // send back the updated user to the client!
-      // update the user friends data with new data!
-      // also update the user conversations !OR
-      // find all conversations and update this user in that conversations of single chats!
+      dispatch(
+        updateUserStoriesInRealtime({
+          updatedUser: response.updatedUser,
+          _id: response?.updatedUser?._id
+        })
+      )
+
+      dispatch(fetchingCurrentUserSuccess(response.updatedUser))
+
+      socket.emit('user-updated-story', {
+        updatedUser: response.updatedUser,
+        _id: response?.updatedUser?._id
+      })
+
     } catch (error) {
       console.log({ error })
     }

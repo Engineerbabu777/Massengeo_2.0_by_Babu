@@ -13,7 +13,6 @@ function AddStory ({ user }) {
 
   const handleToggle = () => setViewStory(!viewStory)
 
-  console.log(user)
 
   return (
     <>

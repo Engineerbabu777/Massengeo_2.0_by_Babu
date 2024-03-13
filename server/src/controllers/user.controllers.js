@@ -250,9 +250,6 @@ export const userStoryCreation = async(req,res) => {
       new:true,
     }).populate("stories blockedList")
 
-    Story.createIndexes()
-
-
     res.status(200).json({success:true,message:"Success",updatedUser});
   } catch (error) {
     console.log({"error creating stories ":error})

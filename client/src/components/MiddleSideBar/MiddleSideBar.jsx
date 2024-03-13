@@ -30,6 +30,7 @@ import SingleSettingsOption from './components/Settings/components/SingleOption'
 import { updateActiveSettingState } from '../../redux/settingSlice'
 import { userDetails } from '../../utils/getUserDetails'
 import { findMySelf } from '../../utils/otherUsers'
+import { updateUserStoriesInRealtime } from '../../redux/userSlice'
 
 export default function MiddleSideBar () {
   const sidebarState = useSelector(state => state.sidebar.active)
@@ -169,6 +170,13 @@ console.log(data);
     socket.on('update-users-typing', ({ userTypingWithMessages, clientId }) => {
       if (clientId !== socket.id) {
         dispatch(updateUsersTyping(userTypingWithMessages))
+      }
+    })
+
+    // HANDLING USER STORIES!
+    socket.on('update-story', ({clientId, updatedUser,_id}) => {
+      if (clientId !== socket.id) {
+        dispatch(updateUserStoriesInRealtime({updatedUser,_id}))
       }
     })
 

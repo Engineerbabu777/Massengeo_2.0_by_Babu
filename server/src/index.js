@@ -153,6 +153,11 @@ socket.on('connection', client => {
     })
   })
 
+  // USER UPDATED HIS STORIES!!
+  client.on('user-updated-story', data => {
+    socket.emit('update-story', {...data,clientId:client.id})
+  })
+
   // ON USER DISCONNECTED!
   client.on('disconnect', data => {
     console.log('user disconnected')
