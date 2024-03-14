@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { FaArrowLeftLong } from 'react-icons/fa6'
 import Avatar from '../../../../RightSide/Header/components/Avatar'
 import moment from 'moment'
+import { IoIosArrowUp } from "react-icons/io";
 
 export default function ViewStoryModal ({
   open,
@@ -18,6 +19,7 @@ export default function ViewStoryModal ({
   const [textColor, setTextColor] = useState(data?.textColor)
   const [time, setTime] = useState(value)
   const [percentage, setPercentage] = useState(0);
+  const [isReplyModeOpen, setIsReplyModeOpen] = useState(false);
 
   useEffect(() => {
     const timeout = setInterval(() => {
@@ -98,7 +100,10 @@ export default function ViewStoryModal ({
             )}
 
             {/* FOOTER! */}
-            <footer className='flex items-center justify-between px-2 p-2 absolute bottom-0 left-0 right-0 '></footer>
+            <footer className='flex text-red-500 bg-white-20 text-xl items-center justify-center px-2 p-2 absolute bottom-0 left-0 right-0 w-full flex flex-col'>
+              {/* <IoIosArrowUp className="h-5 w-5 text-black"/> */}
+              <span className="text-gray-500 bg-white/60 px-4 py-2 text-sm font-semibold italic  rounded-full hover:bg-white cursor-pointer">Reply to {userData?.username}</span>
+            </footer>
           </section>
         )}
       </div>
