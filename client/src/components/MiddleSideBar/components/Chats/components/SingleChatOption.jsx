@@ -243,12 +243,12 @@ export default function SingleChatOption ({
                                     'text' &&
                                     conversation?.lastMessage?.message}
                                   {/* IF MESSAGE TYPE IS IMAGE! */}
-                                  {conversation.lastMessage.messageType ===
+                                  {conversation?.lastMessage?.messageType ===
                                     'image' && (
                                     <FaImage className='w-6 h-6 text-blue-400' />
                                   )}
                                   {/* IF MESSAGE IS TYPE OF IMAGE AND TEXT! */}
-                                  {conversation.lastMessage.messageType ===
+                                  {conversation?.lastMessage?.messageType ===
                                     'image-text' && (
                                     <>
                                       <FaImage className='w-6 h-6 text-blue-400' />
@@ -334,9 +334,10 @@ export default function SingleChatOption ({
                             {conversation.lastMessage.messageType ===
                               'text' && (
                               <>
-                                {conversation?.lastMessage?.isStoryReply && !isSentByMe && ( // ONLY SHOW TO THAT USER WHOSE STORY WE MESSAGED!
-                                  <SiSinglestore className='text-neutral-500 w-5 h-5' />
-                                )}
+                                {conversation?.lastMessage?.isStoryReply &&
+                                  !isSentByMe && ( // ONLY SHOW TO THAT USER WHOSE STORY WE MESSAGED!
+                                    <SiSinglestore className='text-neutral-500 w-5 h-5' />
+                                  )}
                                 {conversation?.lastMessage?.message}
                               </>
                             )}
@@ -345,6 +346,15 @@ export default function SingleChatOption ({
                               'image' && (
                               <>
                                 <FaImage className='w-6 h-6 text-blue-400' />
+                              </>
+                            )}
+                            {conversation.lastMessage.messageType ===
+                              'image-text' && (
+                              <>
+                                <FaImage className='w-6 h-6 text-blue-400' />
+                                <span className=''>
+                                  {conversation.lastMessage.message}
+                                </span>
                               </>
                             )}
                           </>

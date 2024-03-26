@@ -5,8 +5,13 @@ import { formatTimeAgo } from '../../../../../utils/getLastMessageTime'
 import { MdDoNotDisturb } from 'react-icons/md'
 import { FaReplyAll, FaShieldHeart } from 'react-icons/fa6'
 import { GoDotFill } from 'react-icons/go'
+import { findOtherUsers } from '../../../../../utils/otherUsers'
+
 
 const OtherUserMessage = ({ message, isAdmin = false }) => {
+
+  const {activeConversationInfo} = useSelector(state => state.chat);
+
   return (
     <section className='flex max-w-[75%] gap-2'>
       {/* AVATAR! */}
@@ -61,8 +66,7 @@ const OtherUserMessage = ({ message, isAdmin = false }) => {
                       <div className='flex gap-6 flex-col h-[100px] p-2 '>
                         <p className='flex items-center gap-2 text-purple-700 font-semibold'>
                           <FaReplyAll className='w-4 h-4' />
-                          Engineer Babu <GoDotFill className=' w-2 h-2' />{' '}
-                          Status
+                          {message.storyId.userId.username}{" "} <GoDotFill className=" w-2 h-2" />{" "} Status
                         </p>
                         <p className=' text-gray-600 w-[400px] truncate'>
                           {message?.storyId?.storyText ||
@@ -100,8 +104,7 @@ const OtherUserMessage = ({ message, isAdmin = false }) => {
                       <div className='flex gap-6 flex-col h-[100px] p-2 '>
                         <p className='flex items-center gap-2 text-purple-700 font-semibold'>
                           <FaReplyAll className='w-4 h-4' />
-                          Engineer Babu <GoDotFill className=' w-2 h-2' />{' '}
-                          Status
+                          {message.storyId.userId.username}{" "} <GoDotFill className=" w-2 h-2" />{" "} Status
                         </p>
                         <p className=' text-gray-600 w-[400px] truncate'>
                           {message?.storyId?.storyText ||

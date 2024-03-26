@@ -12,10 +12,13 @@ import { IoCheckmarkSharp } from 'react-icons/io5'
 import { FaShieldHeart } from 'react-icons/fa6'
 import { FaReplyAll } from 'react-icons/fa'
 import { GoDotFill } from 'react-icons/go'
+import { useSelector } from 'react-redux'
+import { findOtherUsers } from '../../../../../utils/otherUsers'
 
 const MineMessage = ({ message, isRead, isAdmin = false }) => {
   // RETRIEVE USER DATA FROM LOCAL STORAGE
   const me = JSON.parse(localStorage.getItem('userData@**@user'))
+  const { activeConversationInfo } = useSelector(state => state.chat)
   const dispatch = useDispatch()
   // HANDLE MENU!!
   const [showMenu, setShowMenu] = React.useState(false)
@@ -143,9 +146,13 @@ const MineMessage = ({ message, isRead, isAdmin = false }) => {
                       <div className='flex gap-6 flex-col h-[100px] p-2 '>
                         <p className='flex items-center gap-2 text-purple-700 font-semibold'>
                           <FaReplyAll className='w-4 h-4' />
-                          Engineer Babu{" "} <GoDotFill className=" w-2 h-2" />{" "} Status
+                          {message.storyId.userId.username}{' '}
+                          <GoDotFill className=' w-2 h-2' /> Status
                         </p>
-                        <p className=' text-gray-600 w-[400px] truncate'>{message?.storyId?.storyText || "diummeyguh hsduhg ajhsbghb jahsbh jhsadbv"}</p>
+                        <p className=' text-gray-600 w-[400px] truncate'>
+                          {message?.storyId?.storyText ||
+                            'diummeyguh hsduhg ajhsbghb jahsbh jhsadbv'}
+                        </p>
                       </div>
                       <img
                         data-twe-lazy-load-init
@@ -153,6 +160,38 @@ const MineMessage = ({ message, isRead, isAdmin = false }) => {
                         className='w-[150px] h-[100px] rounded-md overflow-hidden'
                         alt='text'
                       />
+                    </div>
+                  )}
+                  <p className='text-white bg-[#DC4242] items-center absolute bottom-0 left-0 right-0 p-4 pl-8'>
+                    {message.message}
+                  </p>
+                </>
+              )}
+            </>
+          )}
+
+          {message?.messageType === 'text' && message.isStoryReply && (
+            <>
+              {message?.deleteForMe || message?.deleteForEveryOne ? (
+                <p className='text-gray-800 flex gap-2 items-center'>
+                  <MdDoNotDisturb className='h-6 w-6' />
+                  you deleted this message{' '}
+                </p>
+              ) : (
+                <>
+                  {message?.storyId?.storyType === 'text' && (
+                    <div className='flex-1 flex w-full h-[100px] flex-row border-l-4 border-blue-200 gap-2 mb-14'>
+                      <div className='flex gap-6 flex-col h-[100px] p-2 '>
+                        <p className='flex items-center gap-2 text-purple-700 font-semibold'>
+                          <FaReplyAll className='w-4 h-4' />
+                          {message.storyId.userId.username}{' '}
+                          <GoDotFill className=' w-2 h-2' /> Status
+                        </p>
+                        <p className=' text-gray-600 w-[400px] truncate'>
+                          {message?.storyId?.storyText ||
+                            'diummeyguh hsduhg ajhsbghb jahsbh jhsadbv'}
+                        </p>
+                      </div>
                     </div>
                   )}
                   <p className='text-white bg-[#DC4242] items-center absolute bottom-0 left-0 right-0 p-4 pl-8'>

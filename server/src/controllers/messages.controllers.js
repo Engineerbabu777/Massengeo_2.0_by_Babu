@@ -129,7 +129,9 @@ export const sendMessage = async (req, res) => {
           populate: 'senderId storyId'
         }),
       newMessage: await Message.findById(newMessage._id)
-        .populate('senderId storyId')
+        .populate('senderId')
+        .populate({path:'storyId',
+    populate:'userId'})
         .exec()
     })
     // SEND RESPONSE BACK!
@@ -164,6 +166,8 @@ export const fetchAllMessages = async (req, res) => {
       conversationId,
       message_accessed_by: { $in: user._id }
     }).populate('senderId storyId')
+    .populate({path:'storyId',
+    populate:'userId'})
     .populate({path:'leaveOrRemovalData.userId',model:'user',select:'username avatar email'})
 
     // SEND A SUCCESS RESPONSE WITH THE FETCHED MESSAGES
