@@ -9,9 +9,11 @@ import useMessages from '../../../../../hooks/useMessages'
 import { MdDoNotDisturb } from 'react-icons/md'
 import { IoCheckmarkSharp } from 'react-icons/io5'
 // import { FaUserShield } from 'react-icons/fa6'
-import { FaShieldHeart } from "react-icons/fa6";
+import { FaShieldHeart } from 'react-icons/fa6'
+import { FaReplyAll } from 'react-icons/fa'
+import { GoDotFill } from 'react-icons/go'
 
-const MineMessage = ({ message, isRead,isAdmin=false }) => {
+const MineMessage = ({ message, isRead, isAdmin = false }) => {
   // RETRIEVE USER DATA FROM LOCAL STORAGE
   const me = JSON.parse(localStorage.getItem('userData@**@user'))
   const dispatch = useDispatch()
@@ -67,7 +69,11 @@ const MineMessage = ({ message, isRead,isAdmin=false }) => {
         {/* MESSAGE BUBBLE WITH BACKGROUND COLOR, ROUNDED CORNERS, AND STYLING */}
         <div
           className={`${
-            message?.messageType === 'image' ? 'bg-transparent border-2 border-white' : message?.messageType === 'text' ? 'bg-[#F05454]' : "bg-transparent border-2 border-white !p-2"
+            message?.messageType === 'image'
+              ? 'bg-transparent border-2 border-white'
+              : message?.messageType === 'text'
+              ? 'bg-[#F05454]'
+              : 'bg-transparent border-2 border-white !p-2'
           } rounded-l-xl  rounded-tr-xl px-8 py-4 text-white text-xl cursor-pointer relative overflow-hidden ${
             message?.deleteForMe || message.deleteForEveryOne ? 'italic' : null
           }`}
@@ -78,7 +84,7 @@ const MineMessage = ({ message, isRead,isAdmin=false }) => {
           }}
         >
           {/* DISPLAY THE MESSAGE TEXT */}
-          {message?.messageType === 'text' && (
+          {message?.messageType === 'text' && !message.isStoryReply && (
             <>
               {message?.deleteForMe || message?.deleteForEveryOne ? (
                 <p className='text-gray-800 flex gap-2 items-center'>
@@ -91,7 +97,7 @@ const MineMessage = ({ message, isRead,isAdmin=false }) => {
             </>
           )}
           {/* FOR DISPLAYING IMAGES! */}
-          {message?.messageType === 'image' && (
+          {message?.messageType === 'image' && !message.isStoryReply && (
             <>
               {message?.deleteForMe || message?.deleteForEveryOne ? (
                 <p className='text-gray-800 flex gap-2 items-center'>
@@ -104,27 +110,77 @@ const MineMessage = ({ message, isRead,isAdmin=false }) => {
             </>
           )}
           {/* FOR DISPLAYING IMAGE AND TEXT TOGETHER! */}
-          {message?.messageType === 'image-text' && (<>
-            {message?.deleteForMe || message?.deleteForEveryOne ? (
+          {message?.messageType === 'image-text' && (
+            <>
+              {message?.deleteForMe || message?.deleteForEveryOne ? (
                 <p className='text-gray-800 flex gap-2 items-center'>
                   <MdDoNotDisturb className='h-6 w-6' />
                   you deleted this message{' '}
                 </p>
-              ) : (<>
-                <img className='' src={message?.image} alt={'alt-img-text'} />
-                <p className='text-white bg-[#F05454] items-center absolute bottom-0 left-0 right-0 p-4'>
-                  {message.message}
-                </p>           
-            </>
+              ) : (
+                <>
+                  <img className='' src={message?.image} alt={'alt-img-text'} />
+                  <p className='text-white bg-[#F05454] items-center absolute bottom-0 left-0 right-0 p-4'>
+                    {message.message}
+                  </p>
+                </>
               )}
-          </>)}
+            </>
+          )}
+
+          {/* FOR DISPLAYING TEXT REPLIES ON STORIES! */}
+          {message?.messageType === 'text' && message.isStoryReply && (
+            <>
+              {message?.deleteForMe || message?.deleteForEveryOne ? (
+                <p className='text-gray-800 flex gap-2 items-center'>
+                  <MdDoNotDisturb className='h-6 w-6' />
+                  you deleted this message{' '}
+                </p>
+              ) : (
+                <>
+                  {/* <span className='text-gray-300 text-sm'>reply sent</span> */}
+                  {message?.storyId?.storyType === 'image' && (
+                    <div className='flex-1 flex w-full h-[100px] flex-row border-l-4 border-blue-200 gap-2 mb-14'>
+                      {/* {message?.storyId?.storyText && (
+                        <p className='w-full p-2 rounded-b-md flex items-center justify-between p-1 bg-black/80 text-gray-400 font-semibold z-[999]'>
+                          {message?.storyId?.storyText}
+                        </p>
+                      )} */}
+                      <div className='flex gap-6 flex-col h-[100px] p-2 '>
+                        <p className='flex items-center gap-2 text-purple-700 font-semibold'>
+                          <FaReplyAll className='w-4 h-4' />
+                          Engineer Babu{" "} <GoDotFill className=" w-2 h-2" />{" "} Status
+                        </p>
+                        <p className=' text-gray-600 w-[400px] truncate'>{message?.storyId?.storyText || "diummeyguh hsduhg ajhsbghb jahsbh jhsadbv"}</p>
+                      </div>
+                      <img
+                        data-twe-lazy-load-init
+                        src={message?.storyId?.statusImage}
+                        className='w-[150px] h-[100px] rounded-md overflow-hidden'
+                        alt='text'
+                      />
+                    </div>
+                  )}
+                  <p className='text-white bg-[#DC4242] items-center absolute bottom-0 left-0 right-0 p-4'>
+                    {message.message}
+                  </p>
+                </>
+              )}
+            </>
+          )}
         </div>
 
         {/* TIME AND READ STATUS OF THE MESSAGE */}
         {/* TIME AND READ STATUS DISPLAYED AT THE BOTTOM RIGHT OF THE MESSAGE */}
         <span className='text-gray-400 font-semibold text-right flex gap-1 justify-end'>
           {/* DISPLAY SENDER'S USERNAME AND TIME SINCE THE MESSAGE WAS CREATED */}
-         {isAdmin && <FaShieldHeart className={`text-blue-600 w-3 h-3 ${isAdmin ? 'inline-flex mr-1':'hidden'}`}/>}
+          {isAdmin && (
+            <FaShieldHeart
+              className={`text-blue-600 w-3 h-3 ${
+                isAdmin ? 'inline-flex mr-1' : 'hidden'
+              }`}
+            />
+          )}
           {me?.username} {formatTimeAgo(message?.createdAt)}
           {/* CHECKMARK ICON INDICATING WHETHER THE MESSAGE HAS BEEN READ */}
           {/* DOUBLE TICK FOR MESSAGE DELIVERY AS WELL SEEN OR NOT SEEN! */}

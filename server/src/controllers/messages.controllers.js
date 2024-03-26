@@ -126,7 +126,7 @@ export const sendMessage = async (req, res) => {
         .populate('users unreadCount leavedUsers groupAdmins')
         .populate({
           path: 'lastMessage',
-          populate: 'senderId'
+          populate: 'senderId storyId'
         }),
       newMessage: await Message.findById(newMessage._id)
         .populate('senderId storyId')
@@ -163,7 +163,7 @@ export const fetchAllMessages = async (req, res) => {
     const messages = await Message.find({
       conversationId,
       message_accessed_by: { $in: user._id }
-    }).populate('senderId')
+    }).populate('senderId storyId')
     .populate({path:'leaveOrRemovalData.userId',model:'user',select:'username avatar email'})
 
     // SEND A SUCCESS RESPONSE WITH THE FETCHED MESSAGES

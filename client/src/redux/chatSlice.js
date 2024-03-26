@@ -61,7 +61,10 @@ const chatSlice = createSlice({
             JSON.parse(localStorage.getItem('userData@**@user')).id
         ) {
           // WHEN NEW MESSAGE RECEIVED PLAY THE NOTIFICATION!
-          document.getElementById('btnClick').click()
+
+          if (!actions.payload.lastMessage.isStoryReply) {
+            document.getElementById('btnClick').click()
+          }
         }
         state.conversations = [
           actions.payload,
@@ -74,9 +77,9 @@ const chatSlice = createSlice({
       if (
         window?.location?.pathname?.split('/')[1] ===
           actions.payload.conversationId &&
-        !state.activeConversationInfo.leavedUsers.map(user => user._id).includes(
-          JSON.parse(localStorage.getItem('userData@**@user')).id
-        )
+        !state.activeConversationInfo.leavedUsers
+          .map(user => user._id)
+          .includes(JSON.parse(localStorage.getItem('userData@**@user')).id)
       )
         state.activeUserMessages = [
           ...state.activeUserMessages,

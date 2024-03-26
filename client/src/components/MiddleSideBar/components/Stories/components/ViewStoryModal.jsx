@@ -154,7 +154,7 @@ export default function ViewStoryModal ({
                     <input
                       type='text'
                       placeholder='Type a reply...'
-                      className='flex-1 px-2 py-1 bg-black/50 rounded-md w-full border-none outline-none text-white font-semibold text-lg'
+                      className='flex-1 px-2 py-1 bg-black/50 rounded-md w-full border-gray-300 border outline-none text-white font-semibold text-lg'
                       value={storyReply}
                       onChange={handleChange}
                     />
