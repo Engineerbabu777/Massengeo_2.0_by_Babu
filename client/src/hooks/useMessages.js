@@ -22,9 +22,10 @@ export default function useMessages () {
     state => state.chat.activeConversationInfo
   )
 
-  const sendMessages = async (messageType, message, conversationId, isStoryReply) => {
+  const sendMessages = async (messageType, message, conversationId, storyData) => {
 
-    console.log(messageType, message, conversationId, isStoryReply)
+    // console.log(messageType, message, conversationId, isStoryReply)
+
     // return;
     // FOR NOW!
     // TYPE = TEXT!
@@ -51,7 +52,7 @@ export default function useMessages () {
             messageType,
             conversationId,
             receiverId: receiverIDS, // ALL IDS IN AN ARRAY!!
-            isStoryReply
+            storyData: storyData,
           })
         }
       ).then(resp => resp.json())

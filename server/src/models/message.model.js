@@ -8,7 +8,10 @@ const messageSchema = new mongoose.Schema(
     // MESSAGE BODY WHATEVER IT IS!
     message: { type: String, required: true },
     // MESSAGE TYPE WHATEVER (TEXT, IMAGE, FILE)!
-    messageType: { type: String, enum: ['text', 'image', 'file','image-text'] },
+    messageType: {
+      type: String,
+      enum: ['text', 'image', 'file', 'image-text']
+    },
     // SEEN USER IDS!
     seenBy: [String],
     // CONVERSATION ID!
@@ -16,7 +19,7 @@ const messageSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'conversation'
     },
-    image:{type:String},
+    image: { type: String },
     // IS THE MESSAGE IS EDITED!
     isEdited: { type: Boolean, default: false },
     // CHECK THE DELIVERY STATUS OF MESSAGE!
@@ -28,13 +31,17 @@ const messageSchema = new mongoose.Schema(
     // MESSAGE DELETED OPTIONS!
     deleteForMe: { type: Boolean, default: false },
     deleteForEveryOne: { type: Boolean, default: false },
-    message_accessed_by: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }],
+    message_accessed_by: [
+      { type: mongoose.Schema.Types.ObjectId, ref: 'user' }
+    ],
     // REMOVAL MESSAGE / LEAVE MESSAGE,
-    isLeaveOrRemoval:{type:Boolean,default:false},
-    leaveOrRemovalData:{
-      userId:{ type: mongoose.Schema.Types.ObjectId, ref: 'user' },
+    isLeaveOrRemoval: { type: Boolean, default: false },
+    leaveOrRemovalData: {
+      userId: { type: mongoose.Schema.Types.ObjectId, ref: 'user' },
       removalType: String
-    }
+    },
+    storyId: { type: mongoose.Schema.Types.ObjectId, ref: 'story' },
+    isStoryReply: { type: Boolean, default: false }
   },
   {
     timestamps: true

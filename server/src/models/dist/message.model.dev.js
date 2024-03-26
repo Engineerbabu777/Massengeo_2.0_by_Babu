@@ -77,6 +77,14 @@ var messageSchema = new _mongoose["default"].Schema({
       ref: 'user'
     },
     removalType: String
+  },
+  storyId: {
+    type: _mongoose["default"].Schema.Types.ObjectId,
+    ref: 'story'
+  },
+  isStoryReply: {
+    type: Boolean,
+    "default": false
   }
 }, {
   timestamps: true

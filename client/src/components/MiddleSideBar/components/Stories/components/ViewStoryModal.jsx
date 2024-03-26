@@ -50,7 +50,11 @@ export default function ViewStoryModal ({
   }
 
   const handleSendReply = async() => {
-    await sendMessages("text", storyReply,conversationId,true)
+    const storyData = {
+      isStoryReply: true,
+      _id:data?._id,
+    }
+    await sendMessages("text", storyData,conversationId,true)
   }
 
   return (

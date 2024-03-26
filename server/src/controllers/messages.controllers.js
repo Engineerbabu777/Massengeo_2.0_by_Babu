@@ -9,7 +9,9 @@ export const sendMessage = async (req, res) => {
   try {
     // EXTRACT USER, MESSAGE, CONVERSATION_ID, AND MESSAGE_TYPE FROM THE REQUEST BODY
     const user = req.user
-    const { message, conversationId, messageType, receiverId } = req.body
+    const { message, conversationId, messageType, receiverId,storyData } = req.body;
+
+    console.log({b:req.body});
 
     // Checks if user is online then marked delivered as true else false
     const isDelivered = Object.values(onlineUsers).includes(receiverId[0])
@@ -30,6 +32,8 @@ export const sendMessage = async (req, res) => {
       receiverId: receiverId, // ARRAY OF RECEIVER IDS!
       isGroupMessage: receiverId.length > 1 ? true : false,
       message_accessed_by: [...receiverId,req.user._id], // ARRAY OF ACCESSED USERS!
+      isStoryReply:storyData?.isStoryReply ? true : false,
+      storyId: storyData?._id,
     })
 
     const conversation = await Conversation.findById(conversationId).populate(
