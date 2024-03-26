@@ -25,7 +25,7 @@ export default function useMessages () {
   const sendMessages = async (messageType, message, conversationId, isStoryReply) => {
 
     console.log(messageType, message, conversationId, isStoryReply)
-    return;
+    // return;
     // FOR NOW!
     // TYPE = TEXT!
     // MESSAGE CAN ON BE TEXT!
@@ -50,7 +50,8 @@ export default function useMessages () {
             message,
             messageType,
             conversationId,
-            receiverId: receiverIDS // ALL IDS IN AN ARRAY!!
+            receiverId: receiverIDS, // ALL IDS IN AN ARRAY!!
+            isStoryReply
           })
         }
       ).then(resp => resp.json())
