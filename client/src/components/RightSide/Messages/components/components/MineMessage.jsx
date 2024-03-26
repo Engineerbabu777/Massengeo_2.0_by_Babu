@@ -8,7 +8,8 @@ import { updateEditMessageId } from '../../../../../redux/chatSlice'
 import useMessages from '../../../../../hooks/useMessages'
 import { MdDoNotDisturb } from 'react-icons/md'
 import { IoCheckmarkSharp } from 'react-icons/io5'
-import { FaUserShield } from 'react-icons/fa6'
+// import { FaUserShield } from 'react-icons/fa6'
+import { FaShieldHeart } from "react-icons/fa6";
 
 const MineMessage = ({ message, isRead,isAdmin=false }) => {
   // RETRIEVE USER DATA FROM LOCAL STORAGE
@@ -123,7 +124,7 @@ const MineMessage = ({ message, isRead,isAdmin=false }) => {
         {/* TIME AND READ STATUS DISPLAYED AT THE BOTTOM RIGHT OF THE MESSAGE */}
         <span className='text-gray-400 font-semibold text-right flex gap-1 justify-end'>
           {/* DISPLAY SENDER'S USERNAME AND TIME SINCE THE MESSAGE WAS CREATED */}
-         {isAdmin && <FaUserShield className={`text-blue-600 w-4 h-4 ${isAdmin ? 'inline-flex mr-1':'hidden'}`}/>}
+         {isAdmin && <FaShieldHeart className={`text-blue-600 w-3 h-3 ${isAdmin ? 'inline-flex mr-1':'hidden'}`}/>}
           {me?.username} {formatTimeAgo(message?.createdAt)}
           {/* CHECKMARK ICON INDICATING WHETHER THE MESSAGE HAS BEEN READ */}
           {/* DOUBLE TICK FOR MESSAGE DELIVERY AS WELL SEEN OR NOT SEEN! */}

@@ -56,7 +56,7 @@ export default function ViewStoryModal ({
       _id:data?._id,
       userId:otherUserId,
     }
-    await sendMessages("text", storyReply,conversationId,storyData)
+    await sendMessages("text", {text:storyReply},conversationId,storyData)
   }
 
   return (

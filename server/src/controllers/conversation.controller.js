@@ -95,7 +95,7 @@ export const fetchAllConversations = async (req, res) => {
       .populate({
         path: 'lastMessage',
         populate: {
-          path: 'leaveOrRemovalData.userId senderId',
+          path: 'leaveOrRemovalData.userId senderId storyId',
           model: 'user',
           select: 'avatar username email'
         }

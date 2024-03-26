@@ -30,6 +30,14 @@ function StoriesParent () {
       {/* MAPPING OVER THE STORIES OF FRIENDS!! */}
       {userFriends?.length > 0 &&
         userFriends?.map(user => {
+          console.log({
+            somedata:conversations.filter(
+              c =>
+                c?.users?.length === 2 &&
+                !c.group &&
+                c.users.some(u => u._id === user._id)
+            )[0].users
+          })
           return (
             <EachFriend
               user={user}
@@ -47,7 +55,7 @@ function StoriesParent () {
                     c?.users?.length === 2 &&
                     !c.group &&
                     c.users.some(u => u._id === user._id)
-                ))[0]?._id
+                )[0].users)[0]._id
               }
             />
           )

@@ -14,7 +14,8 @@ import Avatar from '../../../../RightSide/Header/components/Avatar'
 import { IoCheckmarkDoneSharp, IoCheckmarkSharp } from 'react-icons/io5'
 import { isMessageReadByOrNot } from '../../../../../utils/getIsMessageReadOrNot'
 import { userDetails } from '../../../../../utils/getUserDetails'
-import { FaImage } from "react-icons/fa";
+import { FaImage } from 'react-icons/fa'
+import { SiSinglestore } from 'react-icons/si'
 
 export default function SingleChatOption ({
   conversation,
@@ -137,9 +138,17 @@ export default function SingleChatOption ({
             }`}
           >
             {/* IF I AM NO LONGER THE MEMBER OF THE GROUP! */}
-            {conversation?.leavedUsers?.map(u => u._id).includes(JSON.parse(localStorage.getItem('userData@**@user')).id) ? <>
-            <span className="text-amber-300 font-semibold italic">You are no longer participant!</span>
-            </>: isTyping ? (
+            {conversation?.leavedUsers
+              ?.map(u => u._id)
+              .includes(
+                JSON.parse(localStorage.getItem('userData@**@user')).id
+              ) ? (
+              <>
+                <span className='text-amber-300 font-semibold italic'>
+                  You are no longer participant!
+                </span>
+              </>
+            ) : isTyping ? (
               <span>typing...</span>
             ) : (
               <>
@@ -148,7 +157,8 @@ export default function SingleChatOption ({
                     <>
                       {' '}
                       {/* IF THE MESSAGE IS SENT BY ME && MESSAGE IS NOT ABOUT LEAVED USERS! */}
-                      {isSentByMe && !conversation?.lastMessage?.isLeaveOrRemoval &&
+                      {isSentByMe &&
+                        !conversation?.lastMessage?.isLeaveOrRemoval &&
                         (!deleteForMe || deleteForEveryOne) && // !false || true
                         (deleteForMe || !deleteForEveryOne) && ( // false || !true
                           <span>
@@ -191,7 +201,8 @@ export default function SingleChatOption ({
                           </span>
                         )}
                       {/* IF THE MESSAGE IS SENT BY OTHERS! */}
-                      {!isSentByMe && !conversation?.lastMessage?.isLeaveOrRemoval &&
+                      {!isSentByMe &&
+                        !conversation?.lastMessage?.isLeaveOrRemoval &&
                         (!deleteForMe || deleteForEveryOne) && // !false || true
                         (deleteForMe || !deleteForEveryOne) && ( // false || !true
                           <span>
@@ -219,18 +230,35 @@ export default function SingleChatOption ({
                         <>
                           {conversation?.lastMessage?.message ? (
                             <>
-                              {conversation?.lastMessage?.isLeaveOrRemoval ? <span className="text-slate-500">
-                                {conversation.lastMessage.leaveOrRemovalData.userId.username.toUpperCase() + " " + conversation.lastMessage.message }
-                              </span>:<>
-                              {/* IF MESSAGE TYPE IS TEXT! */}
-                              {conversation.lastMessage.messageType ===
-                                'text' && conversation?.lastMessage?.message}
-                              {/* IF MESSAGE TYPE IS IMAGE! */}
-                              {conversation.lastMessage.messageType ===
-                                'image' && <FaImage className="w-6 h-6 text-blue-400"/>}
-                              {/* IF MESSAGE IS TYPE OF IMAGE AND TEXT! */}
-                              {conversation.lastMessage.messageType === 'image-text' && <><FaImage className="w-6 h-6 text-blue-400"/><span className="">{conversation.lastMessage.message}</span></>}
-                              </>}
+                              {conversation?.lastMessage?.isLeaveOrRemoval ? (
+                                <span className='text-slate-500'>
+                                  {conversation.lastMessage.leaveOrRemovalData.userId.username.toUpperCase() +
+                                    ' ' +
+                                    conversation.lastMessage.message}
+                                </span>
+                              ) : (
+                                <>
+                                  {/* IF MESSAGE TYPE IS TEXT! */}
+                                  {conversation.lastMessage.messageType ===
+                                    'text' &&
+                                    conversation?.lastMessage?.message}
+                                  {/* IF MESSAGE TYPE IS IMAGE! */}
+                                  {conversation.lastMessage.messageType ===
+                                    'image' && (
+                                    <FaImage className='w-6 h-6 text-blue-400' />
+                                  )}
+                                  {/* IF MESSAGE IS TYPE OF IMAGE AND TEXT! */}
+                                  {conversation.lastMessage.messageType ===
+                                    'image-text' && (
+                                    <>
+                                      <FaImage className='w-6 h-6 text-blue-400' />
+                                      <span className=''>
+                                        {conversation.lastMessage.message}
+                                      </span>
+                                    </>
+                                  )}
+                                </>
+                              )}
                             </>
                           ) : (
                             <span>start a conversation</span>
@@ -303,11 +331,22 @@ export default function SingleChatOption ({
                         {conversation?.lastMessage?.message ? (
                           <>
                             {/* IF MESSAGE TYPE IS TEXT! */}
-                            {conversation.lastMessage.messageType === 'text' &&
-                              conversation?.lastMessage?.message}
+                            {conversation.lastMessage.messageType ===
+                              'text' && (
+                              <>
+                                {conversation?.lastMessage?.isStoryReply && !isSentByMe && ( // ONLY SHOW TO THAT USER WHOSE STORY WE MESSAGED!
+                                  <SiSinglestore className='text-neutral-500 w-5 h-5' />
+                                )}
+                                {conversation?.lastMessage?.message}
+                              </>
+                            )}
                             {/* IF MESSAGE TYPE IS IMAGE! */}
                             {conversation.lastMessage.messageType ===
-                              'image' && <><FaImage className="w-6 h-6 text-blue-400"/></>}
+                              'image' && (
+                              <>
+                                <FaImage className='w-6 h-6 text-blue-400' />
+                              </>
+                            )}
                           </>
                         ) : (
                           <span>start a conversation</span>

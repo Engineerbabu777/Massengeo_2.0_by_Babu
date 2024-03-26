@@ -3,7 +3,7 @@ import Avatar from '../../../Header/components/Avatar'
 import { useSelector } from 'react-redux'
 import { formatTimeAgo } from '../../../../../utils/getLastMessageTime'
 import { MdDoNotDisturb } from 'react-icons/md'
-import { FaUserShield } from "react-icons/fa";
+import { FaShieldHeart } from "react-icons/fa6";
 
 const OtherUserMessage = ({ message,isAdmin=false }) => {
   return (
@@ -57,8 +57,8 @@ const OtherUserMessage = ({ message,isAdmin=false }) => {
           </>)}
         </div>
         {/* TIME! */}
-        <span className='text-gray-400 font-semibold'>
-         {isAdmin && <FaUserShield className={`text-blue-600 w-4 h-4 ${isAdmin ? 'inline-flex mr-1':'hidden'}`}/>}
+        <span className='text-gray-400 font-semibold flex items-center'>
+         {isAdmin && <FaShieldHeart className={`text-blue-600 w-3 h-3 ${isAdmin ? 'inline-flex mr-1':'hidden'}`}/>}
           {message?.senderId?.username} {formatTimeAgo(message?.createdAt)}
         </span>
       </div>
