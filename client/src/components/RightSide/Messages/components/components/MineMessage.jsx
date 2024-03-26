@@ -138,14 +138,8 @@ const MineMessage = ({ message, isRead, isAdmin = false }) => {
                 </p>
               ) : (
                 <>
-                  {/* <span className='text-gray-300 text-sm'>reply sent</span> */}
                   {message?.storyId?.storyType === 'image' && (
                     <div className='flex-1 flex w-full h-[100px] flex-row border-l-4 border-blue-200 gap-2 mb-14'>
-                      {/* {message?.storyId?.storyText && (
-                        <p className='w-full p-2 rounded-b-md flex items-center justify-between p-1 bg-black/80 text-gray-400 font-semibold z-[999]'>
-                          {message?.storyId?.storyText}
-                        </p>
-                      )} */}
                       <div className='flex gap-6 flex-col h-[100px] p-2 '>
                         <p className='flex items-center gap-2 text-purple-700 font-semibold'>
                           <FaReplyAll className='w-4 h-4' />
@@ -161,7 +155,7 @@ const MineMessage = ({ message, isRead, isAdmin = false }) => {
                       />
                     </div>
                   )}
-                  <p className='text-white bg-[#DC4242] items-center absolute bottom-0 left-0 right-0 p-4'>
+                  <p className='text-white bg-[#DC4242] items-center absolute bottom-0 left-0 right-0 p-4 pl-8'>
                     {message.message}
                   </p>
                 </>
