@@ -4,6 +4,7 @@ import { FaArrowLeftLong } from 'react-icons/fa6'
 import Avatar from '../../../../RightSide/Header/components/Avatar'
 import moment from 'moment'
 import { IoIosArrowUp, IoIosSend } from 'react-icons/io'
+import useMessages from '../../../../../hooks/useMessages'
 
 export default function ViewStoryModal ({
   open,
@@ -11,6 +12,7 @@ export default function ViewStoryModal ({
   data,
   value = 10,
   userData,
+  conversationId,
   isMyStory = false
 }) {
   const [bgColor, setBgColor] = useState(data?.backgroundColor)
@@ -20,6 +22,9 @@ export default function ViewStoryModal ({
   const [time, setTime] = useState(value)
   const [percentage, setPercentage] = useState(0)
   const [isReplyModeOpen, setIsReplyModeOpen] = useState(false)
+  const [storyReply, setStoryReply] = useState("");
+
+  const {sendMessages} = useMessages();
 
   useEffect(() => {
     const timeout = setInterval(() => {
@@ -39,6 +44,14 @@ export default function ViewStoryModal ({
 
     return () => clearInterval(timeout)
   }, [percentage,isReplyModeOpen])
+
+  const handleChange = (e) => {
+    setStoryReply(e.target.value);
+  }
+
+  const handleSendReply = async() => {
+    await sendMessages("text", storyReply,conversationId,true)
+  }
 
   return (
     <>
@@ -136,11 +149,11 @@ export default function ViewStoryModal ({
                       type='text'
                       placeholder='Type a reply...'
                       className='flex-1 px-2 py-1 bg-black/50 rounded-md w-full border-none outline-none text-white font-semibold text-lg'
-                      // value={input}
-                      // onChange={handleChangeInput}
+                      value={storyReply}
+                      onChange={handleChange}
                     />
                     <button
-                      // onClick={handleMessages}
+                      onClick={handleSendReply}
                       className='py-2 px-4 text-white flex items-center justify-center rounded-md group bg-[#F05454]'
                     >
                       <span className=''>Reply</span>

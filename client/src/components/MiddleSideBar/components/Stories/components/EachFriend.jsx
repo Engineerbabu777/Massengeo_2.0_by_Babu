@@ -4,7 +4,7 @@
 import React from 'react'
 import SingleStory from '../SingleStory'
 
-function EachFriend({user}) {
+function EachFriend({user,conversationId}) {
  // USER STATUS AVAILABLE!
  const isStatusAvailable = user?.stories?.length === 0
  if (isStatusAvailable) return null // IF USER STATUS NOT AVAILABLE!
@@ -14,7 +14,7 @@ function EachFriend({user}) {
  console.log({isExpired: new Date(isExpired)})
 
 
- return <SingleStory user={user} />
+ return <SingleStory user={user} conversationId={conversationId} />
 }
 
 export default EachFriend

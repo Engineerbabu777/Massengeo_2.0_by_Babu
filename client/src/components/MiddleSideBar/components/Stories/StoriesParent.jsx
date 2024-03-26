@@ -6,9 +6,11 @@ import EachFriend from './components/EachFriend'
 
 function StoriesParent () {
   const { fetchFriendsOfUserAsPerConversations } = useConversation()
-  const { fetchingUserFriends, userFriends,currentUser,fetchingCurrentUser } = useSelector(state => state.user)
+  const { fetchingUserFriends, userFriends, currentUser, fetchingCurrentUser } =
+    useSelector(state => state.user)
+  const { conversations } = useSelector(state => state.chat)
 
-  console.log({ fetchingUserFriends, userFriends,currentUser })
+  console.log({ fetchingUserFriends, userFriends, currentUser })
 
   const fetchUserFriends = async () => {
     await fetchFriendsOfUserAsPerConversations()
@@ -25,9 +27,22 @@ function StoriesParent () {
       <AddStory user={currentUser} />
 
       {/* MAPPING OVER THE STORIES OF FRIENDS!! */}
-      {userFriends?.length > 0 && userFriends?.map(user => (
-        <EachFriend user={user} />
-      ))}
+      {userFriends?.length > 0 &&
+        userFriends?.map(user => {
+          return (
+            <EachFriend
+              user={user}
+              conversationId={
+                conversations.filter(
+                  c =>
+                    c?.users?.length === 2 &&
+                    !c.group &&
+                    c.users.some(u => u._id === user._id)
+                )[0]?._id
+              }
+            />
+          )
+        })}
     </div>
   )
 }
