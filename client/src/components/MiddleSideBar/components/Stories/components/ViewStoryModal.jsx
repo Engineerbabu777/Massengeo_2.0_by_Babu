@@ -13,7 +13,8 @@ export default function ViewStoryModal ({
   value = 10,
   userData,
   conversationId,
-  isMyStory = false
+  isMyStory = false,
+  otherUserId
 }) {
   const [bgColor, setBgColor] = useState(data?.backgroundColor)
   const [textFont, setTextFont] = useState(data?.fontFamily)
@@ -53,8 +54,9 @@ export default function ViewStoryModal ({
     const storyData = {
       isStoryReply: true,
       _id:data?._id,
+      userId:otherUserId,
     }
-    await sendMessages("text", storyData,conversationId,true)
+    await sendMessages("text", storyReply,conversationId,storyData)
   }
 
   return (

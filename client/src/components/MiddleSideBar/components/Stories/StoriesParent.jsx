@@ -3,6 +3,7 @@ import AddStory from './AddStoryModal/AddStory'
 import { useSelector } from 'react-redux'
 import useConversation from '../../../../hooks/useConversation'
 import EachFriend from './components/EachFriend'
+import { findOtherUsers } from '../../../../utils/otherUsers'
 
 function StoriesParent () {
   const { fetchFriendsOfUserAsPerConversations } = useConversation()
@@ -39,6 +40,14 @@ function StoriesParent () {
                     !c.group &&
                     c.users.some(u => u._id === user._id)
                 )[0]?._id
+              }
+              otherUserId={
+                findOtherUsers(conversations.filter(
+                  c =>
+                    c?.users?.length === 2 &&
+                    !c.group &&
+                    c.users.some(u => u._id === user._id)
+                ))[0]?._id
               }
             />
           )

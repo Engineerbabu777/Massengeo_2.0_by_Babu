@@ -11,7 +11,7 @@ export const sendMessage = async (req, res) => {
     const user = req.user
     const { message, conversationId, messageType, receiverId,storyData } = req.body;
 
-    console.log({b:req.body});
+    console.log({body:req.body});
 
     // Checks if user is online then marked delivered as true else false
     const isDelivered = Object.values(onlineUsers).includes(receiverId[0])
@@ -129,7 +129,7 @@ export const sendMessage = async (req, res) => {
           populate: 'senderId'
         }),
       newMessage: await Message.findById(newMessage._id)
-        .populate('senderId')
+        .populate('senderId storyId')
         .exec()
     })
     // SEND RESPONSE BACK!

@@ -30,14 +30,16 @@ export default function useMessages () {
     // FOR NOW!
     // TYPE = TEXT!
     // MESSAGE CAN ON BE TEXT!
+    // console.log(activeConversationI)
 
     // LETS CONFIRM THE RECEIVERS OF THE MESSAGE!
     // LETS CHECK IF GROUP CHAT OR NOT!
-    const isGroupChat = activeConversationInfo.group // IF GROUP THAN TRUE ELSE FALSE!!!
-    const receiverIDS = findOtherUsers(activeConversationInfo.users).map(
+    const isGroupChat = activeConversationInfo?.group // IF GROUP THAN TRUE ELSE FALSE!!!
+    const receiverIDS = storyData?._id ? [storyData?.userId]: findOtherUsers(activeConversationInfo.users).map(
       u => u?._id
     ) // REMOVING OUR SELF FROM THE CONVERSATION USERS!
 
+    console.log({receiverIDS})
     try {
       const response = await fetch(
         'http://localhost:4444/api/v1/messages/send-message',
