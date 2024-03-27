@@ -55,11 +55,11 @@ export default function AddStoryModal ({ open, handleClose }) {
 
   const handleSubmit = () => {
     if(statusImage){
-      const text = document.getElementById("caption").innerText.trim();
+      const text = document?.getElementById("caption")?.value?.trim();
       // SEND IMAGE STORY!
-      createStories("image",{statusImage,text})
+      createStories("image",{statusImage,storyText:text})
     }else{
-      const text = document.getElementById("storyText").innerText.trim();
+      const text = document?.getElementById("storyText")?.innerText?.trim();
       if(text.length <0 || text.length > 100){
         toast.error("invalid character length");
         return;
@@ -153,7 +153,7 @@ export default function AddStoryModal ({ open, handleClose }) {
               </section>}
 
               {/* TEXT AREA FOR JUST IMAGE CAPTION! */}
-              {statusImage && <input type="text" placeholder='Type Caption For Your Story... ' className='flex-1 px-2 py-1.5 rounded-md border-none outline-none text-gray-300 font-semibold text-lg bg-black/30 mr-1'/>}
+              {statusImage && <input type="text" placeholder='Type Caption For Your Story... ' className='flex-1 px-2 py-1.5 rounded-md border-none outline-none text-gray-300 font-semibold text-lg bg-black/30 mr-1' id="caption"/>}
 
               {/* BUTTON! */}
               <button onClick={handleSubmit} className='flex items-center hover:bg-opacity-70 justify-center h-[40px] gap-1 px-2 rounded-md text-2xl  bg-[#F05454] text-white '>

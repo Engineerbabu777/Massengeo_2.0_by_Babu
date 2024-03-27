@@ -62,7 +62,7 @@ export default function ViewStoryModal ({
   return (
     <>
       <div
-        className={`bg-black/50 fixed flex items-center justify-center left-0 z-[999] right-0 top-0 bottom-0 transition-all duration-500 backdrop-blur-sm ${
+        className={`bg-black/50 fixed flex items-center justify-center left-0 z-[999] right-0 top-0 bottom-0 transition duration-500 backdrop-blur-sm ${
           open ? ' visible opacity-1 ' : ' hidden opacity-0 '
         }`}
       >
@@ -128,8 +128,8 @@ export default function ViewStoryModal ({
                   className='w-full h-[400px]'
                   alt='text'
                 />
-                {data?.storyText && (
-                  <p className='w-full p-2 rounded-b-md flex items-center justify-between p-1 bg-black/80 text-gray-400 font-semibold z-[999]'>
+                {data?.storyText&& !isReplyModeOpen && (
+                  <p className='w-full p-2 rounded-b-md flex items-center justify-between p-1 bg-black/80 text-gray-400 font-semibold '>
                     {data?.storyText}
                   </p>
                 )}
@@ -138,7 +138,7 @@ export default function ViewStoryModal ({
 
             {/* FOOTER! */}
             {!isMyStory && (
-              <footer className='flex text-red-500 bg-white-20 text-xl items-center justify-center px-2 p-2 absolute bottom-0 left-0 right-0 w-full flex flex-col gap-1'>
+              <footer className='flex text-red-500 bg-white-20 text-xl items-center justify-center px-2 p-2 absolute bottom-0 left-0 right-0 w-full flex flex-col gap-1 z-[99999]'>
                 <div
                   onClick={() => setIsReplyModeOpen(!isReplyModeOpen)}
                   className='flex items-center rounded-full justify-center h-6 w-6 bg-gray-500/40 text-black cursor-pointer hover:bg-gray-500/20'

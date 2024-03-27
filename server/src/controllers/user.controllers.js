@@ -235,10 +235,10 @@ export const userStoryCreation = async(req,res) => {
     const story = await Story.create({
       storyType: body.type,
       userId: user._id,
-      statusImage: body.type === "image" ? body.data : null,
+      statusImage: body.type === "image" ? body.data.statusImage : null,
       backgroundColor:  body.type === "text" ? body.data.backgroundColor : null,
       fontFamily: body.type === "text" ? body.data.fontFamily : null,
-      storyText:body.type === "text" ? body.data.storyText : body.data.text ? body.data.text : null,
+      storyText:body.type === "text" ? body.data.storyText : body.data.storyText ? body.data.storyText : null,
       textColor:body.type === "text" ? body.data.textColor : null,
     });
 

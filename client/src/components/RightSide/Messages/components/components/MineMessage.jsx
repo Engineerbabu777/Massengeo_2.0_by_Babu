@@ -131,74 +131,68 @@ const MineMessage = ({ message, isRead, isAdmin = false }) => {
             </>
           )}
 
+          {/* SHOW DELETED REPLY FOR STATUS! */}
+          {(message?.deleteForMe || message?.deleteForEveryOne) && (
+            <p className='text-gray-800 flex gap-2 items-center'>
+              <MdDoNotDisturb className='h-6 w-6' />
+              you deleted this message {' '}
+            </p>
+          )}
+
           {/* FOR DISPLAYING TEXT REPLIES ON STORIES! */}
-          {message?.messageType === 'text' && message.isStoryReply && (
+          {message?.messageType === 'text' && message.isStoryReply && (!message?.deleteForMe && !message?.deleteForEveryOne) && (
             <>
-              {message?.deleteForMe || message?.deleteForEveryOne ? (
-                <p className='text-gray-800 flex gap-2 items-center'>
-                  <MdDoNotDisturb className='h-6 w-6' />
-                  you deleted this message{' '}
-                </p>
-              ) : (
-                <>
-                  {message?.storyId?.storyType === 'image' && (
-                    <div className='flex-1 flex w-full h-[100px] flex-row border-l-4 border-blue-200 gap-2 mb-14'>
-                      <div className='flex gap-6 flex-col h-[100px] p-2 '>
-                        <p className='flex items-center gap-2 text-purple-700 font-semibold'>
-                          <FaReplyAll className='w-4 h-4' />
-                          {message.storyId.userId.username}{' '}
-                          <GoDotFill className=' w-2 h-2' /> Status
-                        </p>
-                        <p className=' text-gray-600 w-[400px] truncate'>
-                          {message?.storyId?.storyText ||
-                            'diummeyguh hsduhg ajhsbghb jahsbh jhsadbv'}
-                        </p>
-                      </div>
-                      <img
-                        data-twe-lazy-load-init
-                        src={message?.storyId?.statusImage}
-                        className='w-[150px] h-[100px] rounded-md overflow-hidden'
-                        alt='text'
-                      />
+              <>
+                {message?.storyId?.storyType === 'image' && (
+                  <div className='flex-1 flex w-full h-[100px] flex-row border-l-4 border-blue-200 gap-2 mb-14'>
+                    <div className='flex gap-6 flex-col h-[100px] p-2 '>
+                      <p className='flex items-center gap-2 text-purple-700 font-semibold'>
+                        <FaReplyAll className='w-4 h-4' />
+                        {message.storyId.userId.username}{' '}
+                        <GoDotFill className=' w-2 h-2' /> Status
+                      </p>
+                      <p className=' text-gray-600 w-[400px] truncate'>
+                        {message?.storyId?.storyText ||
+                          'diummeyguh hsduhg ajhsbghb jahsbh jhsadbv'}
+                      </p>
                     </div>
-                  )}
-                  <p className='text-white bg-[#DC4242] items-center absolute bottom-0 left-0 right-0 p-4 pl-8'>
-                    {message.message}
-                  </p>
-                </>
-              )}
+                    <img
+                      data-twe-lazy-load-init
+                      src={message?.storyId?.statusImage}
+                      className='w-[150px] h-[100px] rounded-md overflow-hidden'
+                      alt='text'
+                    />
+                  </div>
+                )}
+                <p className='text-white bg-[#DC4242] items-center absolute bottom-0 left-0 right-0 p-4 pl-8'>
+                  {message.message}
+                </p>
+              </>
             </>
           )}
 
-          {message?.messageType === 'text' && message.isStoryReply && (
+          {message?.messageType === 'text' && message.isStoryReply && (!message?.deleteForMe && !message?.deleteForEveryOne) && (
             <>
-              {message?.deleteForMe || message?.deleteForEveryOne ? (
-                <p className='text-gray-800 flex gap-2 items-center'>
-                  <MdDoNotDisturb className='h-6 w-6' />
-                  you deleted this message{' '}
-                </p>
-              ) : (
-                <>
-                  {message?.storyId?.storyType === 'text' && (
-                    <div className='flex-1 flex w-full h-[100px] flex-row border-l-4 border-blue-200 gap-2 mb-14'>
-                      <div className='flex gap-6 flex-col h-[100px] p-2 '>
-                        <p className='flex items-center gap-2 text-purple-700 font-semibold'>
-                          <FaReplyAll className='w-4 h-4' />
-                          {message.storyId.userId.username}{' '}
-                          <GoDotFill className=' w-2 h-2' /> Status
-                        </p>
-                        <p className=' text-gray-600 w-[400px] truncate'>
-                          {message?.storyId?.storyText ||
-                            'diummeyguh hsduhg ajhsbghb jahsbh jhsadbv'}
-                        </p>
-                      </div>
+              <>
+                {message?.storyId?.storyType === 'text' && (
+                  <div className='flex-1 flex w-full h-[100px] flex-row border-l-4 border-blue-200 gap-2 mb-14'>
+                    <div className='flex gap-6 flex-col h-[100px] p-2 '>
+                      <p className='flex items-center gap-2 text-purple-700 font-semibold'>
+                        <FaReplyAll className='w-4 h-4' />
+                        {message.storyId.userId.username}{' '}
+                        <GoDotFill className=' w-2 h-2' /> Status
+                      </p>
+                      <p className=' text-gray-600 w-[400px] truncate'>
+                        {message?.storyId?.storyText ||
+                          'diummeyguh hsduhg ajhsbghb jahsbh jhsadbv'}
+                      </p>
                     </div>
-                  )}
-                  <p className='text-white bg-[#DC4242] items-center absolute bottom-0 left-0 right-0 p-4 pl-8'>
-                    {message.message}
-                  </p>
-                </>
-              )}
+                  </div>
+                )}
+                <p className='text-white bg-[#DC4242] items-center absolute bottom-0 left-0 right-0 p-4 pl-8'>
+                  {message.message}
+                </p>
+              </>
             </>
           )}
         </div>
